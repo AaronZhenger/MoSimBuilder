@@ -3,61 +3,30 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Ring
-  - Zone
-  - ChainLink
-  - RedPlayer
-  - Wall
-  - Field
-  - noteShotByRed
-  - noteShotByBlue
-  - blueAmpScoredNote
-  - redAmpScoredNote
-  - ignore
-  - Ground
-  - Chain
-  - Destroying
-  - Player2
-  - RedPlayer2
-  - noteShotByRed2
-  - noteShotByBlue2
-  - BlueCargo
-  - RedCargo
-  - GameGUI
-  - delete
-  - ignoreRed
-  - LowBar
-  - LowBarRed
-  - MidBar
-  - MidBarRed
-  - HighBar
-  - HighBarRed
-  - TraverseBar
-  - TraverseBarRed
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - 
   - Water
   - UI
-  - Ring
-  - Robot
-  - PostProcessing
-  - InMyWay
-  - Hangers
-  - RobotRigidbodyPlsIgnore
-  - RobotIgnore
-  - Field
-  - BlueCam
-  - RedCam
-  - NoteIgnore
-  - IgnoreAllCollisions
-  - IgnoreRings
-  - DontCollideWithField
-  - GamePiece
-  - Chain
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
