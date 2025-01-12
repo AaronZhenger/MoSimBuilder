@@ -38,4 +38,5 @@ as help when referencing the next set of information.
 
 
 ### This is all of the information needed to competently build robots in MoSim Builder Alpha 2+
- 
+
+ ### [FAQ](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/FAQ.md)

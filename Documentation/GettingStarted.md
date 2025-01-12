@@ -18,8 +18,10 @@
 ### The final Step is to let unity hub install the correct version of unity for you
   * in the unity hub app click the Add button in the top right
   * next add project from disk
-  * select your project folder.
+  * double click your project folder to open the outer layer. then select the folder with the name MoSimBuilder - V0.0.....
   * if you selected properly is will ask you if you want to install the correct version of unity, click yes.
+  * It will then ask you ask you about adding modules, the default is all that you need checked.
+    ![image](https://github.com/user-attachments/assets/cad4705a-0795-4613-ba4c-2c0d5f1c7224)
   * you can now open the project once the download is complete.
 
 ### Updating
@@ -72,3 +74,4 @@
  * Dpad Down :G
 
 # [First Robot](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/FirstRobot.md)
+## Blue text in large font indicates a link to the next step in the documentation. Click the blue words to continue learning about Builders inner workings
