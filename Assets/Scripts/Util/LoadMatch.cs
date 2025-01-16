@@ -3,11 +3,12 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-[ExecuteAlways]
+[ExecuteAlways]//executes in editor
 public class LoadMatch : MonoBehaviour
 {
     [SerializeField] private GameObject[] fieldPrefab;
     [SerializeField] private GameObject[] robots;
+    [SerializeField] private Transform spawnPoint;
     
     //Robot Selector stuff
     private GameObject[] _robotBuffer;
@@ -87,7 +88,7 @@ public class LoadMatch : MonoBehaviour
 
     private void SpawnRobot()
     {
-        _activeRobot = Instantiate(robots[0], Vector3.zero, Quaternion.identity, _fieldHolder.transform);
+        _activeRobot = Instantiate(robots[0], spawnPoint.position, spawnPoint.rotation, _fieldHolder.transform);
     }
 
     private bool RobotLoaded()
@@ -106,7 +107,8 @@ public class LoadMatch : MonoBehaviour
         _1StCam = Resources.Load("Cameras/1stPerson") as GameObject;
         
         //spawn selected camera
-        Instantiate(_1StCam, Vector3.zero, Quaternion.identity, _activeRobot.transform);
+        var cam = Instantiate(_1StCam, Vector3.zero, spawnPoint.rotation, _activeRobot.transform);;
+        cam.transform.localPosition = Vector3.zero;
     }
 
     private void CheckRobots()//its clean and wont brake but I hate this.
