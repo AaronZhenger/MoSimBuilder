@@ -5,9 +5,11 @@ using UnityEngine;
 public class DriveMotor : MonoBehaviour
 {
     private const float StallTorque = 7;
-    private const float MomentOfInertia = 10;
+    private float _momentOfInertia = 0.0000105f;
 
-    [HideInInspector] public float motorSpeed;
+    [HideInInspector] public float gearRatio = 5.85f;
+
+    public float motorSpeed;
 
     private const float Kv = 6000 / 12;
 
@@ -15,6 +17,8 @@ public class DriveMotor : MonoBehaviour
     void Start()
     {
         motorSpeed = 0;
+        
+        _momentOfInertia = _momentOfInertia * ((1/gearRatio) * (1/gearRatio));
     }
 
     // Update is called once per frame
@@ -23,8 +27,9 @@ public class DriveMotor : MonoBehaviour
         
     }
 
-    public float DriveSimUpdate(float voltage)
+    public float DriveSimUpdate(float voltage, float realSpeed)
     {
+        motorSpeed = realSpeed;
         //w = RPM Wm = Max Rpm Ts = stall Torque J = Moi
         //t = -((J*Wm)/Ts) * ln((Wm-w)/Wm)
         //dw = ((Wm-w)/Wm)*(Ts/(J*Wm)) * dt
@@ -32,8 +37,8 @@ public class DriveMotor : MonoBehaviour
         //V = voltage
         //Kv = RPM per Voltage
         //dw = ((V*Kv-w)/(V*Kv)) * (Ts/(J*V*Kv))
-        motorSpeed += ((voltage * Kv - motorSpeed)/(voltage*Kv)) * (StallTorque/(MomentOfInertia*voltage*Kv));
-        return ((voltage * Kv - motorSpeed)/(voltage*Kv)) * (StallTorque/(MomentOfInertia*voltage*Kv));
+        motorSpeed += ((voltage * Kv - motorSpeed)/(12*Kv)) * (StallTorque/(_momentOfInertia*12*Kv));
+        return motorSpeed;
     }
 
     public void ResetMotor()
