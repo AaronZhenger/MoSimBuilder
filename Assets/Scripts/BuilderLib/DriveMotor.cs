@@ -29,6 +29,7 @@ public class DriveMotor : MonoBehaviour
 
     public float DriveSimUpdate(float voltage, float realSpeed)
     {
+        //reset drive speed to real speed
         motorSpeed = realSpeed;
         //w = RPM Wm = Max Rpm Ts = stall Torque J = Moi
         //t = -((J*Wm)/Ts) * ln((Wm-w)/Wm)

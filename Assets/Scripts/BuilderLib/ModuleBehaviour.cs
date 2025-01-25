@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class ModuleBehaviour : MonoBehaviour
 {
-    private WheelBehaviour _wheelBehaviour;
-    private DriveMotor _driveMotor;
+    //input settigns
+    [HideInInspector] public float wheelDiameter;
+    [HideInInspector] public float gearRatio;
     [HideInInspector] public float targetVelocity = 0;
     [HideInInspector] public float targetModuleAngle = 0;
-    [SerializeField] private float wheelDiameter;
-    [SerializeField] private float gearRatio;
-    [HideInInspector] public Rigidbody rb;
+    
+    private WheelBehaviour _wheelBehaviour;
+    private DriveMotor _driveMotor;
+    private Rigidbody _rb;
+    private float _startingRotation;
+    private GameObject _wheelModel;
 
     // Start is called before the first frame update
     void Start()
     {
-       _wheelBehaviour = gameObject.AddComponent<WheelBehaviour>();
+        //add wheel behaviour to the correct object
+       _wheelBehaviour = transform.Find("Wheel").gameObject.AddComponent<WheelBehaviour>();
        _wheelBehaviour.wheelDiameter = wheelDiameter;
+       
+       //add drive motor sim to object
        _driveMotor = gameObject.AddComponent<DriveMotor>();
        _driveMotor.gearRatio = gearRatio;
        
@@ -26,25 +33,45 @@ public class ModuleBehaviour : MonoBehaviour
            t = t.parent.transform;
        }
        
-       rb = t.GetComponent<Rigidbody>();
+       _rb = t.GetComponent<Rigidbody>();
+       
+       _startingRotation = transform.localRotation.eulerAngles.y;
+       
+       _wheelModel = _wheelBehaviour.transform.Find("Model").gameObject;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        var realSpeed = (_wheelBehaviour.transform.InverseTransformDirection(rb.GetPointVelocity(_wheelBehaviour.transform.position)).z / (Mathf.PI * wheelDiameter)) * 60;
-        var feedForward = targetVelocity * 13;
-        var pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (12/6000);
-        var voltage = Mathf.Clamp(feedForward + pValue, -12, 12);
-        var force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * rb.mass;
-        var friction = _wheelBehaviour.transform.InverseTransformDirection(rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -1.15f * rb.mass;
+        float targetRotation = Mathf.Repeat(targetModuleAngle-_startingRotation, 360);
+        float realSpeed = (_wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z / (Mathf.PI * wheelDiameter)) * 60;
+        
+        float feedForward = targetVelocity * 13; //Kv * target = voltage
+        float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (12/6000); //error * target * p = Perror
+        float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
+        float voltage = Mathf.Clamp(feedForward + pValue * (1 - Mathf.Clamp(Mathf.Abs(angleError),0,90)/90), -12, 12);
+        
+        
+        
+        //f = m * a     a = Vtarget - Vreal
+        float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * _rb.mass;
+        
+        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -1.15f * _rb.mass;
         
         for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
         {
-            rb.AddForceAtPosition((_wheelBehaviour.collisionNormals[i]*force)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
-            rb.AddForceAtPosition((_wheelBehaviour.transform.right.normalized*friction)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
+            //drive wheel force
+            _rb.AddForceAtPosition((_wheelBehaviour.collisionNormals[i]*force)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
+            
+            //friction force
+            _rb.AddForceAtPosition((_wheelBehaviour.transform.right.normalized*friction)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
         }
         
-        _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetModuleAngle,0), 360f*Time.deltaTime).eulerAngles;
+        
+        
+        _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetRotation,0), 360f*Time.deltaTime).eulerAngles;
+        
+        _wheelModel.transform.Rotate( Vector3.down,(realSpeed*Time.deltaTime));
+        
     }
 }

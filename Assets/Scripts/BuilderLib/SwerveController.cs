@@ -4,21 +4,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class SwerveController : MonoBehaviour
 {
-    [SerializeField] private ModuleBehaviour[] modules;
-    [SerializeField] private bool fieldCentric = false;
-    [SerializeField] private bool reversed = false;
-    [SerializeField] private bool isRed = false;
-    private float velocityMp = 1;
-    private float steerMp = 1;
-    private Vector2 _translateValue;
-    private float _rotateValue;
-
+    //constant settings
     private int leftFront = 0;
     private int rightFront = 1;
     private int leftRear = 2;
     private int rightRear = 3;
+    
+    //begin visible section
+    [Tooltip("LF,RF,LR,RR")]
+    [SerializeField] private ModuleBehaviour[] modules;
+    [SerializeField] private float gearRatio = 5.85f;
+    [SerializeField] private float wheelDiameter = 4;
+    [SerializeField] private bool fieldCentric = false;
+    [SerializeField] private bool reversed = false;
+    [SerializeField] private bool isRed = false;
+    //end visible section
+    
+    //Settings
+    private float velocityMp = 1;
+    private float steerMp = 1;
+    
+    //control stuff
+    private Vector2 _translateValue;
+    private Vector2 _rotateValue;
     
     private PlayerInput _playerInput;
     private InputActionMap _inputActionMap;
@@ -38,14 +49,22 @@ public class SwerveController : MonoBehaviour
         _rotateAction = _inputActionMap.FindAction("RightStick");
         _translateAction.Enable();
         _rotateAction.Enable();
+
+        foreach (var module in modules)
+        {
+            module.gearRatio = gearRatio;
+            module.wheelDiameter = (wheelDiameter + 0.01f) * 0.0254f;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //update controls
         _translateValue = _translateAction.ReadValue<Vector2>();
-        _rotateValue = _rotateAction.ReadValue<Vector2>().x;
+        _rotateValue = _rotateAction.ReadValue<Vector2>();
         
+        //rotate input to match alliance and scheme
         Vector3 driveInput = new Vector3(_translateValue.y, 0, _translateValue.x);
 
         float angle;
@@ -83,8 +102,8 @@ public class SwerveController : MonoBehaviour
             str = driveInput.z * velocityMp;
         }
 
-        
-        var RCW = -_rotateValue * steerMp;
+        // Swerve Math
+        var RCW = -_rotateValue.x * steerMp;
     
         var L = modules[leftFront].transform.localPosition.z - modules[rightFront].transform.localPosition.z;
 
@@ -109,7 +128,7 @@ public class SwerveController : MonoBehaviour
         var ws4 = Mathf.Sqrt(Mathf.Pow(A, 2) + Mathf.Pow(C, 2));
         var wa4 = Mathf.Atan2(A, C) * 180 / Mathf.PI;
 
-        
+        //assign outputs
         modules[leftFront].targetVelocity = ws2;
         modules[leftRear].targetVelocity = ws3;
         modules[rightFront].targetVelocity = ws1;

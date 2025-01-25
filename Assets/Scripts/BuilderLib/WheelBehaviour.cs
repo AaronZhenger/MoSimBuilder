@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class WheelBehaviour : MonoBehaviour
 {
+    //settings
     [HideInInspector] public float wheelDiameter;
-    private bool[] _wheelHits;
+    
+    //outputs
     public List<Vector3> collisionPoints = new List<Vector3>();
     public List<Vector3> collisionNormals = new List<Vector3>();
+    
+    //internal
+    private bool[] _wheelHits;
 
     // Start is called before the first frame update
     private void Start()
@@ -19,6 +24,7 @@ public class WheelBehaviour : MonoBehaviour
     // Fixed Update is called every Physics Tick
     private void FixedUpdate()
     {
+        //create wheel check raycasts
         _wheelHits[0] = Physics.Raycast(transform.position, -transform.up.normalized, out RaycastHit hit, wheelDiameter/2); 
         _wheelHits[1] = Physics.Raycast(transform.position, transform.up.normalized, out hit, wheelDiameter/2);
         _wheelHits[2] = Physics.Raycast(transform.position, transform.forward.normalized, out hit, wheelDiameter/2);
@@ -28,8 +34,11 @@ public class WheelBehaviour : MonoBehaviour
         _wheelHits[6] = Physics.Raycast(transform.position, (transform.up.normalized-transform.forward.normalized)/2, out hit, wheelDiameter/6);
         _wheelHits[7] = Physics.Raycast(transform.position, (-transform.up.normalized-transform.forward.normalized)/2, out hit, wheelDiameter/6);
         
+        //reset lists 
         collisionPoints.Clear();
         collisionNormals.Clear();
+        
+        //check and add colision points and normals
         if (_wheelHits[0])
         {
             collisionPoints.Add(transform.position-transform.up.normalized*wheelDiameter/2);
