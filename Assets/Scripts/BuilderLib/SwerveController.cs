@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Util;
 
 
 public class SwerveController : MonoBehaviour
@@ -13,11 +14,14 @@ public class SwerveController : MonoBehaviour
     private int leftRear = 2;
     private int rightRear = 3;
     
+    //used by build frame
+    [HideInInspector] private ModuleBehaviour[] _modules;
+    [HideInInspector] public float gearRatio;
+
+    public float wheelDiameter;
+    //-=-=-=-=-=
+    
     //begin visible section
-    [Tooltip("LF,RF,LR,RR")]
-    [SerializeField] private ModuleBehaviour[] modules;
-    [SerializeField] private float gearRatio = 5.85f;
-    [SerializeField] private float wheelDiameter = 4;
     [SerializeField] private bool fieldCentric = false;
     [SerializeField] private bool reversed = false;
     [SerializeField] private bool isRed = false;
@@ -36,6 +40,8 @@ public class SwerveController : MonoBehaviour
     
     private InputAction _translateAction;
     private InputAction _rotateAction;
+    
+    private string[] _moduleNames = new string[4];
     // Start is called before the first frame update
     void Start()
     {
@@ -49,17 +55,30 @@ public class SwerveController : MonoBehaviour
         _rotateAction = _inputActionMap.FindAction("RightStick");
         _translateAction.Enable();
         _rotateAction.Enable();
+        
+        _moduleNames[0] = "lf";
+        _moduleNames[1] = "rf";
+        _moduleNames[2] = "lr";
+        _moduleNames[3] = "rr";
+        _modules = new ModuleBehaviour[4];
 
-        foreach (var module in modules)
+        var driveTrain = Utils.FindChild("driveTrain", gameObject);
+        
+        for (int i = 0; i < _modules.Length; i++)
         {
-            module.gearRatio = gearRatio;
-            module.wheelDiameter = (wheelDiameter + 0.01f) * 0.0254f;
+            if (Utils.FindChild(_moduleNames[i], driveTrain).GetComponent<ModuleBehaviour>())
+            {
+                _modules[i] = Utils.FindChild(_moduleNames[i], driveTrain).GetComponent<ModuleBehaviour>();
+                _modules[i].gearRatio = gearRatio;
+                _modules[i].wheelDiameter = (wheelDiameter + 0.01f) * 0.0254f;
+            }
         }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        
         //update controls
         _translateValue = _translateAction.ReadValue<Vector2>();
         _rotateValue = _rotateAction.ReadValue<Vector2>();
@@ -105,9 +124,9 @@ public class SwerveController : MonoBehaviour
         // Swerve Math
         var RCW = -_rotateValue.x * steerMp;
     
-        var L = modules[leftFront].transform.localPosition.z - modules[rightFront].transform.localPosition.z;
+        var L = _modules[leftFront].transform.localPosition.z - _modules[rightFront].transform.localPosition.z;
 
-        var W = modules[leftFront].transform.localPosition.x - modules[rightFront].transform.localPosition.x;
+        var W = _modules[leftFront].transform.localPosition.x - _modules[rightFront].transform.localPosition.x;
 
         var R = Mathf.Sqrt(MathF.Pow(L, 2) + Mathf.Pow(W, 2));
 
@@ -129,14 +148,14 @@ public class SwerveController : MonoBehaviour
         var wa4 = Mathf.Atan2(A, C) * 180 / Mathf.PI;
 
         //assign outputs
-        modules[leftFront].targetVelocity = ws2;
-        modules[leftRear].targetVelocity = ws3;
-        modules[rightFront].targetVelocity = ws1;
-        modules[rightRear].targetVelocity = ws4;
+        _modules[leftFront].targetVelocity = ws2;
+        _modules[leftRear].targetVelocity = ws3;
+        _modules[rightFront].targetVelocity = ws1;
+        _modules[rightRear].targetVelocity = ws4;
         
-        modules[leftFront].targetModuleAngle = wa2;
-        modules[leftRear].targetModuleAngle = wa3;
-        modules[rightFront].targetModuleAngle = wa1;
-        modules[rightRear].targetModuleAngle = wa4;
+        _modules[leftFront].targetModuleAngle = wa2;
+        _modules[leftRear].targetModuleAngle = wa3;
+        _modules[rightFront].targetModuleAngle = wa1;
+        _modules[rightRear].targetModuleAngle = wa4;
     }
 }

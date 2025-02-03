@@ -9,8 +9,8 @@ public class WheelBehaviour : MonoBehaviour
     [HideInInspector] public float wheelDiameter;
     
     //outputs
-    public List<Vector3> collisionPoints = new List<Vector3>();
-    public List<Vector3> collisionNormals = new List<Vector3>();
+    [HideInInspector] public List<Vector3> collisionPoints = new List<Vector3>();
+    [HideInInspector] public List<Vector3> collisionNormals = new List<Vector3>();
     
     //internal
     private bool[] _wheelHits;

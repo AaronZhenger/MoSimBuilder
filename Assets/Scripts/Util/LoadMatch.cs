@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [ExecuteAlways]//executes in editor
 public class LoadMatch : MonoBehaviour
@@ -23,6 +27,7 @@ public class LoadMatch : MonoBehaviour
     private GameObject _activeRobot;
 
     private GameObject _1StCam;
+    
     // Start is called before the first frame update
     private void Start()
     {
@@ -32,6 +37,7 @@ public class LoadMatch : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        
         if (!EditorApplication.isPlayingOrWillChangePlaymode && RobotLoaded())
         {
             DeleteRobot();
@@ -43,6 +49,8 @@ public class LoadMatch : MonoBehaviour
             DestroyField();
             LoadField();
         }
+        
+        
         CheckRobots();
     }
 

@@ -18,7 +18,6 @@ public class DriveMotor : MonoBehaviour
     {
         motorSpeed = 0;
         
-        _momentOfInertia = _momentOfInertia * ((1/gearRatio) * (1/gearRatio));
     }
 
     // Update is called once per frame
@@ -38,7 +37,7 @@ public class DriveMotor : MonoBehaviour
         //V = voltage
         //Kv = RPM per Voltage
         //dw = ((V*Kv-w)/(V*Kv)) * (Ts/(J*V*Kv))
-        motorSpeed += ((voltage * Kv - motorSpeed)/(12*Kv)) * (StallTorque/(_momentOfInertia*12*Kv));
+        motorSpeed += ((voltage * Kv - motorSpeed)/(12*Kv)) * (StallTorque/((_momentOfInertia /Mathf.Pow(gearRatio,2))*12*Kv));
         return motorSpeed;
     }
 
