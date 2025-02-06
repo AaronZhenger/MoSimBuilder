@@ -13,7 +13,7 @@ public class ModuleBehaviour : MonoBehaviour
     
     private WheelBehaviour _wheelBehaviour;
     private DriveMotor _driveMotor;
-    private Rigidbody _rb;
+    [HideInInspector] public Rigidbody _rb;
     private float _startingRotation;
     private GameObject _wheelModel;
 
@@ -30,14 +30,6 @@ public class ModuleBehaviour : MonoBehaviour
         _driveMotor = gameObject.AddComponent<DriveMotor>();
         _driveMotor.gearRatio = gearRatio;
        
-        var t = transform;
-        while (t.GetComponent<Rigidbody>() == null)
-        {
-            t = t.parent.transform;
-        }
-       
-        _rb = t.GetComponent<Rigidbody>();
-       
         _startingRotation = transform.localRotation.eulerAngles.y;
 
         _wheelModel = Utils.FindChild("Model", _wheelBehaviour.gameObject);
@@ -46,6 +38,7 @@ public class ModuleBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(_rb == null) return;
         _wheelBehaviour.wheelDiameter = wheelDiameter;
         _driveMotor.gearRatio = gearRatio;
         
@@ -60,7 +53,7 @@ public class ModuleBehaviour : MonoBehaviour
         //f = m * a     a = Vtarget - Vreal
         float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * _rb.mass;
         
-        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -1.15f * _rb.mass;
+        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -2f * _rb.mass;
         for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
         {
             //drive wheel force
@@ -73,11 +66,6 @@ public class ModuleBehaviour : MonoBehaviour
         
         
         _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetRotation,0), 360f*Time.deltaTime).eulerAngles;
-
-        for (int i = 0; i < _wheelModel.transform.childCount; i++)
-        {
-            _wheelModel.transform.GetChild(i).transform.localRotation = Quaternion.Euler(0, 90, 0);
-        }
         
         _wheelModel.transform.Rotate( Vector3.right,realSpeed*Time.deltaTime);
         

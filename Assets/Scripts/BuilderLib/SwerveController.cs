@@ -17,6 +17,7 @@ public class SwerveController : MonoBehaviour
     //used by build frame
     [HideInInspector] private ModuleBehaviour[] _modules;
     [HideInInspector] public float gearRatio;
+    [HideInInspector] public Rigidbody rb;
 
     public float wheelDiameter;
     //-=-=-=-=-=
@@ -46,13 +47,9 @@ public class SwerveController : MonoBehaviour
     void Start()
     {
         _playerInput = gameObject.GetComponent<PlayerInput>();
-        _playerInput.actions.Enable();
         
-        _inputActionMap = _playerInput.currentActionMap;
-        _inputActionMap.Enable();
-        
-        _translateAction = _inputActionMap.FindAction("LeftStick");
-        _rotateAction = _inputActionMap.FindAction("RightStick");
+        _translateAction = _playerInput.actions.FindAction("LeftStick");
+        _rotateAction = _playerInput.actions.FindAction("RightStick");
         _translateAction.Enable();
         _rotateAction.Enable();
         
@@ -71,6 +68,7 @@ public class SwerveController : MonoBehaviour
                 _modules[i] = Utils.FindChild(_moduleNames[i], driveTrain).GetComponent<ModuleBehaviour>();
                 _modules[i].gearRatio = gearRatio;
                 _modules[i].wheelDiameter = (wheelDiameter + 0.01f) * 0.0254f;
+                _modules[i]._rb = rb;
             }
         }
     }

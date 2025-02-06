@@ -1,23 +1,33 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Util;
 
 [ExecuteAlways]
 public class BuildFrame : MonoBehaviour
 {
-    [SerializeField] private Vector2 frameSize;
+    [Header("Frame Info")]
+    [SerializeField] private Vector2 frameSize = new Vector2(29.5f, 29.5f);
+    
+    [SerializeField] private float robotWeight = 40f;
 
-    [SerializeField] private float gearRatio;
+    [Header("Drive Train Settings")]
+    [Tooltip("The simulation is currently hardcoded to Kraken X60s")]
+    [SerializeField] private float gearRatio = 5.85f;
     
     [SerializeField] private ModuleType moduleType;
+
+    [Header("Model Settings")] [SerializeField]
+    private bool useFrameModel = true;
     
-    GameObject driveTrain; // the game object all drivetrain spawns are handled under
+    private GameObject _driveTrain; // the game object all drivetrain spawns are handled under
     
     //Moudle stuff
-    GeneratePart[] _usedModules = new GeneratePart[4]; //caches the modules that are in the world
+    private GeneratePart[] _usedModules = new GeneratePart[4]; //caches the modules that are in the world
     
     private GameObject[] _modules = new GameObject[1]; //holds the module types that could be spawned
     
@@ -30,6 +40,10 @@ public class BuildFrame : MonoBehaviour
     private float[] _moduleWheelDiameters = new float[1];
     //
     
+    private InputActionAsset inputAsset;
+    
+    [HideInInspector] public string PlayerNumber = "Player1";
+    
     private SwerveController swerve;
 
     private float UnitValue;
@@ -41,8 +55,20 @@ public class BuildFrame : MonoBehaviour
 
         if (EditorApplication.isPlaying)
         {
-
+            inputAsset = Resources.Load("Controls/Builder") as InputActionAsset;
+            var playerInput = gameObject.AddComponent<PlayerInput>();
+            playerInput.actions = inputAsset;
+            playerInput.neverAutoSwitchControlSchemes = true;
+            playerInput.defaultControlScheme = PlayerNumber;
+            playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
+            var rb = gameObject.AddComponent<Rigidbody>();
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.mass = robotWeight;
+            rb.drag = 0.5f;
+            rb.angularDrag = 0.05f;
             swerve = gameObject.AddComponent<SwerveController>();
+            swerve.rb = rb;
             swerve.gearRatio = gearRatio;
             swerve.wheelDiameter = _moduleWheelDiameters[(int)moduleType];
         }
@@ -67,9 +93,9 @@ public class BuildFrame : MonoBehaviour
             }
         }
         
-        if (driveTrain == null)
+        if (_driveTrain == null)
         {
-            driveTrain = new GameObject
+            _driveTrain = new GameObject
             {
                 name = "driveTrain",
                 transform =
@@ -98,7 +124,7 @@ public class BuildFrame : MonoBehaviour
         {
             if (_usedModules[i] == null)
             {
-                _usedModules[i] = driveTrain.AddComponent<GeneratePart>();
+                _usedModules[i] = _driveTrain.AddComponent<GeneratePart>();
                 
                 _usedModules[i].Part = _modules[(int)moduleType];
 
@@ -146,11 +172,11 @@ public class BuildFrame : MonoBehaviour
         UnitValue = 0.0254f;
 
         //find generated objects at startup
-        driveTrain = Utils.FindChild("driveTrain", gameObject);
+        _driveTrain = Utils.FindChild("driveTrain", gameObject);
         
-        if (driveTrain != null)
+        if (_driveTrain != null)
         {
-            var generatedParts = driveTrain.GetComponents<GeneratePart>();
+            var generatedParts = _driveTrain.GetComponents<GeneratePart>();
             for (int t = 0; t < _usedModules.Length; t++)
             {
                 foreach (var part in generatedParts)
@@ -169,7 +195,7 @@ public class BuildFrame : MonoBehaviour
             swerve = gameObject.GetComponent<SwerveController>();
         }
 
-        if (swerve != null && driveTrain != null)
+        if (swerve != null && _driveTrain != null)
         {
             swerve.gearRatio = gearRatio;
             swerve.wheelDiameter = _moduleWheelDiameters[(int)moduleType];
