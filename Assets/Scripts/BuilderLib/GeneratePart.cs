@@ -5,21 +5,23 @@ using UnityEditor;
 using UnityEngine;
 using Util;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class GeneratePart : MonoBehaviour
 {
     [SerializeField] private string partName;
     [SerializeField] public bool ObjectSpawned;
     
-    public string PartName { get; set;}
+    [HideInInspector] public string PartName;
 
-    public GameObject Part { get; set; }
+    [HideInInspector] public GameObject Part;
 
-    public Vector3 LoadedPartLocation { get; set; }
+    [HideInInspector] public Vector3 LoadedPartLocation;
+
+    [HideInInspector] public Quaternion LoadedPartRotation;
+
+    [HideInInspector] public Vector3 LoadedPartScale;
     
-    public Quaternion LoadedPartRotation { get; set; }
-    
-    public Vector3 LoadedPartScale { get; set; }
+    private GameObject currentPart;
     
     private GameObject _loadedPart;
     
@@ -47,11 +49,15 @@ public class GeneratePart : MonoBehaviour
                 if (_loadedPart.name != PartName)
                 {
                     DestroyImmediate(_loadedPart);
+                } else if (currentPart != Part)
+                {
+                    DestroyImmediate(_loadedPart);
                 }
             }
 
             if (_loadedPart == null && Part != null)
             {
+                currentPart = Part;
                 _loadedPart = Instantiate(Part, LoadedPartLocation, LoadedPartRotation, transform);
                 _loadedPart.name = PartName;
             }
@@ -73,5 +79,6 @@ public class GeneratePart : MonoBehaviour
         }
 
         _loadedPart = Utils.FindChild(PartName, gameObject);
+        currentPart = Part;
     }
 }
