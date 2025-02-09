@@ -5,5 +5,8 @@ using UnityEngine;
 public enum ModuleType
 {
     invertedCorner,
-    standardCorner
+    standardCorner,
+    inverted,
+    standard,
+    lowProfile
 }

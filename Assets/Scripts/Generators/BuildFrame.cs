@@ -30,15 +30,23 @@ public class BuildFrame : MonoBehaviour
     //Moudle stuff
     private GeneratePart[] _usedModules = new GeneratePart[4]; //caches the modules that are in the world
     
-    private GameObject[] _modules = new GameObject[2]; //holds the module types that could be spawned
+    private GameObject[] _modules = new GameObject[6]; //holds the module types that could be spawned
+    
+    private float[] _moduleWheelDiameters = new float[6]; //sets the wheel size coresponding to the loaded module num
     
     private string[] _moduleNames = new string[4]; // array of names for the modules
     
     private Vector3[] _cornerModulePositions = new Vector3[4]; //position for cornerbiasedModules
+    
+    private Vector3[] _standardModulePositions = new Vector3[4];
+    
+    private Vector3[] _lowProfileModulePositions = new Vector3[4];
+    
+    private Vector3[] _usedModulePositions = new Vector3[4];
 
     private Vector3[] _moduleRotations = new Vector3[4];
     
-    private float[] _moduleWheelDiameters = new float[2];
+    
     //
     
     private InputActionAsset _inputAsset;
@@ -95,6 +103,18 @@ public class BuildFrame : MonoBehaviour
             } else if (loadedModule.name == ModuleType.standardCorner.ToString())
             {
                 _modules[1] = loadedModule;
+            } else if (loadedModule.name == ModuleType.inverted.ToString())
+            {
+                _modules[2] = loadedModule;
+            } else if (loadedModule.name == ModuleType.standard.ToString())
+            {
+                _modules[3] = loadedModule;
+            } else if (loadedModule.name == ModuleType.inverted.ToString())
+            {
+                _modules[4] = loadedModule;
+            } else if (loadedModule.name == ModuleType.lowProfile.ToString())
+            {
+                _modules[5] = loadedModule;
             }
         }
         
@@ -118,6 +138,26 @@ public class BuildFrame : MonoBehaviour
         _cornerModulePositions[1] = new Vector3(frameSize.x * 0.5f - 2.15f, 0, frameSize.y * 0.5f - 2.15f);
         _cornerModulePositions[2] = new Vector3(frameSize.x * -0.5f + 2.15f, 0, frameSize.y * -0.5f + 2.15f);
         _cornerModulePositions[3] = new Vector3(frameSize.x * 0.5f - 2.15f, 0, frameSize.y * -0.5f + 2.15f);
+        
+        _standardModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 3.15f, 0, frameSize.y * 0.5f - 3.15f);
+        _standardModulePositions[1] = new Vector3(frameSize.x * 0.5f - 3.15f, 0, frameSize.y * 0.5f - 3.15f);
+        _standardModulePositions[2] = new Vector3(frameSize.x * -0.5f + 3.15f, 0, frameSize.y * -0.5f + 3.15f);
+        _standardModulePositions[3] = new Vector3(frameSize.x * 0.5f - 3.15f, 0, frameSize.y * -0.5f + 3.15f);
+        
+        _lowProfileModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 1.25f, 0, frameSize.y * 0.5f - 1.25f);
+        _lowProfileModulePositions[1] = new Vector3(frameSize.x * 0.5f - 1.25f, 0, frameSize.y * 0.5f - 1.25f);
+        _lowProfileModulePositions[2] = new Vector3(frameSize.x * -0.5f + 1.25f, 0, frameSize.y * -0.5f + 1.25f);
+        _lowProfileModulePositions[3] = new Vector3(frameSize.x * 0.5f -1.25f, 0, frameSize.y * -0.5f + 1.25f);
+
+        _usedModulePositions = moduleType switch
+        {
+            ModuleType.invertedCorner => _cornerModulePositions,
+            ModuleType.standardCorner => _cornerModulePositions,
+            ModuleType.inverted => _standardModulePositions,
+            ModuleType.standard => _standardModulePositions,
+            ModuleType.lowProfile => _lowProfileModulePositions,
+            _ => _usedModulePositions
+        };
 
         _moduleRotations[0] = new Vector3(0, 0, 0);
         _moduleRotations[1] = new Vector3(0, 90, 0);
@@ -155,7 +195,7 @@ public class BuildFrame : MonoBehaviour
             }
             else if (_usedModules[i] != null)
             {
-                _usedModules[i].LoadedPartLocation = _cornerModulePositions[i] * 0.0254f;
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
 
                 _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
                         
@@ -177,11 +217,23 @@ public class BuildFrame : MonoBehaviour
             } else if (loadedModule.name == ModuleType.standardCorner.ToString())
             {
                 _modules[1] = loadedModule;
+            } else if (loadedModule.name == ModuleType.inverted.ToString())
+            {
+                _modules[2] = loadedModule;
+            } else if (loadedModule.name == ModuleType.standard.ToString())
+            {
+                _modules[3] = loadedModule;
+            } else if (loadedModule.name == ModuleType.lowProfile.ToString())
+            {
+                _modules[4] = loadedModule;
             }
         }
 
         _moduleWheelDiameters[0] = 4;
         _moduleWheelDiameters[1] = 4;
+        _moduleWheelDiameters[2] = 4;
+        _moduleWheelDiameters[3] = 4;
+        _moduleWheelDiameters[4] = 3;
 
         //set modules names
         _moduleNames[0] = "lf";
