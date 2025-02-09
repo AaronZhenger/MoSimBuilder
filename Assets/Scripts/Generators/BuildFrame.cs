@@ -26,6 +26,7 @@ public class BuildFrame : MonoBehaviour
     private bool useFrameModel = true;
     
     private GameObject _driveTrain; // the game object all drivetrain spawns are handled under
+    private GameObject _frame;
     
     //Moudle stuff
     private GeneratePart[] _usedModules = new GeneratePart[4]; //caches the modules that are in the world
@@ -46,6 +47,29 @@ public class BuildFrame : MonoBehaviour
 
     private Vector3[] _moduleRotations = new Vector3[4];
     
+    
+    //Frame Stuff
+    private GeneratePart[] _frameModels = new GeneratePart[4]; //caches the frame parts in the world
+    
+    private GameObject _frameModel;
+    
+    private Vector3[] _conerModuleFrameLengths = new Vector3[4];
+    
+    private Vector3[] _standardModuleFrameLengths = new Vector3[4];
+    
+    private Vector3[] _lowProfileModuleFrameLengths = new Vector3[4];
+    
+    private Vector3[] _usedFrameLengths = new Vector3[4];
+
+    private Vector3[] _framePosition = new Vector3[4];
+    
+    private Vector3[] _frameRotation = new Vector3[4];
+    
+    private string[] _frameNames = new string[4];
+    
+    private float[] _frameHeights = new float[3];
+    
+    private float _usedFrameHeight;
     
     //
     
@@ -134,20 +158,20 @@ public class BuildFrame : MonoBehaviour
         }
 
         //set module locations
-        _cornerModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 2.15f, 0, frameSize.y * 0.5f - 2.15f);
-        _cornerModulePositions[1] = new Vector3(frameSize.x * 0.5f - 2.15f, 0, frameSize.y * 0.5f - 2.15f);
-        _cornerModulePositions[2] = new Vector3(frameSize.x * -0.5f + 2.15f, 0, frameSize.y * -0.5f + 2.15f);
-        _cornerModulePositions[3] = new Vector3(frameSize.x * 0.5f - 2.15f, 0, frameSize.y * -0.5f + 2.15f);
+        _cornerModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 2.65f, 0, frameSize.y * 0.5f - 2.65f);
+        _cornerModulePositions[1] = new Vector3(frameSize.x * 0.5f - 2.65f, 0, frameSize.y * 0.5f - 2.65f);
+        _cornerModulePositions[2] = new Vector3(frameSize.x * -0.5f + 2.65f, 0, frameSize.y * -0.5f + 2.65f);
+        _cornerModulePositions[3] = new Vector3(frameSize.x * 0.5f - 2.65f, 0, frameSize.y * -0.5f + 2.65f);
         
-        _standardModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 3.15f, 0, frameSize.y * 0.5f - 3.15f);
-        _standardModulePositions[1] = new Vector3(frameSize.x * 0.5f - 3.15f, 0, frameSize.y * 0.5f - 3.15f);
-        _standardModulePositions[2] = new Vector3(frameSize.x * -0.5f + 3.15f, 0, frameSize.y * -0.5f + 3.15f);
-        _standardModulePositions[3] = new Vector3(frameSize.x * 0.5f - 3.15f, 0, frameSize.y * -0.5f + 3.15f);
+        _standardModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 3.65f, 0, frameSize.y * 0.5f - 3.65f);
+        _standardModulePositions[1] = new Vector3(frameSize.x * 0.5f - 3.65f, 0, frameSize.y * 0.5f - 3.65f);
+        _standardModulePositions[2] = new Vector3(frameSize.x * -0.5f + 3.65f, 0, frameSize.y * -0.5f + 3.65f);
+        _standardModulePositions[3] = new Vector3(frameSize.x * 0.5f - 3.65f, 0, frameSize.y * -0.5f + 3.65f);
         
-        _lowProfileModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 1.25f, 0, frameSize.y * 0.5f - 1.25f);
-        _lowProfileModulePositions[1] = new Vector3(frameSize.x * 0.5f - 1.25f, 0, frameSize.y * 0.5f - 1.25f);
-        _lowProfileModulePositions[2] = new Vector3(frameSize.x * -0.5f + 1.25f, 0, frameSize.y * -0.5f + 1.25f);
-        _lowProfileModulePositions[3] = new Vector3(frameSize.x * 0.5f -1.25f, 0, frameSize.y * -0.5f + 1.25f);
+        _lowProfileModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 1.75f, 0, frameSize.y * 0.5f - 1.75f);
+        _lowProfileModulePositions[1] = new Vector3(frameSize.x * 0.5f - 1.75f, 0, frameSize.y * 0.5f - 1.75f);
+        _lowProfileModulePositions[2] = new Vector3(frameSize.x * -0.5f + 1.75f, 0, frameSize.y * -0.5f + 1.75f);
+        _lowProfileModulePositions[3] = new Vector3(frameSize.x * 0.5f -1.75f, 0, frameSize.y * -0.5f + 1.75f);
 
         _usedModulePositions = moduleType switch
         {
@@ -175,10 +199,10 @@ public class BuildFrame : MonoBehaviour
 
                 _usedModules[i].PartName = _moduleNames[i];
 
-                _usedModules[i].LoadedPartLocation = new Vector3();
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
 
-                _usedModules[i].LoadedPartRotation = Quaternion.identity;
-
+                _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
+                        
                 _usedModules[i].LoadedPartScale = Vector3.one;
             } 
             else if (_usedModules[i].Part != _modules[(int)moduleType])
@@ -187,10 +211,10 @@ public class BuildFrame : MonoBehaviour
 
                 _usedModules[i].PartName = _moduleNames[i];
 
-                _usedModules[i].LoadedPartLocation = new Vector3();
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
 
-                _usedModules[i].LoadedPartRotation = Quaternion.identity;
-
+                _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
+                        
                 _usedModules[i].LoadedPartScale = Vector3.one;
             }
             else if (_usedModules[i] != null)
@@ -200,6 +224,134 @@ public class BuildFrame : MonoBehaviour
                 _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
                         
                 _usedModules[i].LoadedPartScale = Vector3.one;
+            }
+        }
+        
+        
+        
+        // Frame Models
+
+        if (_driveTrain != null)
+        {
+            if (_frame == null)
+            {
+                _frame = new GameObject
+                {
+                    name = "frameModel",
+                    transform =
+                    {
+                        parent = _driveTrain.transform,
+                        localPosition = Vector3.zero,
+                        localRotation = Quaternion.identity,
+                        localScale = Vector3.one
+                    }
+                };
+            }
+        }
+        
+        var loadedTubes =  Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+
+        foreach (var loadedTube in loadedTubes)
+        {
+            if (loadedTube.name == "Solid_0.125_1x2")
+            {
+                _frameModel = loadedTube;
+            }
+        }
+        
+        _frameHeights[0] = 0.8f; //corner
+        _frameHeights[1] = 0.8f; //standard
+        _frameHeights[2] = 2.65f; //low profile
+        
+        _usedFrameHeight = moduleType switch
+        {
+            ModuleType.invertedCorner => _frameHeights[0],
+            ModuleType.standardCorner => _frameHeights[0],
+            ModuleType.inverted => _frameHeights[1],
+            ModuleType.standard => _frameHeights[1],
+            ModuleType.lowProfile => _frameHeights[2],
+            _ => 0
+        };
+        
+        _framePosition[0] = new Vector3(0, _usedFrameHeight, frameSize.y/2 - 0.5f); 
+        _framePosition[1] = new Vector3(0, _usedFrameHeight, -frameSize.y/2 + 0.5f);
+        _framePosition[2] = new Vector3(frameSize.x/2 - 0.5f, _usedFrameHeight, 0);
+        _framePosition[3] = new Vector3(-frameSize.x/2 + 0.5f, _usedFrameHeight, 0);
+
+        _conerModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 8.25f);
+        _conerModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 8.25f);
+        _conerModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 8.25f);
+        _conerModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 8.25f);
+        
+        _standardModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x-2);
+        _standardModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x-2);
+        _standardModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y);
+        _standardModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y);
+        
+        _lowProfileModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 7f);
+        _lowProfileModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 7f);
+        _lowProfileModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 7f);
+        _lowProfileModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 7f);
+        
+        _usedFrameLengths = moduleType switch
+        {
+            ModuleType.invertedCorner => _conerModuleFrameLengths,
+            ModuleType.standardCorner => _conerModuleFrameLengths,
+            ModuleType.inverted => _standardModuleFrameLengths,
+            ModuleType.standard => _standardModuleFrameLengths,
+            ModuleType.lowProfile => _lowProfileModuleFrameLengths,
+            _ => _usedModulePositions
+        };
+        
+        _frameRotation[0] = new Vector3(0, 90, 0);
+        _frameRotation[1] = new Vector3(0, 90, 0);
+        _frameRotation[2] = new Vector3(0, 0, 0);
+        _frameRotation[3] = new Vector3(0, 0, 0);
+        
+        if (useFrameModel)
+        {
+            for (int i = 0; i < _frameModels.Length; i++)
+            {
+                if (_frameModels[i] == null)
+                {
+                    _frameModels[i] = _frame.AddComponent<GeneratePart>();
+
+                    _frameModels[i].Part = _frameModel;
+
+                    _frameModels[i].PartName = _frameNames[i];
+
+                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+
+                    _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
+                        
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                } else if (_frameModels[i].Part !=_frameModel)
+                {
+                    _frameModels[i].Part = _frameModel;
+
+                    _frameModels[i].PartName = _frameNames[i];
+
+                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+
+                    _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
+                        
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                }
+                else if (_frameModels[i] != null)
+                {
+                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+
+                    _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
+                        
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                }
+            }
+        }
+        else
+        {
+            if (_frame != null)
+            {
+                DestroyImmediate(_frame);
             }
         }
     }
@@ -228,6 +380,16 @@ public class BuildFrame : MonoBehaviour
                 _modules[4] = loadedModule;
             }
         }
+        
+        var loadedTubes =  Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+
+        foreach (var loadedTube in loadedTubes)
+        {
+            if (loadedTube.name == "Solid_0.125_1x2")
+            {
+                _frameModel = loadedTube;
+            }
+        }
 
         _moduleWheelDiameters[0] = 4;
         _moduleWheelDiameters[1] = 4;
@@ -240,6 +402,11 @@ public class BuildFrame : MonoBehaviour
         _moduleNames[1] = "rf";
         _moduleNames[2] = "lr";
         _moduleNames[3] = "rr";
+
+        _frameNames[0] = "front";
+        _frameNames[1] = "back";
+        _frameNames[2] = "left";
+        _frameNames[3] = "right";
 
         //set conversion unit (TEMP)
         _unitValue = 0.0254f;
@@ -261,6 +428,22 @@ public class BuildFrame : MonoBehaviour
                 }
             }
             
+            _frame = Utils.FindChild("frameModel", _driveTrain);
+
+            if (_frame != null)
+            {
+                var frameParts = _frame.GetComponents<GeneratePart>();
+                for (int t = 0; t < _usedModules.Length; t++)
+                {
+                    foreach (var part in frameParts)
+                    {
+                        if (part.PartName == _frameNames[t])
+                        {
+                            _frameModels[t] = part;
+                        }
+                    }
+                }
+            }
         }
 
         if (gameObject.GetComponent<SwerveController>())
