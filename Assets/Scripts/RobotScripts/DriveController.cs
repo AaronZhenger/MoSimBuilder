@@ -449,6 +449,9 @@ public class DriveController : MonoBehaviour
         if (gamepad != null)
         {
             isFieldCentric = !gamepad.leftShoulder.isPressed;
+            //Uncomment the line below and comment the line above if you want to use a trigger rather than a button, you can change the deadzone by modifying the value on the end
+            //            isFieldCentric = gamepad.leftTrigger.ReadValue() < 0.1f;
+
         }
 
             if (_flag) return;
