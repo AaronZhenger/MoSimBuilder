@@ -8,8 +8,17 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
+
 public class DriveController : MonoBehaviour
 {
+    public bool isFieldCentric = true;
+    private PlayerInput playerInput;
+
+    private void Awake()
+    {
+        playerInput = GetComponent<PlayerInput>();
+    }
+
     [HideInInspector]
     public DriveTrain driveTrain;
 
@@ -108,8 +117,7 @@ public class DriveController : MonoBehaviour
 
     private bool _dontUpdateBeforeVelocity = false;
     [HideInInspector]
-    public bool isFieldCentric = false;
-
+    
     private GameManager _gameManager;
 
     private Vector3 _startingPos;
@@ -167,7 +175,9 @@ public class DriveController : MonoBehaviour
     private InputAction _rotateAction;
     
     [HideInInspector] public InputActionAsset _inputActionAsset;
+    private Gamepad gamepad;  
 
+    
     private void Start()
     {
         rayCastDistance = 0.75f*0.0254f;
@@ -433,6 +443,14 @@ public class DriveController : MonoBehaviour
 
     private void Update()
     {
+        // Check if the left bumper is held down
+        gamepad = Gamepad.current;
+
+        if (gamepad != null)
+        {
+            isFieldCentric = !gamepad.leftShoulder.isPressed;
+        }
+
             if (_flag) return;
             isGrounded = CheckGround();
             areRobotsTouching = RobotsTouching;
