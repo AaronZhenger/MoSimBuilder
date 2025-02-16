@@ -11,13 +11,7 @@ using UnityEngine.Serialization;
 
 public class DriveController : MonoBehaviour
 {
-    public bool isFieldCentric = true;
-    private PlayerInput playerInput;
-
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInput>();
-    }
+    [HideInInspector] public bool isFieldCentric = true;
 
     [HideInInspector]
     public DriveTrain driveTrain;
@@ -173,9 +167,9 @@ public class DriveController : MonoBehaviour
     
     private InputAction _translateAction;
     private InputAction _rotateAction;
+    private InputAction _robotRelative;
     
     [HideInInspector] public InputActionAsset _inputActionAsset;
-    private Gamepad gamepad;  
 
     
     private void Start()
@@ -191,6 +185,7 @@ public class DriveController : MonoBehaviour
         
         _translateAction = _inputActionMap.FindAction("LeftStick");
         _rotateAction = _inputActionMap.FindAction("RightStick");
+        _robotRelative = _inputActionMap.FindAction("LB");
         _translateAction.Enable();
         _rotateAction.Enable();
         
@@ -444,15 +439,11 @@ public class DriveController : MonoBehaviour
     private void Update()
     {
         // Check if the left bumper is held down
-        gamepad = Gamepad.current;
 
-        if (gamepad != null)
-        {
-            isFieldCentric = !gamepad.leftShoulder.isPressed;
-            //Uncomment the line below and comment the line above if you want to use a trigger rather than a button, you can change the deadzone by modifying the value on the end
-            //            isFieldCentric = gamepad.leftTrigger.ReadValue() < 0.1f;
-
-        }
+        isFieldCentric = !_robotRelative.IsPressed();
+        //Uncomment the line below and comment the line above if you want to use a trigger rather than a button, you can change the deadzone by modifying the value on the end
+        //            isFieldCentric = gamepad.leftTrigger.ReadValue() < 0.1f;
+        
 
             if (_flag) return;
             isGrounded = CheckGround();
@@ -972,6 +963,7 @@ public class DriveController : MonoBehaviour
                         }
                         else
                         {
+
                             fwd = driveInput.x * velocityMp;
 
                             str = driveInput.z * velocityMp;

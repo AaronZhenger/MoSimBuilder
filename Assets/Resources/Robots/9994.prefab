@@ -10777,6 +10777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bed8cf96c1fdc6459e4ae10aaa64472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFieldCentric: 1
   driveTrain: 2
   driveTrainParent: {fileID: 1595980668960224987}
   rayCastDistance: 0.25
@@ -10799,7 +10800,6 @@ MonoBehaviour:
   - {fileID: 8442708149320779127}
   - {fileID: 6691148199833580438}
   - {fileID: 1910038090302514006}
-  isFieldCentric: 1
   atTargetPos: 0
   atTargetRot: 0
   targetOffset: 0
