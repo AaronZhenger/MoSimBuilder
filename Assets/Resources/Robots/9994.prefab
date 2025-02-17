@@ -10728,6 +10728,9 @@ MonoBehaviour:
   speedUnits: 0
   driveSpeed: 16
   driveAcceleration: 18
+  useRobotRelativeButton: 1
+  robotRelativeButton: 6
+  flipRobotRelative: 1
   frameTubing: 0
   units: 0
   driveTrainWidth: 30
@@ -10778,6 +10781,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFieldCentric: 1
+  FOCcontol: Lb
+  useFOCButton: 1
+  flipFOC: 1
   driveTrain: 2
   driveTrainParent: {fileID: 1595980668960224987}
   rayCastDistance: 0.25

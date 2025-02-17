@@ -58,6 +58,11 @@ public class GenerateDriveTrain : MonoBehaviour
     [Tooltip("max acceleration in SpeedUnits/s/s")]
     [SerializeField] private float driveAcceleration = 18;
 
+    
+    [SerializeField] private Buttons robotRelativeButton;
+    [SerializeField] private bool useRobotRelativeButton = false;
+    [SerializeField] private bool flipRobotRelative = false;
+
     [Header("Frame Information")] [SerializeField]
     private TubeType frameTubing;
     
@@ -437,6 +442,10 @@ public class GenerateDriveTrain : MonoBehaviour
         _driveController.maxSpeed = driveSpeed * _maxMp;
 
         _driveController.accelerationSpeed = driveAcceleration * _velMp;
+
+        _driveController.FOCcontol = robotRelativeButton.ToString();
+        _driveController.useFOCButton = useRobotRelativeButton;
+        _driveController.flipFOC = flipRobotRelative;
 
         if (_playerInput == null)
         {
