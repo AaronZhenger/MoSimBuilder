@@ -8,8 +8,17 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
+
 public class DriveController : MonoBehaviour
 {
+    [HideInInspector] public bool isFieldCentric = true;
+
+    [HideInInspector] public string FOCcontol;
+
+    [HideInInspector] public bool useFOCButton = false;
+    
+    [HideInInspector] public bool flipFOC = false;
+
     [HideInInspector]
     public DriveTrain driveTrain;
 
@@ -108,8 +117,7 @@ public class DriveController : MonoBehaviour
 
     private bool _dontUpdateBeforeVelocity = false;
     [HideInInspector]
-    public bool isFieldCentric = false;
-
+    
     private GameManager _gameManager;
 
     private Vector3 _startingPos;
@@ -165,9 +173,11 @@ public class DriveController : MonoBehaviour
     
     private InputAction _translateAction;
     private InputAction _rotateAction;
+    private InputAction _robotRelative;
     
     [HideInInspector] public InputActionAsset _inputActionAsset;
 
+    
     private void Start()
     {
         rayCastDistance = 0.75f*0.0254f;
@@ -181,6 +191,7 @@ public class DriveController : MonoBehaviour
         
         _translateAction = _inputActionMap.FindAction("LeftStick");
         _rotateAction = _inputActionMap.FindAction("RightStick");
+        _robotRelative = _inputActionMap.FindAction(FOCcontol);
         _translateAction.Enable();
         _rotateAction.Enable();
         
@@ -433,6 +444,16 @@ public class DriveController : MonoBehaviour
 
     private void Update()
     {
+        // Check if the left bumper is held down
+
+        if (useFOCButton)
+        {
+            isFieldCentric = !_robotRelative.IsPressed();
+        }
+        //Uncomment the line below and comment the line above if you want to use a trigger rather than a button, you can change the deadzone by modifying the value on the end
+        //            isFieldCentric = gamepad.leftTrigger.ReadValue() < 0.1f;
+        
+
             if (_flag) return;
             isGrounded = CheckGround();
             areRobotsTouching = RobotsTouching;
@@ -951,9 +972,18 @@ public class DriveController : MonoBehaviour
                         }
                         else
                         {
-                            fwd = driveInput.x * velocityMp;
+                            if (!flipFOC)
+                            {
+                                fwd = driveInput.x * velocityMp;
 
-                            str = driveInput.z * velocityMp;
+                                str = driveInput.z * velocityMp;
+                            }
+                            else
+                            {
+                                fwd = -driveInput.x * velocityMp;
+                                
+                                str = -driveInput.z * velocityMp;
+                            }
                         }
 
 
