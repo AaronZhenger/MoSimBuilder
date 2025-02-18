@@ -13,7 +13,7 @@ public class BuildFrame : MonoBehaviour
 {
     [Header("Frame Info")]
     [SerializeField] private Vector2 frameSize = new Vector2(29.5f, 29.5f);
-    
+        
     [SerializeField] private float robotWeight = 40f;
 
     [Header("Drive Train Settings")]
