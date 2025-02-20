@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5250677028271516809}
   m_Layer: 0
-  m_Name: Solid_0.125_1x2
+  m_Name: OneXTwoXEighth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

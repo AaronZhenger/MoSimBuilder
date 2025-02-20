@@ -53,7 +53,7 @@ public class ModuleBehaviour : MonoBehaviour
         //f = m * a     a = Vtarget - Vreal
         float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * _rb.mass;
         
-        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -2f * _rb.mass;
+        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -3f * _rb.mass;
         for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
         {
             //drive wheel force

@@ -253,7 +253,7 @@ public class BuildFrame : MonoBehaviour
 
         foreach (var loadedTube in loadedTubes)
         {
-            if (loadedTube.name == "Solid_0.125_1x2")
+            if (loadedTube.name == "OneXTwoXEighth")
             {
                 _frameModel = loadedTube;
             }
@@ -385,7 +385,7 @@ public class BuildFrame : MonoBehaviour
 
         foreach (var loadedTube in loadedTubes)
         {
-            if (loadedTube.name == "Solid_0.125_1x2")
+            if (loadedTube.name == "OneXTwoXEighth")
             {
                 _frameModel = loadedTube;
             }

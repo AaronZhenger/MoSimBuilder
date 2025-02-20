@@ -16,17 +16,24 @@ namespace Util
         Sequence
     }
 
+    public enum SequenceType
+    {
+        nextPress,
+        delay
+    }
+
     public enum TubeType
     {
-        OneXTwo,
-        TwoXTwo,
-        OneXOne
+        OneXTwoXEighth,
+        TwoXTwoXEighth,
+        OneXOneXEighth
     }
 
     public enum Units
     {
         Inch,
         Meter,
-        Centimeter
+        Centimeter,
+        Millimeter
     }
 }
