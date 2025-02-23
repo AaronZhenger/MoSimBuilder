@@ -60,11 +60,19 @@ public class BuildTubing : MonoBehaviour
 
         foreach (var loadedTube in loadedTubes)
         {
-            if (loadedTube.name == TubeType.OneXTwoXEighth.ToString())
+            if (loadedTube.name == TubeType.OneXTwoXEighth.ToString() && tubeType == TubeType.OneXTwoXEighth)
+            {
+                _tube = loadedTube;
+            } else if (loadedTube.name == TubeType.OneXOneXEighth.ToString() && tubeType == TubeType.OneXOneXEighth)
+            {
+                _tube = loadedTube;
+            } else if (loadedTube.name == TubeType.TwoXTwoXEighth.ToString() && tubeType == TubeType.TwoXTwoXEighth)
             {
                 _tube = loadedTube;
             }
         }
+        
+        
 
         if (_generatePart == null)
         {

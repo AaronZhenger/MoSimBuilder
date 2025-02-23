@@ -48,7 +48,7 @@ public class ModuleBehaviour : MonoBehaviour
         float feedForward = targetVelocity * 13; //Kv * target = voltage
         float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (12/6000); //error * target * p = Perror
         float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
-        float voltage = Mathf.Clamp(feedForward + pValue * (1 - Mathf.Clamp(Mathf.Abs(angleError),0,90)/90), -12, 12);
+        float voltage = Mathf.Clamp(feedForward + pValue * ((90 - Mathf.Clamp(Mathf.Abs(angleError),0,90))/90), -12, 12);
         
         //f = m * a     a = Vtarget - Vreal
         float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * _rb.mass;
@@ -65,7 +65,7 @@ public class ModuleBehaviour : MonoBehaviour
         
         
         
-        _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetRotation,0), 360f*Time.deltaTime).eulerAngles;
+        _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetRotation,0), 360*Time.deltaTime).eulerAngles;
         
         _wheelModel.transform.Rotate( Vector3.right,realSpeed*Time.deltaTime);
         
