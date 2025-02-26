@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Util
@@ -24,6 +25,32 @@ namespace Util
             }
             
             return null;
+        }
+
+        public static GameObject FindParentRB(GameObject child)
+        {
+            var t = child.transform.parent;
+            while (t.GetComponent<Rigidbody>() == null)
+            {
+                if (t.parent == null)
+                {
+                    return null;
+                }
+                t = t.parent.transform;
+            }
+            
+            return t.gameObject;
+        }
+        
+        public static GameObject FindParentPlayerInput(GameObject child)
+        {
+            var t = child.transform;
+            while (t.GetComponent<PlayerInput>() == null)
+            {
+                t = t.parent.transform;
+            }
+            
+            return t.gameObject;
         }
     }
 }
