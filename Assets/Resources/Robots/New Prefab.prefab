@@ -2489,13 +2489,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setPoints:
   - setpointName: Test1
-    controlType: 0
-    sequenceType: 0
-    sequenceTo: 
-    delay: 0
+    controlType: 2
+    sequenceType: 1
+    sequenceTo: Test2
+    delay: 2
     point: 50
     controllerButton: X
     keyboardButton: X
+  - setpointName: Test2
+    controlType: 2
+    sequenceType: 0
+    sequenceTo: 
+    delay: 2
+    point: 20
+    controllerButton: Y
+    keyboardButton: Y
+  - setpointName: Test3
+    controlType: 2
+    sequenceType: 0
+    sequenceTo: 
+    delay: 2
+    point: 0
+    controllerButton: A
+    keyboardButton: A
 --- !u!1 &2111769865735922558
 GameObject:
   m_ObjectHideFlags: 0
