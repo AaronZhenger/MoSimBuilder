@@ -27,8 +27,15 @@ public class JointController : MonoBehaviour
     private bool _sequenceActive;
     private float _sequenceTime;
     private bool _delayType;
+
+    [HideInInspector] public float p;
+    [HideInInspector] public float i;
+    [HideInInspector] public float d;
+    [HideInInspector] public float iSat;
+    [HideInInspector] public float max;
     
     [HideInInspector] public SetPoint[] setPoints;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -47,11 +54,11 @@ public class JointController : MonoBehaviour
 
         _pidController = new PIDController
         {
-            proportionalGain = 5,
+            proportionalGain = p,
             derivativeGain = 0,
             integralGain = 0,
-            outputMax = 10,
-            outputMin = -10,
+            outputMax = max,
+            outputMin = -max,
             integralSaturation = 0
         };
     }
@@ -227,7 +234,7 @@ public class JointController : MonoBehaviour
 
         if (angular)
         {
-            rawPID = _pidController.UpdateAngle(Time.deltaTime,currentPosition, _targetPosition);
+            rawPID = _pidController.UpdateAngle(Time.deltaTime,currentPosition, -_targetPosition);
             joint.targetAngularVelocity = rawPID * driveAxis;
         }
         else

@@ -2490,18 +2490,18 @@ MonoBehaviour:
   setPoints:
   - setpointName: L4
     controlType: 2
-    sequenceType: 1
+    sequenceType: 0
     sequenceTo: L42
     delay: 0.5
-    point: 0
+    point: 90
     controllerButton: X
     keyboardButton: X
   - setpointName: L42
     controlType: 2
-    sequenceType: 0
+    sequenceType: 1
     sequenceTo: L43
-    delay: 2
-    point: 80
+    delay: 1
+    point: 90
     controllerButton: X
     keyboardButton: X
   - setpointName: L43
@@ -2509,7 +2509,7 @@ MonoBehaviour:
     sequenceType: 0
     sequenceTo: 
     delay: 2
-    point: 0
+    point: -90
     controllerButton: X
     keyboardButton: X
 --- !u!1 &2111769865735922558
@@ -9302,19 +9302,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setPoints:
+  - setpointName: l4
+    controlType: 2
+    sequenceType: 1
+    sequenceTo: l4Extend
+    delay: 0.25
+    point: 0
+    controllerButton: X
+    keyboardButton: X
   - setpointName: l4Extend
     controlType: 2
     sequenceType: 0
-    sequenceTo: l4Stow
-    delay: 1
-    point: 0.5
-    controllerButton: X
-    keyboardButton: X
-  - setpointName: l4Stow
-    controlType: 2
-    sequenceType: 1
     sequenceTo: Stow
-    delay: 0.25
+    delay: 1
     point: 0.5
     controllerButton: X
     keyboardButton: X
@@ -9324,8 +9324,8 @@ MonoBehaviour:
     sequenceTo: 
     delay: 1
     point: 0
-    controllerButton: A
-    keyboardButton: A
+    controllerButton: X
+    keyboardButton: X
 --- !u!1 &8789262964313018258
 GameObject:
   m_ObjectHideFlags: 0

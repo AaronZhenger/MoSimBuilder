@@ -11,6 +11,8 @@ public class Buildelevator : MonoBehaviour
     private Vector3 _startPose;
     
     private ConfigurableJoint _joint;
+    
+    private Rigidbody _rigidbody;
 
     private GameObject _connectedBody;
 
@@ -24,6 +26,11 @@ public class Buildelevator : MonoBehaviour
     {
         if (EditorApplication.isPlaying)
         {
+            if (_rigidbody == null)
+            {
+                _rigidbody = gameObject.AddComponent<Rigidbody>();
+            }
+            
             if (_joint == null)
             {
                 _joint = gameObject.AddComponent<ConfigurableJoint>();
@@ -51,10 +58,18 @@ public class Buildelevator : MonoBehaviour
             _joint.yDrive = _drive;
             
             _controller = gameObject.AddComponent<JointController>();
-            
+
+            _controller.p = 5;
+            _controller.i = 0;
+            _controller.d = 0.0005f;
+            _controller.iSat = 0;
+            _controller.max = 5;
             _controller.angular = false;
             _controller.driveAxis = new Vector3(0, 1, 0);
             _controller.joint = _joint;
+            
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
     }
 
