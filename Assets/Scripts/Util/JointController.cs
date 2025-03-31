@@ -50,8 +50,8 @@ public class JointController : MonoBehaviour
             proportionalGain = 5,
             derivativeGain = 0,
             integralGain = 0,
-            outputMax = 1,
-            outputMin = -1,
+            outputMax = 10,
+            outputMin = -10,
             integralSaturation = 0
         };
     }
@@ -64,8 +64,10 @@ public class JointController : MonoBehaviour
             _sequenceTime -= Time.deltaTime;
         }
         
+        bool alreadyMoved = false;
         for (int i = 0; i < setPoints.Length; i++)
         {
+            
             var setPoint = setPoints[i];
             var controllerAction = _inputMap.FindAction(setPoint.controllerButton);
             var keyboardAction = _inputMap.FindAction(setPoint.keyboardButton);
@@ -101,10 +103,12 @@ public class JointController : MonoBehaviour
 
                 case ControlType.Sequence:
                     // Implement Sequence logic
+                    //its cooked. just dont touch
                     switch (setPoint.sequenceType)
                     {
+                        //delay logic
                         case (SequenceType.delay):
-                            if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0)
+                            if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
                             {
                                 _targetPosition = setPoint.point;
                                 _sequencePoint = setPoint.sequenceTo;
@@ -112,6 +116,7 @@ public class JointController : MonoBehaviour
                                 _delayType = true;
 
                                 _sequenceActive = _sequencePoint.Length > 0;
+                                alreadyMoved = true;
                             }
                             else if (!_sequenceActive && buttonPressed)
                             {
@@ -132,10 +137,22 @@ public class JointController : MonoBehaviour
                                     _sequenceActive = _sequencePoint.Length > 0;
                                     _sequenceTime = setPoint.delay;
                                     _delayType = true;
+                                    alreadyMoved = true;
                                 }
+                            } else if (!_delayType && buttonPressed && _sequencePoint == setPoint.setpointName && !alreadyMoved)
+                            {
+                                _targetPosition = setPoint.point;
+                                _sequencePoint = setPoint.sequenceTo;
+                                _sequenceTime = setPoint.delay;
+                                _delayType = true;
+
+                                _sequenceActive = _sequencePoint.Length > 0;
+                                alreadyMoved = true;
                             }
 
                             break;
+                        
+                        //next press logic
                         case (SequenceType.nextPress):
                             if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
                             {
@@ -144,17 +161,20 @@ public class JointController : MonoBehaviour
                                 _delayType = false;
 
                                 _sequenceActive = _sequencePoint.Length > 0;
+                                alreadyMoved = true;
                             }
-                            else if (buttonPressed)
+                            else if (buttonPressed && !alreadyMoved)
                             {
-                                if (_sequenceActive && _sequencePoint == setPoint.setpointName)
+                                _delayType = false;
+                                if (_sequenceActive && _sequencePoint == setPoint.setpointName && !alreadyMoved)
                                 {
                                     _targetPosition = setPoint.point;
                                     _sequencePoint = setPoint.sequenceTo;
 
                                     _sequenceActive = _sequencePoint.Length > 0;
+                                    alreadyMoved = true;
                                 }
-                                else if (!_sequenceActive)
+                                else if (!_sequenceActive && !alreadyMoved)
                                 {
                                     bool startPoint = false;
                                     for (int j = 0; j < setPoints.Length; j++)
@@ -171,6 +191,7 @@ public class JointController : MonoBehaviour
                                         _sequencePoint = setPoint.sequenceTo;
 
                                         _sequenceActive = _sequencePoint.Length > 0;
+                                        alreadyMoved = true;
                                     }
                                 }
                             }
@@ -212,7 +233,7 @@ public class JointController : MonoBehaviour
         else
         {
             rawPID = _pidController.Update(Time.deltaTime,currentPosition, _targetPosition);
-            joint.targetVelocity = rawPID * driveAxis;
+            joint.targetVelocity = -rawPID * driveAxis;
         }
     }
 }

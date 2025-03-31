@@ -4,10 +4,11 @@ using UnityEditor;
 using UnityEngine;
 using Util;
 
-[ExecuteAlways]
-public class BuildArm : MonoBehaviour
+public class Buildelevator : MonoBehaviour
 {
     [SerializeField] private SetPoint[] setPoints;
+
+    private Vector3 _startPose;
     
     private ConfigurableJoint _joint;
 
@@ -27,6 +28,8 @@ public class BuildArm : MonoBehaviour
             {
                 _joint = gameObject.AddComponent<ConfigurableJoint>();
             }
+
+            _startPose = transform.localPosition;
             
             _connectedBody = Utils.FindParentRB(gameObject);
 
@@ -34,23 +37,23 @@ public class BuildArm : MonoBehaviour
 
             _joint.connectedBody = _gRb;
             _joint.xMotion = ConfigurableJointMotion.Locked;
-            _joint.yMotion = ConfigurableJointMotion.Locked;
             _joint.zMotion = ConfigurableJointMotion.Locked;
             _joint.angularYMotion = ConfigurableJointMotion.Locked;
             _joint.angularZMotion = ConfigurableJointMotion.Locked;
+            _joint.angularXMotion = ConfigurableJointMotion.Locked;
+            
+            _joint.yMotion = ConfigurableJointMotion.Free;
 
-            _joint.angularXMotion = ConfigurableJointMotion.Free;
-
-            _drive.maximumForce = 8000;
-            _drive.positionDamper = 100;
+            _drive.maximumForce = 8000000;
+            _drive.positionDamper = 10000;
             _drive.positionSpring = 0;
             _drive.useAcceleration = false;
-            _joint.angularXDrive = _drive;
+            _joint.yDrive = _drive;
             
             _controller = gameObject.AddComponent<JointController>();
             
-            _controller.angular = true;
-            _controller.driveAxis = new Vector3(1, 0, 0);
+            _controller.angular = false;
+            _controller.driveAxis = new Vector3(0, 1, 0);
             _controller.joint = _joint;
         }
     }
@@ -65,7 +68,7 @@ public class BuildArm : MonoBehaviour
         else
         {
             _controller.setPoints = setPoints;
-            _controller.currentPosition = transform.localRotation.eulerAngles.x;
+            _controller.currentPosition = transform.localPosition.y - _startPose.y;
         }
     }
 }
