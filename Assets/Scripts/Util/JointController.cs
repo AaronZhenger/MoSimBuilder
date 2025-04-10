@@ -12,6 +12,7 @@ public class JointController : MonoBehaviour
     public bool angular;
     public Vector3 driveAxis;
     public float home;
+    public bool follower = false;
     
     private PlayerInput _playerInput;
     public InputActionMap _inputMap;
@@ -63,6 +64,11 @@ public class JointController : MonoBehaviour
         };
     }
 
+    public void FollowPosition(float position)
+    {  
+       this._targetPosition = position; 
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -72,6 +78,9 @@ public class JointController : MonoBehaviour
         }
         
         bool alreadyMoved = false;
+        
+        if (follower) return; 
+        
         for (int i = 0; i < setPoints.Length; i++)
         {
             
