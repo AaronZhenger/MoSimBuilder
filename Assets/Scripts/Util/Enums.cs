@@ -1,5 +1,8 @@
 namespace Util
 {
+    /// <summary>
+    /// The Swerve Module style to use
+    /// </summary>
     public enum ModuleType
     {
         invertedCorner,
@@ -9,6 +12,9 @@ namespace Util
         lowProfile
     }
 
+    /// <summary>
+    /// The type of setpoint that is being used
+    /// </summary>
     public enum ControlType
     {
         Toggle,
@@ -16,12 +22,18 @@ namespace Util
         Sequence
     }
 
+    /// <summary>
+    /// The continuation requirement for the sequence type of setpoint
+    /// </summary>
     public enum SequenceType
     {
         nextPress,
         delay
     }
 
+    /// <summary>
+    /// Tube sizing names.
+    /// </summary>
     public enum TubeType
     {
         OneXTwoXEighth,
@@ -29,6 +41,9 @@ namespace Util
         OneXOneXEighth
     }
 
+    /// <summary>
+    /// Units that can be used to generate Parts.
+    /// </summary>
     public enum Units
     {
         Inch,

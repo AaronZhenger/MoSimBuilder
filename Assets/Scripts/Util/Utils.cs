@@ -12,6 +12,12 @@ namespace Util
         
         }
 
+        /// <summary>
+        /// Finds a child with a given name by only searching the children instead of everything.
+        /// </summary>
+        /// <param name="childName"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public static GameObject FindChild(string childName, GameObject parent)
         {
             if (parent == null) return null;
@@ -27,6 +33,11 @@ namespace Util
             return null;
         }
 
+        /// <summary>
+        /// Finds the first Parent objcet which contains a rigid body
+        /// </summary>
+        /// <param name="child"></param>
+        /// <returns></returns>
         public static GameObject FindParentRB(GameObject child)
         {
             var t = child.transform.parent;
@@ -42,6 +53,11 @@ namespace Util
             return t.gameObject;
         }
         
+        /// <summary>
+        /// finds the first parent object with a player input object.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <returns></returns>
         public static GameObject FindParentPlayerInput(GameObject child)
         {
             var t = child.transform;

@@ -6,9 +6,21 @@ using Util;
 public class ModuleBehaviour : MonoBehaviour
 {
     //input settigns
+    /// <summary>
+    /// The diameter of the swerve wheel
+    /// </summary>
     [HideInInspector] public float wheelDiameter;
+    /// <summary>
+    /// The gear ratio of the motor to drive wheel (positive reduction)
+    /// </summary>
     [HideInInspector] public float gearRatio;
+    /// <summary>
+    /// The target velocity for the drive contorller
+    /// </summary>
     [HideInInspector] public float targetVelocity = 0;
+    /// <summary>
+    /// The target angle to finish the modules at.
+    /// </summary>
     [HideInInspector] public float targetModuleAngle = 0;
     
     private WheelBehaviour _wheelBehaviour;

@@ -5,20 +5,35 @@ using UnityEditor;
 using UnityEngine;
 using Util;
 
+/// <summary>
+/// Generates a part object can be used multiple times on one object to create complex models
+/// </summary>
 [ExecuteInEditMode]
 public class GeneratePart : MonoBehaviour
 {
     [SerializeField] private string partName;
     [SerializeField] public bool ObjectSpawned;
     
+    /// <summary>
+    /// The name of the Object to use
+    /// </summary>
     [HideInInspector] public string PartName;
 
+    /// <summary>
+    /// The part(GameObject) to generate
+    /// </summary>
     [HideInInspector] public GameObject Part;
-
+    /// <summary>
+    /// The transform relative to the scripts object to put the part
+    /// </summary>
     [HideInInspector] public Vector3 LoadedPartLocation;
-
+/// <summary>
+/// The rotation relative to the scripts object to put the part
+/// </summary>
     [HideInInspector] public Quaternion LoadedPartRotation;
-
+/// <summary>
+/// The Scale for the object to use.
+/// </summary>
     [HideInInspector] public Vector3 LoadedPartScale;
     
     private GameObject currentPart;

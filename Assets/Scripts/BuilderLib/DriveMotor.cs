@@ -23,9 +23,19 @@ public class DriveMotor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (DriveBroke())
+        {
+            ResetMotor();
+        }
     }
 
+    /// <summary>
+    /// Updates the speed of the drive motor values.
+    /// Resets the calculated new speed to the real new speed
+    /// </summary>
+    /// <param name="voltage"></param>
+    /// <param name="realSpeed"></param>
+    /// <returns></returns>
     public float DriveSimUpdate(float voltage, float realSpeed)
     {
         //reset drive speed to real speed
@@ -41,8 +51,20 @@ public class DriveMotor : MonoBehaviour
         return motorSpeed;
     }
 
+    /// <summary>
+    /// resets the motor speed in case of issues.
+    /// </summary>
     public void ResetMotor()
     {
         motorSpeed = 0;
+    }
+    
+    /// <summary>
+    /// Detects rare NAN casses and resets the motor speed
+    /// </summary>
+    /// <returns></returns>
+    private bool DriveBroke()
+    {
+        return !float.IsNaN(motorSpeed) && !float.IsInfinity(motorSpeed);
     }
 }

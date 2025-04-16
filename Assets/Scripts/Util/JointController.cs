@@ -7,11 +7,29 @@ using Util;
 
 public class JointController : MonoBehaviour
 {
-    public float currentPosition;
-    public ConfigurableJoint joint;
-    public bool angular;
+    /// <summary>
+    /// Sets the location for the controller to base its targets off of
+    /// </summary>
+    public float currentPosition; 
+    /// <summary>
+    /// The joint for the controller to affect controll over
+    /// </summary>
+    public ConfigurableJoint joint; 
+    /// <summary>
+    /// Whether or not the joint is moving in a linear or angular axis (true is angular)
+    /// </summary>
+    public bool angular; 
+    /// <summary>
+    /// Specifies the EUler axis to controll. must be (1,0,0) (0,1,0) or (0,0,1)
+    /// </summary>
     public Vector3 driveAxis;
-    public float home;
+    /// <summary>
+    /// Sets the home location.
+    /// </summary>
+    public float home; 
+    /// <summary>
+    /// Used when another scripts needs to controll the target instead of the passed through setpoints.
+    /// </summary>
     public bool follower = false;
     
     private PlayerInput _playerInput;
@@ -35,6 +53,9 @@ public class JointController : MonoBehaviour
     [HideInInspector] public float iSat;
     [HideInInspector] public float max;
     
+    /// <summary>
+    /// The setpoint struct to base the logic around.
+    /// </summary>
     [HideInInspector] public SetPoint[] setPoints;
     
     // Start is called before the first frame update
@@ -64,6 +85,10 @@ public class JointController : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// the overide function for running a joint PID directly instead of through the setpoint object
+    /// </summary>
+    /// <param name="position"></param>
     public void FollowPosition(float position)
     {  
        this._targetPosition = position; 

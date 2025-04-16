@@ -11,11 +11,26 @@ public class PIDController
         ErrorRateOfChange
     }
 
+  /// <summary>
+  /// The P value of the PID
+  /// </summary>
     public float proportionalGain;
+  /// <summary>
+  /// The I gain of the PID
+  /// </summary>
     public float integralGain;
+  /// <summary>
+  /// The D gain of the PID
+  /// </summary>
     public float derivativeGain;
 
+    /// <summary>
+    /// Minimum output value for the PID
+    /// </summary>
     public float outputMin = -1;
+    /// <summary>
+    /// Maximum Output value for the PID
+    /// </summary>
     public float outputMax = 1;
     public float integralSaturation;
     public DerivativeMeasurement derivativeMeasurement;
@@ -26,10 +41,21 @@ public class PIDController
     public float velocity;
     public bool derivativeInitialized;
 
+    /// <summary>
+    /// Resets the PID controller
+    /// </summary>
     public void Reset() {
         derivativeInitialized = false;
     }
 
+    /// <summary>
+    /// Update the PID in linear mode
+    /// </summary>
+    /// <param name="dt"></param>
+    /// <param name="currentValue"></param>
+    /// <param name="targetValue"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public float Update(float dt, float currentValue, float targetValue) {
         if (dt <= 0) throw new ArgumentOutOfRangeException(nameof(dt));
 
@@ -66,10 +92,24 @@ public class PIDController
         return Mathf.Clamp(result, outputMin, outputMax);
     }
 
+    /// <summary>
+    /// Calculates the angle difference
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     private float AngleDifference(float a, float b) {
         return (a - b + 540) % 360 - 180;
     }
 
+    /// <summary>
+    /// Updates the angle value (for angular mode)
+    /// </summary>
+    /// <param name="dt"></param>
+    /// <param name="currentAngle"></param>
+    /// <param name="targetAngle"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public float UpdateAngle(float dt, float currentAngle, float targetAngle) {
         if (dt <= 0) throw new ArgumentOutOfRangeException(nameof(dt));
         float error = AngleDifference(targetAngle, currentAngle);

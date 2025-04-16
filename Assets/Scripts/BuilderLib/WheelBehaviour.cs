@@ -37,6 +37,7 @@ public class WheelBehaviour : MonoBehaviour
         //reset lists 
         collisionPoints.Clear();
         collisionNormals.Clear();
+        //Proceeds to lose sanity
         
         //check and add colision points and normals
         if (_wheelHits[0])

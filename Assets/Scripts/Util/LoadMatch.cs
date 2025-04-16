@@ -15,6 +15,7 @@ public class LoadMatch : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     
     //Robot Selector stuff
+    //sorting buffers. I might go insane If I ever redo them
     private GameObject[] _robotBuffer;
     private GameObject[] _robotBuffer2;
     private GameObject[] _robotBuffer3;
@@ -54,6 +55,9 @@ public class LoadMatch : MonoBehaviour
         CheckRobots();
     }
 
+    /// <summary>
+    /// loads the field.
+    /// </summary>
     private void LoadField()
     {
         _fieldHolder = new GameObject
@@ -65,6 +69,10 @@ public class LoadMatch : MonoBehaviour
         Instantiate(fieldPrefab[0], Vector3.zero, Quaternion.identity, _fieldHolder.transform);
     }
 
+    /// <summary>
+    /// identifies the active field
+    /// </summary>
+    /// <returns></returns>
     private bool CheckField()
     {
         if (transform.childCount == 0)
@@ -77,6 +85,9 @@ public class LoadMatch : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// destroys the active field
+    /// </summary>
     private void DestroyField()
     {
         if (transform.Find("FieldHolder"))
@@ -86,6 +97,9 @@ public class LoadMatch : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the field to the default state
+    /// </summary>
     private void ResetField()
     {
         DestroyField();
@@ -94,21 +108,34 @@ public class LoadMatch : MonoBehaviour
         addCamera();
     }
 
+    /// <summary>
+    /// Spawns a robot
+    /// </summary>
     private void SpawnRobot()
     {
         _activeRobot = Instantiate(robots[0], spawnPoint.position, spawnPoint.rotation, _fieldHolder.transform);
     }
 
+    /// <summary>
+    /// Identifies if a robot is currently loaded
+    /// </summary>
+    /// <returns></returns>
     private bool RobotLoaded()
     {
         return _activeRobot != null;
     }
 
+    /// <summary>
+    /// Deletes the active robot
+    /// </summary>
     private void DeleteRobot()
     {
         DestroyImmediate(_activeRobot);
     }
 
+    /// <summary>
+    /// Adds a camera to the active robot
+    /// </summary>
     private void addCamera()
     {
         //load camera options
@@ -119,6 +146,10 @@ public class LoadMatch : MonoBehaviour
         cam.transform.localPosition = Vector3.zero;
     }
 
+    
+    /// <summary>
+    /// creates the list of loaded robots to be put on the inspector
+    /// </summary>
     private void CheckRobots()//its clean and wont brake but I hate this.
     {
         //detect all robot prefabs
