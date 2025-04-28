@@ -22,6 +22,12 @@ namespace Util
         Sequence
     }
 
+    public enum elevatorType
+    {
+        Cascade,
+        Continuous
+    }
+
     /// <summary>
     /// The continuation requirement for the sequence type of setpoint
     /// </summary>

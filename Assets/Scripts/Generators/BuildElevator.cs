@@ -4,16 +4,21 @@ using MyBox;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 using Util;
 using Random = Unity.Mathematics.Random;
 
 [ExecuteAlways]
 public class Buildelevator : MonoBehaviour
 {
+    [Header("General Settings")]
     [SerializeField] private SetPoint[] setPoints;
 
     [SerializeField] private bool model;
     
+    [SerializeField] private elevatorType elevatorType;
+    
+    [Header("ModelSettings")]
     [ConditionalField(nameof(model), false)]
     [SerializeField] private float width;
     [ConditionalField(nameof(model), false)]
@@ -22,8 +27,25 @@ public class Buildelevator : MonoBehaviour
     [SerializeField] private int stages;
     [ConditionalField(nameof(model), false)]
     [SerializeField] private bool carriage = true;
-    [ConditionalField(nameof(carriage), false)]
+    [ConditionalField(true, nameof(Predicate))]
     [SerializeField] private float carriageHeight;
+    private bool Predicate() => model && carriage;
+
+    [Tooltip("The final stage is the carriage stage")]
+    [SerializeField] private float[] stageWeights;
+
+    [Header("advanced Settings")]
+    [SerializeField] private bool useAdvancedSettings = false;
+
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float maxSpeed;
+
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kP;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kI;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kD;
 
     private Vector3 _startPose;
     
@@ -63,7 +85,7 @@ public class Buildelevator : MonoBehaviour
     
     private AudioSource _audioSource;
     
-    [SerializeField]  AudioResource[] _audioClips;
+    private AudioResource[] _audioClips;
     
     
     // Start is called before the first frame update
@@ -143,6 +165,10 @@ public class Buildelevator : MonoBehaviour
                 BuildModel();
             }
         }
+        else if (elevatorType == elevatorType.Cascade)
+        {
+            CascadeMovement();
+        }
         else
         {
             ContinuousClick();
@@ -162,7 +188,7 @@ public class Buildelevator : MonoBehaviour
             if (i == _rigidbodies.Length - 1)
             {
                 _controllers[i].setPoints = setPoints;
-                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - ((i+1) * 0.0254f);
+                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - ((i) * 0.0254f);
                 _controllers[i].follower = false;
                 continue; //skip follower calculations
             }
@@ -174,45 +200,38 @@ public class Buildelevator : MonoBehaviour
             //there are so many things wrong with this but PLEASE just leave it. I have lost so much time trying to 
             //trying to make it not jank.
             float combinedHeight = 0;
-            for (int j = i+1; j < _rigidbodies.Length; j++)
-            { 
-                combinedHeight += ((height) - (1 * ((j < 2) ? 0 : j - 1) - ((stages - j) * -2))) * 0.0254f;
+            for (int j = i + 1; j < _rigidbodies.Length; j++)
+            {
+                combinedHeight += ((height-(4 + (stages - (i-1)))) - (1 * ((j < 2) ? 0 : j - 1) - ((stages - j) * -2))) * 0.0254f;
             }
 
-            float heightOffset = 0;
-            if (carriage)
-            {
-                heightOffset = -(carriageHeight + 1) * 0.0254f;
-            }
+            float heightOffset = carriage ? -(carriageHeight + 1) * 0.0254f : 0;
 
             float setPoint = 0;
-            if (combinedHeight < _rigidbodies[stages-1].transform.localPosition.y - (i * 0.0254f) - heightOffset)
+            if (combinedHeight < _rigidbodies[^1].transform.localPosition.y - (i * 0.0254f) - heightOffset)
             {
                 _engaged[i] = true; //audio thingy
-                setPoint = combinedHeight - _rigidbodies[stages-1].transform.localPosition.y - ((i+1) * 0.0254f);
-                
-                setPoint -= 6 * 0.0254f;
+                setPoint = combinedHeight - _rigidbodies[^1].transform.localPosition.y - ((i + 1) * 0.0254f);
 
-                if (carriage && stages - 2 == i)
-                {
-                    setPoint += (6 + i) * 0.0254f;
-                }
+                setPoint += (i * 1f) * 0.0254f;
+
             }
             else
             {
                 setPoint = 0;
                 _engaged[i] = false;
             }
-            
+
             setPoint = -setPoint;
 
             if (setPoint <= 0)
             {
                 setPoint = 0;
             }
+
             
             _controllers[i].FollowPosition(setPoint);
-            _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - ((i+1) * 0.0254f);
+            _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - (((i * 1) + (i * 0.05f)) * 0.0254f);
         }
     }
 
@@ -251,15 +270,15 @@ public class Buildelevator : MonoBehaviour
             _audioSource.resource = _audioClips[1];
         }
 
-        _audioSource.pitch = 1.25f;
-        
+        _audioSource.pitch = 1.85f;
+        _audioSource.reverbZoneMix = 0;
         _audioSource.Play();
     }
 
     /// <summary>
     /// Set stages to correct locations for a cascade rigged elevator
     /// </summary>
-    private void cascadeMovement()
+    private void CascadeMovement()
     {
         //TODO: add the cascade rigged motion to this function
         for (int i = 0; i < _rigidbodies.Length; i++)
@@ -268,20 +287,35 @@ public class Buildelevator : MonoBehaviour
             {
                 _controllers[i].follower = false;
                 _controllers[i].setPoints = setPoints;
+                float overlapLength = 0.0254f * 1.05f; // Example overlap length
+                float offset = (i+1) * overlapLength;
+                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - offset;
             }
             else
             {
+                //ai took over I give no promises
                 _controllers[i].follower = true;
-                
-                float target = _rigidbodies[^1].transform.localPosition.y;
 
-                float count = 0;
-                for (int j = i + 1; j < _rigidbodies.Length; j++)
+                float carriagePosition = _rigidbodies[^1].transform.localPosition.y;
+                int totalStages = _rigidbodies.Length;
+                int currentStageIndex = i;
+                float overlapLength = 0.0254f * 1.5f; // Example overlap length
+
+                // The target position should be a fraction of the carriage's movement,
+                // offset by the accumulated overlap of the stages *below* it.
+                float target = carriagePosition * ((float)(currentStageIndex + 1) / totalStages);
+
+                // Each stage 'i' has 'i' stages below it that contribute to its initial offset.
+                target += (1 + currentStageIndex) * overlapLength * 0.0254f;
+
+                if (target < 0)
                 {
-                    count += 1;
+                    target = 0;
                 }
-                target = target / (count * 1.5f);
                 _controllers[i].FollowPosition(target);
+                // The currentPosition should reflect the stage's local Y position.
+                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y;
+                //end ai takeover
             }
         }
     }
@@ -291,14 +325,15 @@ public class Buildelevator : MonoBehaviour
     /// </summary>
     private void GenerateRBs()
     {
+        var driveTrain = Utils.FindParentRB(gameObject).GetComponent<Rigidbody>();
         _rigidbodies = new Rigidbody[_modelObjects.Length - 1]; //stationary stage doesnt have a rb
         for (int i = 0; i < _modelObjects.Length-1; i++) //skip the stationary stage (0)
         {
             _rigidbodies[i] = _modelObjects[i+1].AddComponent<Rigidbody>();
 
-            _rigidbodies[i].mass = 1;
+            _rigidbodies[i].mass = stageWeights[i];
             _rigidbodies[i].drag = 0;
-            _rigidbodies[i].angularDrag = 0;
+            _rigidbodies[i].angularDrag = driveTrain.angularDrag;
             _rigidbodies[i].useGravity = true;
             _rigidbodies[i].isKinematic = false;
             _rigidbodies[i].interpolation = RigidbodyInterpolation.Interpolate;
@@ -317,7 +352,6 @@ public class Buildelevator : MonoBehaviour
         for (int i = 0; i < _modelObjects.Length-1; i++) //skip the stationary stage (0)
         {
             _joints[i] = _modelObjects[i+1].AddComponent<ConfigurableJoint>();
-
             _joints[i].connectedBody = driveTrain;
             _joints[i].xMotion = ConfigurableJointMotion.Locked;
             _joints[i].zMotion = ConfigurableJointMotion.Locked;
@@ -345,11 +379,23 @@ public class Buildelevator : MonoBehaviour
         {
             _controllers[i] = _modelObjects[i+1].AddComponent<JointController>();
 
-            _controllers[i].p = 5;
-            _controllers[i].i = 0;
-            _controllers[i].d = 0.0005f;
-            _controllers[i].iSat = 0;
-            _controllers[i].max = 5;
+            if (useAdvancedSettings)
+            {
+                _controllers[i].p = kP;
+                _controllers[i].i = kI;
+                _controllers[i].d = kD;
+                _controllers[i].iSat = 0;
+                _controllers[i].max = maxSpeed;
+            }
+            else
+            {
+                _controllers[i].p = 5;
+                _controllers[i].i = 0;
+                _controllers[i].d = 0.0005f;
+                _controllers[i].iSat = 0;
+                _controllers[i].max = 5;
+            }
+            
             _controllers[i].angular = false;
             _controllers[i].driveAxis = new Vector3(0, 1, 0);
             _controllers[i].joint = _joints[i];
@@ -381,6 +427,50 @@ public class Buildelevator : MonoBehaviour
     //generates the standard elevator model.
     private void BuildModel()
     {
+
+        if (stageWeights == null)
+        {
+            stageWeights = new float[stages];
+            for (int i = 0; i < stages; i++)
+            {
+                stageWeights[i] = 5;
+            }
+        } 
+        else if (stageWeights.Length != stages)
+        {
+            float[] carriageWeightBuffer = stageWeights;
+            stageWeights = new float[stages];
+
+            if (carriageWeightBuffer.Length > stages)
+            {
+                var stagesRemoved = carriageWeightBuffer.Length - stages;
+
+                for (int i = 0; i < stages; i++)
+                {
+                    stageWeights[i] = carriageWeightBuffer[i + stagesRemoved];
+                }
+            }
+            else
+            {
+                stageWeights = new float[stages];
+
+                var stagesAdded = stages - carriageWeightBuffer.Length;
+                for (int i = 0; i < stages; i++)
+                {
+                    if (i < stagesAdded)
+                    {
+                        stageWeights[i] = 5;
+                    }
+                    else
+                    {
+                        stageWeights[i] = carriageWeightBuffer[i - (stagesAdded)];
+                    }
+                }
+                
+                
+            }
+        }
+        
         if (wasCarriage != carriage)
         {
             foreach (var modelObject in _modelObjects)
@@ -445,7 +535,7 @@ public class Buildelevator : MonoBehaviour
                 }
 
                 
-                _modelObjects[i].transform.localPosition = new Vector3(0, i * 1 * 0.0254f, 0); //step the bottom up by 1 inch
+                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 6);
                     
@@ -575,6 +665,7 @@ public class Buildelevator : MonoBehaviour
             }
             else if (carriage && i == stages)
             {
+                //TODO: fix carrage height math. 5 inches is 3
                 if (_modelObjects[i] == null)
                 {
                     _modelObjects[i] = new GameObject
@@ -591,7 +682,7 @@ public class Buildelevator : MonoBehaviour
                 }
 
                 
-                _modelObjects[i].transform.localPosition = new Vector3(0, i * 1 * 0.0254f, 0); //step the bottom up by 1 inch
+                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 4);
                     
@@ -695,7 +786,7 @@ public class Buildelevator : MonoBehaviour
                 }
 
                 
-                _modelObjects[i].transform.localPosition = new Vector3(0, i * 1 * 0.0254f, 0); //step the bottom up by 1 inch
+                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 4);
                     
@@ -708,8 +799,7 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1 : 0) * 1.25f)) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
                 }
                 else
                 {
@@ -717,8 +807,7 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1 : 0) * 1.25f)) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
                 }
                 
                 if (tubing[1] == null)
@@ -767,10 +856,10 @@ public class Buildelevator : MonoBehaviour
                     tubing[3].Part = _tubingObject;
                     tubing[3].PartName = "upper cross brace (" + i + ")";
                     tubing[3].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
-                    tubing[3].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
+                        new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))+0.5f) * 0.0254f, 0);
+                    tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f);  
                 }
                 else
                 {
@@ -778,7 +867,7 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))+0.5f) * 0.0254f, 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)) * (1))) * 0.0254f); 
+                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
                 }
                 
             }
