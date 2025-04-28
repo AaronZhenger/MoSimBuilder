@@ -695,8 +695,7 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0))) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); //if stationary width goes outside height
                 }
                 else
                 {
@@ -704,8 +703,7 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0))) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); //if stationary width goes outside height
                 }
                 
                 if (tubing[1] == null)
@@ -714,18 +712,18 @@ public class Buildelevator : MonoBehaviour
                     tubing[1].Part = _tubingObject;
                     tubing[1].PartName = "left Upright (" + i + ")";
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (carriageHeight/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - i))) * 0.0254f, 0);
+                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, ((carriageHeight/2) ) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight - (1 * ((i < 2) ? 0 : i-1) - ((stages - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
                 }
                 else
                 {
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (carriageHeight/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - i))) * 0.0254f, 0);
+                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, ((carriageHeight/2) ) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight - (1 * ((i < 2) ? 0 : i-1) - ((stages - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
                 }
                 
                 if (tubing[2] == null)
@@ -742,10 +740,10 @@ public class Buildelevator : MonoBehaviour
                 else
                 {
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (carriageHeight/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - i))) * 0.0254f, 0);
+                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, ((carriageHeight/2)) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight - (1 * ((i < 2) ? 0 : i-1) - ((stages - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
                 }
                 
                 if (tubing[3] == null)
@@ -754,15 +752,15 @@ public class Buildelevator : MonoBehaviour
                     tubing[3].Part = _tubingObject;
                     tubing[3].PartName = "upper cross brace (" + i + ")";
                     tubing[3].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1 * (i)))) * 0.0254f, (1.0f + (carriageHeight/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - i))) * 0.0254f, 0);
-                    tubing[3].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
+                        new Vector3(0, ((carriageHeight-0.5f) * 0.0254f), 0);
+                    tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight - (1 * ((i < 2) ? 0 : i-1) - ((stages - i) * -2))) * 0.0254f); 
+                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); 
                 }
                 else
                 {
                     tubing[3].LoadedPartLocation =
-                        new Vector3(0, (carriageHeight - (stages) - ((stages - i))+0.5f) * 0.0254f, 0);
+                        new Vector3(0, ((carriageHeight-0.5f) * 0.0254f), 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
                         new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); 
