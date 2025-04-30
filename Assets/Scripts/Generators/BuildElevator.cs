@@ -425,6 +425,47 @@ public class Buildelevator : MonoBehaviour
         _drives[i].useAcceleration = false;
         _joints[i].yDrive = _drive;
     }
+    
+    //ai warning
+    // Separate function to handle the hierarchy reordering
+    private void ReorderHierarchy()
+    {
+        Transform[] children = new Transform[transform.childCount];
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            children[i] = transform.GetChild(i);
+        }
+
+        System.Array.Sort(children, (a, b) =>
+        {
+            int indexA = -1;
+            int indexB = -1;
+
+            if (a.name.StartsWith("Stage"))
+            {
+                if (int.TryParse(a.name.Substring(5), out int result))
+                {
+                    indexA = result;
+                }
+            }
+
+            if (b.name.StartsWith("Stage"))
+            {
+                if (int.TryParse(b.name.Substring(5), out int result))
+                {
+                    indexB = result;
+                }
+            }
+
+            return indexA.CompareTo(indexB);
+        });
+
+        for (int i = 0; i < children.Length; i++)
+        {
+            children[i].SetSiblingIndex(i);
+        }
+    }
+    //end ai warning
 
     //generates the standard elevator model.
     private void BuildModel()
@@ -490,10 +531,31 @@ public class Buildelevator : MonoBehaviour
             int oldLength = _stageModels.Length;
             int newLength = stages + 1;
 
-            if (newLength > oldLength) // Growing
+            if (newLength > oldLength) // Growing - Insert new stage at the beginning and reorder
             {
+                int stagesToAdd = newLength - oldLength;
+
+                // Resize the array to accommodate the new stages
                 Array.Resize(ref _stageModels, newLength);
-                for (int i = oldLength; i < newLength; i++)
+
+                // Shift all existing stage GameObjects up by the number of stages being added
+                for (int i = _stageModels.Length - 1; i >= stagesToAdd; i--)
+                {
+                    _stageModels[i] = _stageModels[i - stagesToAdd];
+                    if (_stageModels[i] != null)
+                    {
+                        _stageModels[i].name = "Stage" + i;
+                        // Update Model child name as well
+                        GameObject modelTransform = Utils.FindChild("Model" + (i - stagesToAdd), _stageModels[i]);
+                        if (modelTransform != null)
+                        {
+                            modelTransform.name = "Model" + i;
+                        }
+                    }
+                }
+
+                // Create the new stage GameObjects at the beginning
+                for (int i = 0; i < stagesToAdd; i++)
                 {
                     GameObject newStage = new GameObject("Stage" + i);
                     newStage.transform.parent = transform;
@@ -511,6 +573,8 @@ public class Buildelevator : MonoBehaviour
                         DestroyImmediate(models);
                     }
                 }
+                
+                ReorderHierarchy();
             }
             else // Shrinking - Revised to shift later GameObjects down
             {
@@ -548,7 +612,7 @@ public class Buildelevator : MonoBehaviour
 
                 for (int i = 0; i < _stageModels.Length; i++)
                 {
-                    var models = Utils.FindChild("Model" + (i+1), _stageModels[i]);
+                    var models = Utils.FindChild("Model" + (i+(oldLength - newLength)), _stageModels[i]);
                     if (models != null)
                     {
                         DestroyImmediate(models);
