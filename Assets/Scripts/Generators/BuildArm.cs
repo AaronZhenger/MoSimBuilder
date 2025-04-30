@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MyBox;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 
 [ExecuteAlways]
@@ -12,6 +14,14 @@ public class BuildArm : MonoBehaviour
     
     [Header("Model Settings")]
     [SerializeField] private ArmModel armModel;
+
+    [ConditionalField(true, nameof(Predicate))] 
+    [SerializeField]
+    private float length;
+    private bool Predicate() => armModel == ArmModel.Single || armModel == ArmModel.SplitParallel;
+
+    [ConditionalField(nameof(armModel), false, ArmModel.SplitParallel)] [SerializeField]
+    private float width;
     
     private ConfigurableJoint _joint;
     
@@ -124,9 +134,9 @@ public class BuildArm : MonoBehaviour
                 }
                 else
                 {
-                    _parts[0].LoadedPartLocation = new Vector3(0,0, 0);
+                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
                     _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[0].LoadedPartScale = new Vector3(1, 1, 1);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
                 }
                 break;
             case ArmModel.SplitParallel:
@@ -142,13 +152,13 @@ public class BuildArm : MonoBehaviour
                 }
                 else
                 {
-                    _parts[0].LoadedPartLocation = new Vector3(0,0, 0);
+                    _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
                     _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[0].LoadedPartScale = new Vector3(1, 1, 1);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
                     
-                    _parts[1].LoadedPartLocation = new Vector3(0, 0, 0);
+                    _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
                     _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[1].LoadedPartScale = new Vector3(1, 1, 1);
+                    _parts[1].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
                 }
                 break;
             case ArmModel.None:
@@ -158,11 +168,56 @@ public class BuildArm : MonoBehaviour
         }
     }
     
-    private GeneratePart[] CheckTubes(GameObject parent, int length)
+    private void CreateDoubleArm()
+    {
+        _parts = CheckTubes(_modelObject, 2);
+
+        if (_parts[0] == null)
+        {
+            _parts[0] = _modelObject.AddComponent<GeneratePart>();
+            _parts[0].Part = _tubingObject;
+            _parts[0].PartName = "DoubleL";
+            _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+        }
+
+        if (_parts[1] == null)
+        {
+            _parts[1] = _modelObject.AddComponent<GeneratePart>();
+            _parts[1].Part = _tubingObject;
+            _parts[1].PartName = "DoubleR";
+            _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+            _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
+            _parts[1].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+        }
+    }
+    
+    private void CreateSingleArm()
+    {
+        _parts = CheckTubes(_modelObject, 1);
+
+        if (_parts[0] == null)
+        {
+            _parts[0] = _modelObject.AddComponent<GeneratePart>();
+            _parts[0].Part = _tubingObject;
+            _parts[0].PartName = "Single";
+            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+        }
+    }
+    
+    private GeneratePart[] CheckTubes(GameObject parent, int num)
     {
         GeneratePart[] unfiltered = parent.GetComponents<GeneratePart>();
         
-        GeneratePart[] filtered = new GeneratePart[length];
+        GeneratePart[] filtered = new GeneratePart[num];
+
+        for (int i = 0; i < num; i++)
+        {
+            filtered[i] = null;
+        }
 
         foreach (var t in unfiltered)
         {
@@ -192,35 +247,6 @@ public class BuildArm : MonoBehaviour
         }
 
         return filtered;
-    }
-
-    private void CreateDoubleArm()
-    {
-        _parts = CheckTubes(_modelObject, 2);
-        _parts[0] = _modelObject.AddComponent<GeneratePart>();
-        _parts[0].Part = _tubingObject;
-        _parts[0].PartName = "DoubleL";
-        _parts[0].LoadedPartLocation = new Vector3();
-        _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-        _parts[0].LoadedPartScale = new Vector3(1, 1, 1);
-        
-        _parts[1] = _modelObject.AddComponent<GeneratePart>();
-        _parts[1].Part = _tubingObject;
-        _parts[1].PartName = "DoubleR`";
-        _parts[1].LoadedPartLocation = new Vector3();
-        _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-        _parts[1].LoadedPartScale = new Vector3(1, 1, 1);
-    }
-
-    private void CreateSingleArm()
-    {
-        _parts = CheckTubes(_modelObject, 1);
-        _parts[0] = _modelObject.AddComponent<GeneratePart>();
-        _parts[0].Part = _tubingObject;
-        _parts[0].PartName = "Single";
-        _parts[0].LoadedPartLocation = new Vector3();
-        _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-        _parts[0].LoadedPartScale = new Vector3(1, 1, 1);
     }
 
     private void CreateModelObject()

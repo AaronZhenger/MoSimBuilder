@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MyBox;
@@ -13,12 +14,11 @@ public class Buildelevator : MonoBehaviour
 {
     [Header("General Settings")]
     [SerializeField] private SetPoint[] setPoints;
-
-    [SerializeField] private bool model;
     
     [SerializeField] private elevatorType elevatorType;
     
     [Header("ModelSettings")]
+    [SerializeField] private bool model;
     [ConditionalField(nameof(model), false)]
     [SerializeField] private float width;
     [ConditionalField(nameof(model), false)]
@@ -60,6 +60,8 @@ public class Buildelevator : MonoBehaviour
     private float _scaleFactor;
     
     private GameObject[] _modelObjects;
+
+    private GameObject[] _stageModels;
     
     private Rigidbody[] _rigidbodies;
     
@@ -131,11 +133,19 @@ public class Buildelevator : MonoBehaviour
 
         _scaleFactor = 0.0254f;
         
+        _stageModels = new GameObject[stages+1];
+        for (int i = 0; i <= stages; i++)
+        {
+            _stageModels[i] = Utils.FindChild("Stage" + i, gameObject);
+        }
+        
         _modelObjects = new GameObject[stages +1];
         for (int i = 0; i <= stages; i++)
         {
-            _modelObjects[i] = Utils.FindChild("Stage" + i, gameObject).gameObject;
+            _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
         }
+        
+        
     }
 
     private void Initialize()
@@ -180,7 +190,7 @@ public class Buildelevator : MonoBehaviour
             if (i == _rigidbodies.Length - 1)
             {
                 _controllers[i].setPoints = setPoints;
-                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - ((i) * 0.0254f);
+                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - ((i) * 0.0254f);
                 _controllers[i].follower = false;
                 continue; //skip follower calculations
             }
@@ -200,10 +210,10 @@ public class Buildelevator : MonoBehaviour
             float heightOffset = carriage ? -(carriageHeight + 1) * 0.0254f : 0;
 
             float setPoint = 0;
-            if (combinedHeight < _rigidbodies[^1].transform.localPosition.y - (i * 0.0254f) - heightOffset)
+            if (combinedHeight < transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y - (i * 0.0254f) - heightOffset)
             {
                 _engaged[i] = true; //audio thingy
-                setPoint = combinedHeight - _rigidbodies[^1].transform.localPosition.y - ((i + 1) * 0.0254f);
+                setPoint = combinedHeight - transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y - ((i + 1) * 0.0254f);
 
                 setPoint += (i * 1f) * 0.0254f;
 
@@ -223,7 +233,7 @@ public class Buildelevator : MonoBehaviour
 
             
             _controllers[i].FollowPosition(setPoint);
-            _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - (((i * 1) + (i * 0.05f)) * 0.0254f);
+            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - (((i * 1) + (i * 0.05f)) * 0.0254f);
         }
     }
 
@@ -281,14 +291,14 @@ public class Buildelevator : MonoBehaviour
                 _controllers[i].setPoints = setPoints;
                 float overlapLength = 0.0254f * 1.05f; // Example overlap length
                 float offset = (i+1) * overlapLength;
-                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y - offset;
+                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - offset;
             }
             else
             {
                 //ai took over I give no promises
                 _controllers[i].follower = true;
 
-                float carriagePosition = _rigidbodies[^1].transform.localPosition.y;
+                float carriagePosition = transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y;
                 int totalStages = _rigidbodies.Length;
                 int currentStageIndex = i;
                 float overlapLength = 0.0254f * 1.5f; // Example overlap length
@@ -306,7 +316,7 @@ public class Buildelevator : MonoBehaviour
                 }
                 _controllers[i].FollowPosition(target);
                 // The currentPosition should reflect the stage's local Y position.
-                _controllers[i].currentPosition = _rigidbodies[i].transform.localPosition.y;
+                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
                 //end ai takeover
             }
         }
@@ -318,10 +328,10 @@ public class Buildelevator : MonoBehaviour
     private void GenerateRBs()
     {
         var driveTrain = Utils.FindParentRB(gameObject).GetComponent<Rigidbody>();
-        _rigidbodies = new Rigidbody[_modelObjects.Length - 1]; //stationary stage doesnt have a rb
-        for (int i = 0; i < _modelObjects.Length-1; i++) //skip the stationary stage (0)
+        _rigidbodies = new Rigidbody[_stageModels.Length - 1]; //stationary stage doesnt have a rb
+        for (int i = 0; i < _stageModels.Length-1; i++) //skip the stationary stage (0)
         {
-            _rigidbodies[i] = _modelObjects[i+1].AddComponent<Rigidbody>();
+            _rigidbodies[i] = _stageModels[i+1].AddComponent<Rigidbody>();
 
             _rigidbodies[i].mass = stageWeights[i];
             _rigidbodies[i].drag = 0;
@@ -339,11 +349,11 @@ public class Buildelevator : MonoBehaviour
     private void GenerateJoints()
     {
         var driveTrain = Utils.FindParentRB(gameObject).GetComponent<Rigidbody>();
-        _joints = new ConfigurableJoint[_modelObjects.Length - 1]; //stationary stage doesnt have a rb
-        _drives = new JointDrive[_modelObjects.Length - 1];
+        _joints = new ConfigurableJoint[_stageModels.Length - 1]; //stationary stage doesnt have a rb
+        _drives = new JointDrive[_stageModels.Length - 1];
         for (int i = 0; i < _modelObjects.Length-1; i++) //skip the stationary stage (0)
         {
-            _joints[i] = _modelObjects[i+1].AddComponent<ConfigurableJoint>();
+            _joints[i] = _stageModels[i+1].AddComponent<ConfigurableJoint>();
             _joints[i].connectedBody = driveTrain;
             _joints[i].xMotion = ConfigurableJointMotion.Locked;
             _joints[i].zMotion = ConfigurableJointMotion.Locked;
@@ -462,30 +472,127 @@ public class Buildelevator : MonoBehaviour
                 
             }
         }
-        
-        if (_wasCarriage != carriage)
+
+        if (_stageModels == null)
         {
-            foreach (var modelObject in _modelObjects)
+            _stageModels = new GameObject[stages + 1];
+            for (int i = 0; i < _stageModels.Length; i++)
             {
-                if (_modelObjects != null)
+                _stageModels[i] = new GameObject("Stage" + i);
+                _stageModels[i].transform.parent = transform;
+                _stageModels[i].transform.localPosition = Vector3.zero;
+                _stageModels[i].transform.localRotation = Quaternion.identity;
+                _stageModels[i].transform.localScale = Vector3.one;
+            }
+        }
+        else if (_stageModels.Length != stages + 1) //ai warning
+        {
+            int oldLength = _stageModels.Length;
+            int newLength = stages + 1;
+
+            if (newLength > oldLength) // Growing
+            {
+                Array.Resize(ref _stageModels, newLength);
+                for (int i = oldLength; i < newLength; i++)
                 {
-                    DestroyImmediate(modelObject.gameObject);
+                    GameObject newStage = new GameObject("Stage" + i);
+                    newStage.transform.parent = transform;
+                    newStage.transform.localPosition = Vector3.zero;
+                    newStage.transform.localRotation = Quaternion.identity;
+                    newStage.transform.localScale = Vector3.one;
+                    _stageModels[i] = newStage;
+                }
+                
+                for (int i = 0; i < _stageModels.Length; i++)
+                {
+                    var models = Utils.FindChild("Model" + (i), _stageModels[i]);
+                    if (models != null)
+                    {
+                        DestroyImmediate(models);
+                    }
+                }
+            }
+            else // Shrinking - Revised to shift later GameObjects down
+            {
+                GameObject[] newStageModels = new GameObject[newLength];
+                int offset = _stageModels.Length - newLength; // Number of elements to remove from the beginning
+
+                // Shift the later GameObjects to the beginning of the new array
+                for (int i = 0; i < newLength; i++)
+                {
+                    if (i + offset < _stageModels.Length && _stageModels[i + offset] != null)
+                    {
+                        newStageModels[i] = _stageModels[i + offset];
+                        newStageModels[i].name = "Stage" + i;
+                    }
+                    else
+                    {
+                        newStageModels[i] = new GameObject("Stage" + i);
+                        newStageModels[i].transform.parent = transform;
+                        newStageModels[i].transform.localPosition = Vector3.zero;
+                        newStageModels[i].transform.localRotation = Quaternion.identity;
+                        newStageModels[i].transform.localScale = Vector3.one;
+                    }
+                }
+
+                // Destroy the GameObjects that were at the beginning of the old array
+                for (int i = 0; i < offset; i++)
+                {
+                    if (_stageModels[i] != null)
+                    {
+                        DestroyImmediate(_stageModels[i]);
+                    }
+                }
+
+                _stageModels = newStageModels;
+
+                for (int i = 0; i < _stageModels.Length; i++)
+                {
+                    var models = Utils.FindChild("Model" + (i+1), _stageModels[i]);
+                    if (models != null)
+                    {
+                        DestroyImmediate(models);
+                    }
                 }
             }
         }
+        else
+        {
+            // If the size is correct, ensure names and transforms are still correct
+            for (int i = 0; i < _stageModels.Length; i++)
+            {
+                if (_stageModels[i] == null)
+                {
+                    _stageModels[i] = new GameObject("Stage" + i);
+                    _stageModels[i].transform.parent = transform;
+                    _stageModels[i].transform.localPosition = Vector3.zero;
+                    _stageModels[i].transform.localRotation = Quaternion.identity;
+                    _stageModels[i].transform.localScale = Vector3.one;
+                }
+                else if (_stageModels[i].name != "Stage" + i)
+                {
+                    _stageModels[i].name = "Stage" + i;
+                    _stageModels[i].transform.parent = transform;
+                    _stageModels[i].transform.localPosition = Vector3.zero;
+                    _stageModels[i].transform.localRotation = Quaternion.identity;
+                    _stageModels[i].transform.localScale = Vector3.one;
+                }
+            }
+        } //end ai warning
+        
         int nonCrossBraceStages = 1;
         if (carriage)
         {
             nonCrossBraceStages = 2;
         }
         
-        if (_modelObjects.Length == 0)
+        if (_stageModels.Length == 0)
         {
             _modelObjects = new GameObject[stages+1];
             
             _tubings = new GeneratePart[stages+1][];
         }
-        else if (_modelObjects.Length != stages + 1)
+        else if (_stageModels.Length != stages + 1)
         {
             foreach (var modelObject in _modelObjects)
             {
@@ -505,20 +612,26 @@ public class Buildelevator : MonoBehaviour
             {
                 _tubings = new GeneratePart[stages + 1][];
             }
+
+            if (_modelObjects == null || _modelObjects.Length != stages + 1)
+            {
+                _modelObjects = new GameObject[stages + 1];
+            }
         }
         
         for (int i = 0; i <= stages; i++) //0 is stationary so 1 stage should generate 2
         {
             if (i <= stages-nonCrossBraceStages || i == 0) //determines cross brace stage models
             {
+                _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
                 if (_modelObjects[i] == null)
                 {
                     _modelObjects[i] = new GameObject
                     {
-                        name = "Stage" + i,
+                        name = "Model" + i,
                         transform =
                         {
-                            parent = transform,
+                            parent = _stageModels[i].transform,
                             localPosition = Vector3.zero,
                             localRotation = Quaternion.identity,
                             localScale = Vector3.one
@@ -657,15 +770,16 @@ public class Buildelevator : MonoBehaviour
             }
             else if (carriage && i == stages)
             {
+                _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
                 //TODO: fix carrage height math. 5 inches is 3
                 if (_modelObjects[i] == null)
                 {
                     _modelObjects[i] = new GameObject
                     {
-                        name = "Stage" + i,
+                        name = "Model" + i,
                         transform =
                         {
-                            parent = transform,
+                            parent = _stageModels[i].transform,
                             localPosition = Vector3.zero,
                             localRotation = Quaternion.identity,
                             localScale = Vector3.one
@@ -760,14 +874,15 @@ public class Buildelevator : MonoBehaviour
             }
             else if (stages - i <= nonCrossBraceStages || !carriage)
             {
+                _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
                 if (_modelObjects[i] == null)
                 {
                     _modelObjects[i] = new GameObject
                     {
-                        name = "Stage" + i,
+                        name = "Model" + i,
                         transform =
                         {
-                            parent = transform,
+                            parent = _stageModels[i].transform,
                             localPosition = Vector3.zero,
                             localRotation = Quaternion.identity,
                             localScale = Vector3.one
@@ -863,6 +978,17 @@ public class Buildelevator : MonoBehaviour
             }
         }
         
+        if (_wasCarriage != carriage && _modelObjects != null)
+        {
+            foreach (var modelObject in _modelObjects)
+            {
+                if (modelObject.GetComponent<GeneratePart>() != null)
+                {
+                    DestroyImmediate(modelObject.GetComponent<GeneratePart>());
+                }
+            }
+        }
+        
         _wasCarriage = carriage;
     }
 
@@ -876,6 +1002,11 @@ public class Buildelevator : MonoBehaviour
     /// <returns></returns>
     private GeneratePart[] CheckTubes(GameObject parent, float stageNum, int length)
     {
+        if (parent == null)
+        {
+            return new GeneratePart[length]; // Or handle the error differently
+        }
+        
         GeneratePart[] unfiltered = parent.GetComponents<GeneratePart>();
         
         GeneratePart[] filtered = new GeneratePart[length];
@@ -891,10 +1022,10 @@ public class Buildelevator : MonoBehaviour
             } else if (t.PartName == "right Upright (" + stageNum + ")")
             {
                 filtered[2] = t;
-            } else if (t.PartName == "left cross brace standoff (" + stageNum + ")")
+            } else if (t.PartName == "left cross brace standoff (" + stageNum + ")" && length > 4)
             {
                 filtered[3] = t;
-            } else if (t.PartName == "right cross brace standoff (" + stageNum + ")")
+            } else if (t.PartName == "right cross brace standoff (" + stageNum + ")" && length > 4)
             {
                 filtered[4] = t;
             } else if (t.PartName == "upper cross brace (" + stageNum + ")" && length != 4)

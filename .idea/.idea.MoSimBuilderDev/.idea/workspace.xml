@@ -10,7 +10,6 @@
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +53,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="_stageModels" />
+    </option>
+  </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2023.2.18f1\Editor\Unity.exe" />
@@ -152,7 +156,7 @@
       <workItem from="1745802905456" duration="306000" />
       <workItem from="1745861121430" duration="16414000" />
       <workItem from="1745931876251" duration="3051000" />
-      <workItem from="1746028625154" duration="3403000" />
+      <workItem from="1746028625154" duration="12088000" />
     </task>
     <servers />
   </component>

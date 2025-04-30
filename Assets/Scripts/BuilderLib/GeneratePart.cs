@@ -46,10 +46,11 @@ public class GeneratePart : MonoBehaviour
     {
         Startup();
     }
-
-    void Awake()
+    
+    void OnDisable()
     {
-        Startup();
+        // It's good practice to cancel invokes when the object is disabled
+        CancelInvoke(nameof(run));
     }
 
     // Update is called once per frame
@@ -98,6 +99,6 @@ public class GeneratePart : MonoBehaviour
         _loadedPart = Utils.FindChild(PartName, gameObject);
         currentPart = Part;
         
-        InvokeRepeating(nameof(run), 0f, 0.5f); //does the same thing as fixed update but doesnt require it be selected in editor
+        InvokeRepeating(nameof(run), 0f, 0.2f); //does the same thing as fixed update but doesnt require it be selected in editor
     }
 }
