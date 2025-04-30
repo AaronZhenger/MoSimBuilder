@@ -32,6 +32,7 @@ namespace Util
     {
         Single,
         SplitParallel,
+        SingleTwoByTwo,
         None
     }
 

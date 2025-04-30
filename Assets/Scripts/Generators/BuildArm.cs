@@ -18,10 +18,24 @@ public class BuildArm : MonoBehaviour
     [ConditionalField(true, nameof(Predicate))] 
     [SerializeField]
     private float length;
-    private bool Predicate() => armModel == ArmModel.Single || armModel == ArmModel.SplitParallel;
+    private bool Predicate() => armModel == ArmModel.Single || armModel == ArmModel.SplitParallel || armModel == ArmModel.SingleTwoByTwo;
 
     [ConditionalField(nameof(armModel), false, ArmModel.SplitParallel)] [SerializeField]
     private float width;
+    
+    [SerializeField] private float armWeight;
+
+    [Header("Use Advanced Settings")]
+    [SerializeField] private bool useAdvancedSettings;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float max;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kP;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kI;
+    [ConditionalField(nameof(useAdvancedSettings), false)]
+    [SerializeField]private float kD;
+
     
     private ConfigurableJoint _joint;
     
@@ -37,7 +51,9 @@ public class BuildArm : MonoBehaviour
 
     private JointDrive _drive;
     
-    private GameObject _tubingObject;
+    private GameObject[] _tubingObject;
+
+    private ArmModel _oldModel;
     // Start is called before the first frame update
     void Start()
     {
@@ -100,11 +116,16 @@ public class BuildArm : MonoBehaviour
     {
         var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
+        _tubingObject = new GameObject[2];
         foreach (var loadedTube in loadedTubes)
         {
             if (loadedTube.name == "OneXTwoXEighth")
             {
-                _tubingObject = loadedTube;
+                _tubingObject[0] = loadedTube;
+            }
+            else if (loadedTube.name == "TwoXTwoXEighth")
+            {
+                _tubingObject[1] = loadedTube;   
             }
         }
 
@@ -113,6 +134,8 @@ public class BuildArm : MonoBehaviour
         {
             _modelObject = detectedPart.gameObject;
         }
+
+        _oldModel = armModel;
     }
 
     private void BuildModel()
@@ -126,7 +149,7 @@ public class BuildArm : MonoBehaviour
                 {
                     CreateSingleArm();
                 }
-                else if (_parts.Length != 1)
+                else if (_parts.Length != 1 || _oldModel != armModel)
                 {
                     DestroyImmediate(_modelObject);
                     CreateModelObject();
@@ -144,7 +167,7 @@ public class BuildArm : MonoBehaviour
                 {
                     CreateDoubleArm();
                 }
-                else if (_parts.Length != 2)
+                else if (_parts.Length != 2 || _oldModel != armModel)
                 {
                     DestroyImmediate(_modelObject);
                     CreateModelObject();
@@ -161,11 +184,31 @@ public class BuildArm : MonoBehaviour
                     _parts[1].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
                 }
                 break;
+            case ArmModel.SingleTwoByTwo:
+                if (_parts == null)
+                {
+                    CreateSingleTwoByTwoArm();
+                }
+                else if (_parts.Length != 1 || _oldModel != armModel)
+                {
+                    DestroyImmediate(_modelObject);
+                    CreateModelObject();
+                    CreateSingleTwoByTwoArm();
+                }
+                else
+                {
+                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+                    _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+                }
+                break;
             case ArmModel.None:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        
+        _oldModel = armModel;
     }
     
     private void CreateDoubleArm()
@@ -175,7 +218,7 @@ public class BuildArm : MonoBehaviour
         if (_parts[0] == null)
         {
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
-            _parts[0].Part = _tubingObject;
+            _parts[0].Part = _tubingObject[0];
             _parts[0].PartName = "DoubleL";
             _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
             _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
@@ -185,7 +228,7 @@ public class BuildArm : MonoBehaviour
         if (_parts[1] == null)
         {
             _parts[1] = _modelObject.AddComponent<GeneratePart>();
-            _parts[1].Part = _tubingObject;
+            _parts[1].Part = _tubingObject[0];
             _parts[1].PartName = "DoubleR";
             _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
             _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
@@ -200,8 +243,23 @@ public class BuildArm : MonoBehaviour
         if (_parts[0] == null)
         {
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
-            _parts[0].Part = _tubingObject;
+            _parts[0].Part = _tubingObject[0];
             _parts[0].PartName = "Single";
+            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+        }
+    }
+    
+    private void CreateSingleTwoByTwoArm()
+    {
+        _parts = CheckTubes(_modelObject, 1);
+
+        if (_parts[0] == null)
+        {
+            _parts[0] = _modelObject.AddComponent<GeneratePart>();
+            _parts[0].Part = _tubingObject[1];
+            _parts[0].PartName = "SingleTwo";
             _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
             _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
             _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
@@ -269,12 +327,23 @@ public class BuildArm : MonoBehaviour
     private void GenController()
     {
         _controller = gameObject.AddComponent<JointController>();
-            
-        _controller.p = 1;
-        _controller.i = 0;
-        _controller.d = 0.0005f;
+
+        if (useAdvancedSettings)
+        {
+            _controller.p = kP;
+            _controller.i = kI;
+            _controller.d = kD;
+            _controller.max = max;
+        }
+        else
+        {
+            _controller.p = 1;
+            _controller.i = 0;
+            _controller.d = 0.0005f;
+            _controller.max = 10;
+        }
+        
         _controller.iSat = 0;
-        _controller.max = 10;
         _controller.angular = true;
         _controller.driveAxis = new Vector3(1, 0, 0);
         _controller.joint = _joint;
@@ -305,6 +374,7 @@ public class BuildArm : MonoBehaviour
     private void GenRB()
     {
         _rigidbody = gameObject.AddComponent<Rigidbody>();
+        _rigidbody.mass = armWeight;
         _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }

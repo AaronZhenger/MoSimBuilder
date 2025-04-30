@@ -57,8 +57,8 @@ public class ModuleBehaviour : MonoBehaviour
         float targetRotation = Mathf.Repeat(targetModuleAngle-_startingRotation, 360);
         float realSpeed = (_wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z / (Mathf.PI * wheelDiameter)) * 60;
         
-        float feedForward = targetVelocity * 23; //Kv * target = voltage
-        float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (50/6000); //error * target * p = Perror
+        float feedForward = targetVelocity * 18; //Kv * target = voltage
+        float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (80/6000); //error * target * p = Perror
         float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
         float voltage = Mathf.Clamp(feedForward + pValue * ((90 - Mathf.Clamp(Mathf.Abs(angleError),0,90))/90), -12, 12);
         
