@@ -53,7 +53,7 @@ public class GeneratePart : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void run()
     {
         if (PartName != null && Part != null)
         {
@@ -84,6 +84,8 @@ public class GeneratePart : MonoBehaviour
                 LoadedPartScale.y / transform.localScale.y, LoadedPartScale.z / transform.localScale.z);
             _loadedPart.transform.localScale = scaleAdjustedScale;
         }
+
+        ObjectSpawned = _loadedPart != null;
     }
 
     private void Startup()
@@ -95,5 +97,7 @@ public class GeneratePart : MonoBehaviour
 
         _loadedPart = Utils.FindChild(PartName, gameObject);
         currentPart = Part;
+        
+        InvokeRepeating(nameof(run), 0f, 0.5f); //does the same thing as fixed update but doesnt require it be selected in editor
     }
 }

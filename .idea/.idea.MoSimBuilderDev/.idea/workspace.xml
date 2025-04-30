@@ -6,7 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +150,9 @@
       <workItem from="1745601779646" duration="1178000" />
       <workItem from="1745712447412" duration="6109000" />
       <workItem from="1745802905456" duration="306000" />
-      <workItem from="1745861121430" duration="14578000" />
+      <workItem from="1745861121430" duration="16414000" />
+      <workItem from="1745931876251" duration="3051000" />
+      <workItem from="1746028625154" duration="3403000" />
     </task>
     <servers />
   </component>

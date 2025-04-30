@@ -28,6 +28,13 @@ namespace Util
         Continuous
     }
 
+    public enum ArmModel
+    {
+        Single,
+        SplitParallel,
+        None
+    }
+
     /// <summary>
     /// The continuation requirement for the sequence type of setpoint
     /// </summary>

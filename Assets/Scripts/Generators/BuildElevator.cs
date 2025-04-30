@@ -48,16 +48,8 @@ public class Buildelevator : MonoBehaviour
     [SerializeField]private float kD;
 
     private Vector3 _startPose;
-    
-    private ConfigurableJoint _joint;
-    
-    private Rigidbody _rigidbody;
 
     private GameObject _connectedBody;
-
-    private Rigidbody _gRb;
-
-    private JointController _controller;
 
     private JointDrive _drive;
     
@@ -65,7 +57,7 @@ public class Buildelevator : MonoBehaviour
     
     private GameObject _tubingObject;
     
-    private float scaleFactor;
+    private float _scaleFactor;
     
     private GameObject[] _modelObjects;
     
@@ -77,11 +69,11 @@ public class Buildelevator : MonoBehaviour
     
     private JointController[] _controllers;
 
-    bool[] _engaged;
+    private bool[] _engaged;
     
-    private bool[] wasEngaged;
+    private bool[] _wasEngaged;
     
-    private bool wasCarriage;
+    private bool _wasCarriage;
     
     private AudioSource _audioSource;
     
@@ -128,16 +120,16 @@ public class Buildelevator : MonoBehaviour
         
         
         _engaged = new bool[stages];
-        wasEngaged = new bool[stages];
+        _wasEngaged = new bool[stages];
 
         for (int i = 0; i < _engaged.Length; i++)
         {
             _engaged[i] = false;   
-            wasEngaged[i] = false;
+            _wasEngaged[i] = false;
                 
         }
 
-        scaleFactor = 0.0254f;
+        _scaleFactor = 0.0254f;
         
         _modelObjects = new GameObject[stages +1];
         for (int i = 0; i <= stages; i++)
@@ -242,12 +234,12 @@ public class Buildelevator : MonoBehaviour
     {
         for (int i = 0; i < _engaged.Length; i++)
         {
-            if (wasEngaged[i] != _engaged[i])
+            if (_wasEngaged[i] != _engaged[i])
             {
                 RandomClick();
             }
             
-            wasEngaged[i] = _engaged[i];
+            _wasEngaged[i] = _engaged[i];
         }
     }
 
@@ -471,7 +463,7 @@ public class Buildelevator : MonoBehaviour
             }
         }
         
-        if (wasCarriage != carriage)
+        if (_wasCarriage != carriage)
         {
             foreach (var modelObject in _modelObjects)
             {
@@ -732,10 +724,10 @@ public class Buildelevator : MonoBehaviour
                     tubing[2].Part = _tubingObject;
                     tubing[2].PartName = "right Upright (" + i + ")";
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (carriageHeight/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - i))) * 0.0254f, 0);
+                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, ((carriageHeight/2)) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight - (1 * ((i < 2) ? 0 : i-1) - ((stages - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
                 }
                 else
                 {
@@ -871,7 +863,7 @@ public class Buildelevator : MonoBehaviour
             }
         }
         
-        wasCarriage = carriage;
+        _wasCarriage = carriage;
     }
 
     /// <summary>
