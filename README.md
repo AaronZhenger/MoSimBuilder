@@ -10,8 +10,20 @@ I have put together what is hopefully an extremely useful set of documentation t
  * If you wish to contribute to the documentation please make a pull request to the stable branch.
 
 ## Beta 1 plans
-  - Modular scoring system
-  - Ground up rebuild (iterate and prepare for pre release, and fix jank)
+  - Ground up rebuild
+  - Expand Input based no Code solution
+  - Implement external cad models directly into the ecosystem
+  - improve the sandbox tools available
+  - Implement DT V4 :).
+
+## Beta 2 Plans
+  - Rewrite much of the rewrite with better base tooling
+  - implement a new game piece system
+  - Top Down Event based input for no Code Solution
+
+## Beta 3 Plans 
+  - scoring
+  - field creation tools
 
 ## Pre Release 1 plans
 - Ship as an actual .exe game with the ability to share robots and fields
