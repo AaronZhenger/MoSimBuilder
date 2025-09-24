@@ -54,7 +54,7 @@ public class GeneratePart : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void run()
+    public void run()
     {
         if (PartName != null && Part != null)
         {
@@ -89,7 +89,7 @@ public class GeneratePart : MonoBehaviour
         ObjectSpawned = _loadedPart != null;
     }
 
-    private void Startup()
+    public void Startup()
     {
         if (partName != null)
         {

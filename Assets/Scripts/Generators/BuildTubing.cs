@@ -1,129 +1,98 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Util;
 
-[ExecuteAlways]
-public class BuildTubing : MonoBehaviour
+namespace Generators
 {
-    [SerializeField] private TubeType tubeType;
-
-    [SerializeField] private string partName;
-
-    [SerializeField] private float length;
-
-    [SerializeField] private Units units;
-
-    private GeneratePart _generatePart;
-
-    private GameObject _model;
-
-    private GameObject _tube;
-
-    private float _factor;
-
-    // Start is called before the first frame update
-    void Start()
+    [ExecuteAlways]
+    public class BuildTubing : GeneratePart
     {
-        Startup();
-    }
+        [SerializeField] private TubeType tubeType;
 
-    private void Awake()
-    {
-        Startup();
-    }
+        [SerializeField] private float length;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        _factor = units switch
+        [SerializeField] private Units units;
+
+        private GameObject _tube;
+
+        private float _factor;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            Units.Inch => 0.0254f,
-            Units.Meter => 1,
-            Units.Centimeter => 0.01f,
-            Units.Millimeter => 0.001f,
-            _ => 0.0254f
-        };
-        
-        if (_model == null)
+            Startup();
+        }
+
+        private void Awake()
         {
-            _model = new GameObject
+            Startup();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        
+            _factor = units switch
             {
-                name = "tubeModel",
-                transform =
-                {
-                    parent = transform,
-                    localPosition = Vector3.zero,
-                    localRotation = Quaternion.identity,
-                    localScale = Vector3.one
-                }
+                Units.Inch => 0.0254f,
+                Units.Meter => 1,
+                Units.Centimeter => 0.01f,
+                Units.Millimeter => 0.001f,
+                _ => 0.0254f
             };
-        }
 
-        var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+            var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
-        foreach (var loadedTube in loadedTubes)
-        {
-            if (loadedTube.name == TubeType.OneXTwoXEighth.ToString() && tubeType == TubeType.OneXTwoXEighth)
+            foreach (var loadedTube in loadedTubes)
             {
-                _tube = loadedTube;
-            } else if (loadedTube.name == TubeType.OneXOneXEighth.ToString() && tubeType == TubeType.OneXOneXEighth)
-            {
-                _tube = loadedTube;
-            } else if (loadedTube.name == TubeType.TwoXTwoXEighth.ToString() && tubeType == TubeType.TwoXTwoXEighth)
-            {
-                _tube = loadedTube;
+                if (loadedTube.name == TubeType.OneXTwoXEighth.ToString() && tubeType == TubeType.OneXTwoXEighth)
+                {
+                    _tube = loadedTube;
+                } else if (loadedTube.name == TubeType.OneXOneXEighth.ToString() && tubeType == TubeType.OneXOneXEighth)
+                {
+                    _tube = loadedTube;
+                } else if (loadedTube.name == TubeType.TwoXTwoXEighth.ToString() && tubeType == TubeType.TwoXTwoXEighth)
+                {
+                    _tube = loadedTube;
+                }
             }
-        }
         
         
 
-        if (_generatePart == null)
-        {
-            _generatePart = _model.AddComponent<GeneratePart>();
+            if (!Part)
+            {
 
-            _generatePart.Part = _tube;
+                Part = _tube;
 
-            _generatePart.PartName = "tube";
+                PartName = "tube";
 
-            _generatePart.LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = Vector3.zero;
 
-            _generatePart.LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
 
-            _generatePart.LoadedPartScale = Vector3.one;
-        }
-        else if (_generatePart.Part != _tube)
-        {
-            _generatePart.Part = _tube;
+                LoadedPartScale = Vector3.one;
+            }
+            else if (Part != _tube)
+            {
+                Part = _tube;
 
-            _generatePart.PartName = "tube";
+                PartName = "tube";
 
-            _generatePart.LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = Vector3.zero;
 
-            _generatePart.LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
 
-            _generatePart.LoadedPartScale = new Vector3(1,1,length * _factor);
-        }
-        else if (_generatePart != null)
-        {
-            _generatePart.LoadedPartLocation = Vector3.zero;
+                LoadedPartScale = new Vector3(1,1,length * _factor);
+            }
+            else if (Part != null)
+            {
+                LoadedPartLocation = Vector3.zero;
 
-            _generatePart.LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
 
-            _generatePart.LoadedPartScale = new Vector3(1,1,length * _factor);
-        }
-    }
-
-    private void Startup()
-    {
-        _model = Utils.FindChild("tubeModel", gameObject);
-
-        if (_model != null)
-        {
-            var frameParts = _model.GetComponent<GeneratePart>();
-            _generatePart = frameParts;
+                LoadedPartScale = new Vector3(1,1,length * _factor);
+            }
+            
+            base.run();
         }
     }
 }
