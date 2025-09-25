@@ -18,7 +18,11 @@ public class JointController : MonoBehaviour
     /// <summary>
     /// Whether or not the joint is moving in a linear or angular axis (true is angular)
     /// </summary>
-    public bool angular; 
+    public bool angular;
+
+    public bool useNoWrap;
+    public float noWrapAngle;
+    
     /// <summary>
     /// Specifies the EUler axis to controll. must be (1,0,0) (0,1,0) or (0,0,1)
     /// </summary>
@@ -97,6 +101,8 @@ public class JointController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        noWrapAngle = Mathf.Repeat(noWrapAngle, 360);
+        
         if (_sequenceTime > 0)
         {
             _sequenceTime -= Time.deltaTime;
@@ -268,13 +274,78 @@ public class JointController : MonoBehaviour
 
         if (angular)
         {
-            rawPID = _pidController.UpdateAngle(Time.deltaTime,currentPosition, -_targetPosition);
+            float targetForPid = -_targetPosition;
+            var wrapAngle = noWrapAngle;
+            wrapAngle = Utils.FlipAngle(wrapAngle);
+            wrapAngle = Mathf.Repeat(wrapAngle, 360);
+            if (useNoWrap)
+            {
+                if (PassesThroughWrapAngle(currentPosition, _targetPosition, wrapAngle))
+                {
+                    // Force the long way by adding/subtracting 360 to the target
+                    float difference = Utils.AngleDifference(_targetPosition, currentPosition);
+        
+                    if (difference > 0)
+                    {
+                        // Would normally go counter-clockwise, force clockwise
+                        targetForPid = wrapAngle + 180;
+                    }
+                    else
+                    {
+                        // Would normally go clockwise, force counter-clockwise
+                        targetForPid = wrapAngle - 180;
+                    }
+                }
+                else
+                {
+                    //this case is redundant for my sanity
+                    // Normal case - shortest path doesn't pass through wrap angle
+                    targetForPid = -_targetPosition;
+                }
+            }
+            
+            rawPID = _pidController.UpdateAngle(Time.fixedDeltaTime,currentPosition, targetForPid);
             joint.targetAngularVelocity = rawPID * driveAxis;
         }
         else
         {
-            rawPID = _pidController.Update(Time.deltaTime,currentPosition, _targetPosition);
+            rawPID = _pidController.UpdateLinear(Time.fixedDeltaTime,currentPosition, _targetPosition);
             joint.targetVelocity = -rawPID * driveAxis;
+        }
+    }
+    
+    bool PassesThroughWrapAngle(float currentAngle, float targetAngle, float wrapAngle)
+    {
+        // Normalize all angles to [0, 360)
+        currentAngle = ((currentAngle % 360) + 360) % 360;
+        targetAngle = ((targetAngle % 360) + 360) % 360;
+        wrapAngle = ((wrapAngle % 360) + 360) % 360;
+    
+        // Calculate the shortest angular difference
+        float diff = targetAngle - currentAngle;
+        if (diff > 180.0f) diff -= 360.0f;
+        if (diff < -180.0f) diff += 360.0f;
+    
+        // Determine the angular span we're traversing
+        float endAngle = currentAngle + diff;
+        if (endAngle < 0) endAngle += 360.0f;
+        if (endAngle >= 360.0f) endAngle -= 360.0f;
+    
+        // Check if wrapAngle is between start and end on the shortest path
+        if (diff > 0) {
+            // Moving counter-clockwise
+            if (currentAngle <= endAngle) {
+                return (wrapAngle > currentAngle && wrapAngle < endAngle);
+            } else {
+                return (wrapAngle > currentAngle || wrapAngle < endAngle);
+            }
+        } else {
+            // Moving clockwise  
+            if (currentAngle >= endAngle) {
+                return (wrapAngle < currentAngle && wrapAngle > endAngle);
+            } else {
+                return (wrapAngle < currentAngle || wrapAngle > endAngle);
+            }
         }
     }
 }

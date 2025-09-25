@@ -17,13 +17,17 @@ public class BuildArm : MonoBehaviour
 
     [ConditionalField(true, nameof(Predicate))] 
     [SerializeField]
-    private float length;
+    private float length = 5;
     private bool Predicate() => armModel == ArmModel.Single || armModel == ArmModel.SplitParallel || armModel == ArmModel.SingleTwoByTwo;
 
     [ConditionalField(nameof(armModel), false, ArmModel.SplitParallel)] [SerializeField]
     private float width;
     
-    [SerializeField] private float armWeight;
+    [SerializeField] private float armWeight = 1;
+
+    [SerializeField] private bool useNoWrapPoint = false;
+    [ConditionalField(nameof(useNoWrapPoint), false)]
+    [SerializeField] private float noWrapAngle = 180;
 
     [Header("Use Advanced Settings")]
     [SerializeField] private bool useAdvancedSettings;
@@ -61,6 +65,7 @@ public class BuildArm : MonoBehaviour
         
         if (EditorApplication.isPlaying)
         {
+            CreateAngleHolderParent();
             GenRB();
             GenJoint();
             GenController();
@@ -76,29 +81,19 @@ public class BuildArm : MonoBehaviour
         }
         else
         {
-            float angle = Quaternion.Angle(transform.rotation, _joint.connectedBody.rotation);
+            var targetAxis = Vector3.right;
 
-            if (transform.localRotation.eulerAngles.x > 180)
-            {
-                angle = -angle;
-            }
+            Quaternion deltaRotation = transform.localRotation;
+        
+            deltaRotation.ToAngleAxis(out float angle, out Vector3 axis);
+        
 
-            if (angle < 0)
-            {
-                angle += 360;
-            }
-
-            if (angle >= 360)
-            {
-                angle -= 360;
-            }
-
-            if (angle < 0)
-            {
-                angle += 360;
-            }
-
-            angle = Mathf.Repeat(angle, 360);
+            float projection = Vector3.Dot(targetAxis, axis);
+        
+            //    - The signed angle around our target axis
+            float signedAngle = angle * projection;
+        
+            signedAngle = Mathf.Repeat(signedAngle, 360);
 
             if (!EditorApplication.isPlaying)
             {
@@ -107,7 +102,7 @@ public class BuildArm : MonoBehaviour
             else
             {
                 _controller.setPoints = setPoints;
-                _controller.currentPosition = angle;
+                _controller.currentPosition = signedAngle;
             }
         }
     }
@@ -324,6 +319,15 @@ public class BuildArm : MonoBehaviour
         }
     }
 
+    private void CreateAngleHolderParent()
+    {
+        GameObject parent = new GameObject("AngleHolder");
+        parent.transform.SetParent(transform.parent);
+        parent.transform.position = transform.position;
+        parent.transform.rotation = transform.rotation;
+        transform.SetParent(parent.transform);
+    }
+
     private void GenController()
     {
         _controller = gameObject.AddComponent<JointController>();
@@ -337,7 +341,7 @@ public class BuildArm : MonoBehaviour
         }
         else
         {
-            _controller.p = 1;
+            _controller.p = 0.5f;
             _controller.i = 0;
             _controller.d = 0.0005f;
             _controller.max = 10;
@@ -347,6 +351,8 @@ public class BuildArm : MonoBehaviour
         _controller.angular = true;
         _controller.driveAxis = new Vector3(1, 0, 0);
         _controller.joint = _joint;
+        _controller.useNoWrap = useNoWrapPoint;
+        _controller.noWrapAngle = noWrapAngle;
     }
 
     private void GenJoint()

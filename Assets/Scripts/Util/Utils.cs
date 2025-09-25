@@ -68,5 +68,57 @@ namespace Util
             
             return t.gameObject;
         }
+        
+        /// <summary>
+        /// Flips the angle 180
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static float FlipAngle(float angle)
+        {
+            angle = -angle;
+            angle = Mathf.Repeat(angle, 360); 
+            if (angle < 0)
+            {
+                angle += 360;
+            }
+            return angle;
+        }
+        
+        /// <summary>
+        /// Wraps the angle into -180 180 from 360
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static float WrapAngle180(float angle)
+        {
+            angle = Mathf.Repeat(angle, 360);
+            if (angle > 180)
+            {
+                angle -= 360; // Convert to -180 to 180 range
+            }
+            return angle;
+        }
+
+        /// <summary>
+        /// wraps angle to 0 to 360
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static float WrapAngle360(float angle)
+        {
+            angle = Mathf.Repeat(angle, 360);
+            return angle;
+        }
+        
+        /// <summary>
+        /// returns the difference between two angles
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float AngleDifference(float a, float b) {
+            return (a - b + 540) % 360 - 180;
+        }
     }
 }
