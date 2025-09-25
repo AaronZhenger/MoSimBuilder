@@ -280,7 +280,7 @@ public class JointController : MonoBehaviour
             wrapAngle = Mathf.Repeat(wrapAngle, 360);
             if (useNoWrap)
             {
-                if (PassesThroughWrapAngle(currentPosition, _targetPosition, wrapAngle))
+                if (PassesThroughWrapAngle(currentPosition, targetForPid, wrapAngle))
                 {
                     // Force the long way by adding/subtracting 360 to the target
                     float difference = Utils.AngleDifference(_targetPosition, currentPosition);
