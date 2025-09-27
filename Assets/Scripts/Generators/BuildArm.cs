@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MyBox;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,6 +16,10 @@ public class BuildArm : MonoBehaviour
     [Header("Model Settings")]
     [SerializeField] private ArmModel armModel;
 
+    [ConditionalField(true, nameof(Predicate))] 
+    [SerializeField]
+    private Units units = Units.Inch;
+    
     [ConditionalField(true, nameof(Predicate))] 
     [SerializeField]
     private float length = 5;
@@ -58,6 +63,8 @@ public class BuildArm : MonoBehaviour
     private GameObject[] _tubingObject;
 
     private ArmModel _oldModel;
+
+    private float scaleModifier;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +82,22 @@ public class BuildArm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        switch (units)
+        {
+            case Units.Inch:
+                scaleModifier = 0.0254f;
+                break;
+            case Units.Centimeter:
+                scaleModifier = 0.01f;
+                break;
+            case Units.Meter:
+                scaleModifier = 1.0f;
+                break;
+            case Units.Millimeter:
+                scaleModifier = 0.001f;
+                break;
+        }
+        
         if (!EditorApplication.isPlaying)
         {
             BuildModel();
@@ -109,6 +132,7 @@ public class BuildArm : MonoBehaviour
 
     private void Startup()
     {
+        scaleModifier = 0.0254f;
         var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
         _tubingObject = new GameObject[2];
@@ -152,9 +176,9 @@ public class BuildArm : MonoBehaviour
                 }
                 else
                 {
-                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * scaleModifier);
                     _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
                 }
                 break;
             case ArmModel.SplitParallel:
@@ -170,13 +194,13 @@ public class BuildArm : MonoBehaviour
                 }
                 else
                 {
-                    _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+                    _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * scaleModifier,0, (length/2) * scaleModifier);
                     _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
                     
-                    _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+                    _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * scaleModifier,0, (length/2) * scaleModifier);
                     _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[1].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+                    _parts[1].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
                 }
                 break;
             case ArmModel.SingleTwoByTwo:
@@ -192,9 +216,9 @@ public class BuildArm : MonoBehaviour
                 }
                 else
                 {
-                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+                    _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * scaleModifier);
                     _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+                    _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
                 }
                 break;
             case ArmModel.None:
@@ -215,9 +239,9 @@ public class BuildArm : MonoBehaviour
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
             _parts[0].Part = _tubingObject[0];
             _parts[0].PartName = "DoubleL";
-            _parts[0].LoadedPartLocation = new Vector3(((width/2) - 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartLocation = new Vector3(((width/2* scaleModifier) - (0.5f * 0.0254f)) ,0, (length/2* scaleModifier) );
             _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
         }
 
         if (_parts[1] == null)
@@ -225,9 +249,9 @@ public class BuildArm : MonoBehaviour
             _parts[1] = _modelObject.AddComponent<GeneratePart>();
             _parts[1].Part = _tubingObject[0];
             _parts[1].PartName = "DoubleR";
-            _parts[1].LoadedPartLocation = new Vector3(((-width/2) + 0.5f) * 0.0254f,0, (length/2) * 0.0254f);
+            _parts[1].LoadedPartLocation = new Vector3(((-width/2 * scaleModifier) + (0.5f * 0.0254f)),0, (length/2) * scaleModifier);
             _parts[1].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-            _parts[1].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+            _parts[1].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
         }
     }
     
@@ -240,9 +264,9 @@ public class BuildArm : MonoBehaviour
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
             _parts[0].Part = _tubingObject[0];
             _parts[0].PartName = "Single";
-            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * scaleModifier);
             _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
         }
     }
     
@@ -255,9 +279,9 @@ public class BuildArm : MonoBehaviour
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
             _parts[0].Part = _tubingObject[1];
             _parts[0].PartName = "SingleTwo";
-            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * 0.0254f);
+            _parts[0].LoadedPartLocation = new Vector3(0,0, (length/2) * scaleModifier);
             _parts[0].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
-            _parts[0].LoadedPartScale = new Vector3(1, 1, length * 0.0254f);
+            _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
         }
     }
     
@@ -316,6 +340,8 @@ public class BuildArm : MonoBehaviour
             _modelObject.transform.localRotation = Quaternion.identity;
             
             _modelObject.transform.localScale = Vector3.one;
+            
+            _parts = null;
         }
     }
 

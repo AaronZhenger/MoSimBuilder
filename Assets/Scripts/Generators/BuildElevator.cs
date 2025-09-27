@@ -19,6 +19,9 @@ public class Buildelevator : MonoBehaviour
     
     [Header("ModelSettings")]
     [SerializeField] private bool model;
+
+    [ConditionalField(nameof(model), false)] [SerializeField]
+    private Units units = Units.Inch;
     [ConditionalField(nameof(model), false)]
     [SerializeField] private float width;
     [ConditionalField(nameof(model), false)]
@@ -95,6 +98,7 @@ public class Buildelevator : MonoBehaviour
 
     private void Startup()
     {
+        
         var loadedTubes =  Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
         foreach (var loadedTube in loadedTubes)
@@ -130,8 +134,6 @@ public class Buildelevator : MonoBehaviour
             _wasEngaged[i] = false;
                 
         }
-
-        _scaleFactor = 0.0254f;
         
         _stageModels = new GameObject[stages+1];
         for (int i = 0; i <= stages; i++)
@@ -160,6 +162,22 @@ public class Buildelevator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        switch (units)
+        {
+            case Units.Inch:
+                _scaleFactor = 0.0254f;
+                break;
+            case Units.Centimeter:
+                _scaleFactor = 0.01f;
+                break;
+            case Units.Meter:
+                _scaleFactor = 1.0f;
+                break;
+            case Units.Millimeter:
+                _scaleFactor = 0.001f;
+                break;
+        }
+        
         if (!EditorApplication.isPlaying)
         {
             if (model)

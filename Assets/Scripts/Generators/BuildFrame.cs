@@ -12,6 +12,7 @@ using Util;
 public class BuildFrame : MonoBehaviour
 {
     [Header("Frame Info")]
+    [SerializeField] private Units units = Units.Inch;
     [SerializeField] private Vector2 frameSize = new Vector2(29.5f, 29.5f);
         
     [SerializeField] private float robotWeight = 40f;
@@ -115,6 +116,21 @@ public class BuildFrame : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        switch (units)
+        {
+            case Units.Inch:
+                _unitValue = 0.0254f;
+                break;
+            case Units.Centimeter:
+                _unitValue = 0.01f;
+                break;
+            case Units.Meter:
+                _unitValue = 1.0f;
+                break;
+            case Units.Millimeter:
+                _unitValue = 0.001f;
+                break;
+        }
 
         //load module models
         var loadedModules =  Resources.LoadAll<GameObject>("Swerve") as GameObject[];
@@ -158,20 +174,20 @@ public class BuildFrame : MonoBehaviour
         }
 
         //set module locations
-        _cornerModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 2.65f, 0, frameSize.y * 0.5f - 2.65f);
-        _cornerModulePositions[1] = new Vector3(frameSize.x * 0.5f - 2.65f, 0, frameSize.y * 0.5f - 2.65f);
-        _cornerModulePositions[2] = new Vector3(frameSize.x * -0.5f + 2.65f, 0, frameSize.y * -0.5f + 2.65f);
-        _cornerModulePositions[3] = new Vector3(frameSize.x * 0.5f - 2.65f, 0, frameSize.y * -0.5f + 2.65f);
+        _cornerModulePositions[0] = new Vector3((frameSize.x * -0.5f * _unitValue) + (2.65f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (2.65f * 0.0254f));
+        _cornerModulePositions[1] = new Vector3(frameSize.x * 0.5f * _unitValue - (2.65f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (2.65f * 0.0254f));
+        _cornerModulePositions[2] = new Vector3(frameSize.x * -0.5f * _unitValue + (2.65f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (2.65f * 0.0254f));
+        _cornerModulePositions[3] = new Vector3(frameSize.x * 0.5f * _unitValue - (2.65f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (2.65f * 0.0254f));
         
-        _standardModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 3.65f, 0, frameSize.y * 0.5f - 3.65f);
-        _standardModulePositions[1] = new Vector3(frameSize.x * 0.5f - 3.65f, 0, frameSize.y * 0.5f - 3.65f);
-        _standardModulePositions[2] = new Vector3(frameSize.x * -0.5f + 3.65f, 0, frameSize.y * -0.5f + 3.65f);
-        _standardModulePositions[3] = new Vector3(frameSize.x * 0.5f - 3.65f, 0, frameSize.y * -0.5f + 3.65f);
+        _standardModulePositions[0] = new Vector3((frameSize.x * -0.5f * _unitValue) + (3.65f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (3.65f * 0.0254f));
+        _standardModulePositions[1] = new Vector3(frameSize.x * 0.5f * _unitValue - (3.65f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (3.65f * 0.0254f));
+        _standardModulePositions[2] = new Vector3(frameSize.x * -0.5f * _unitValue + (3.65f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (3.65f * 0.0254f));
+        _standardModulePositions[3] = new Vector3(frameSize.x * 0.5f * _unitValue - (3.65f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (3.65f * 0.0254f));
         
-        _lowProfileModulePositions[0] = new Vector3((frameSize.x * -0.5f) + 1.75f, 0, frameSize.y * 0.5f - 1.75f);
-        _lowProfileModulePositions[1] = new Vector3(frameSize.x * 0.5f - 1.75f, 0, frameSize.y * 0.5f - 1.75f);
-        _lowProfileModulePositions[2] = new Vector3(frameSize.x * -0.5f + 1.75f, 0, frameSize.y * -0.5f + 1.75f);
-        _lowProfileModulePositions[3] = new Vector3(frameSize.x * 0.5f -1.75f, 0, frameSize.y * -0.5f + 1.75f);
+        _lowProfileModulePositions[0] = new Vector3((frameSize.x * _unitValue * -0.5f) + (1.75f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (1.75f * 0.0254f));
+        _lowProfileModulePositions[1] = new Vector3(frameSize.x * _unitValue * 0.5f - (1.75f * 0.0254f), 0, frameSize.y * 0.5f * _unitValue - (1.75f * 0.0254f));
+        _lowProfileModulePositions[2] = new Vector3(frameSize.x * _unitValue * -0.5f + (1.75f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (1.75f * 0.0254f));
+        _lowProfileModulePositions[3] = new Vector3(frameSize.x * _unitValue * 0.5f - (1.75f * 0.0254f), 0, frameSize.y * -0.5f * _unitValue + (1.75f * 0.0254f));
 
         _usedModulePositions = moduleType switch
         {
@@ -199,7 +215,7 @@ public class BuildFrame : MonoBehaviour
 
                 _usedModules[i].PartName = _moduleNames[i];
 
-                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i];
 
                 _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
                         
@@ -211,7 +227,7 @@ public class BuildFrame : MonoBehaviour
 
                 _usedModules[i].PartName = _moduleNames[i];
 
-                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i];
 
                 _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
                         
@@ -219,7 +235,7 @@ public class BuildFrame : MonoBehaviour
             }
             else if (_usedModules[i] != null)
             {
-                _usedModules[i].LoadedPartLocation = _usedModulePositions[i] * 0.0254f;
+                _usedModules[i].LoadedPartLocation = _usedModulePositions[i];
 
                 _usedModules[i].LoadedPartRotation = Quaternion.Euler(_moduleRotations[i]);
                         
@@ -273,25 +289,25 @@ public class BuildFrame : MonoBehaviour
             _ => 0
         };
         
-        _framePosition[0] = new Vector3(0, _usedFrameHeight, frameSize.y/2 - 0.5f); 
-        _framePosition[1] = new Vector3(0, _usedFrameHeight, -frameSize.y/2 + 0.5f);
-        _framePosition[2] = new Vector3(frameSize.x/2 - 0.5f, _usedFrameHeight, 0);
-        _framePosition[3] = new Vector3(-frameSize.x/2 + 0.5f, _usedFrameHeight, 0);
+        _framePosition[0] = new Vector3(0, _usedFrameHeight * 0.0254f, frameSize.y/2 * _unitValue - (0.5f * 0.0254f)); 
+        _framePosition[1] = new Vector3(0, _usedFrameHeight * 0.0254f, -frameSize.y/2 * _unitValue + (0.5f * 0.0254f));
+        _framePosition[2] = new Vector3(frameSize.x/2 * _unitValue - (0.5f * 0.0254f), _usedFrameHeight * 0.0254f, 0);
+        _framePosition[3] = new Vector3(-frameSize.x/2 * _unitValue + (0.5f * 0.0254f), _usedFrameHeight * 0.0254f, 0);
 
-        _conerModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 8.25f);
-        _conerModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 8.25f);
-        _conerModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 8.25f);
-        _conerModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 8.25f);
+        _conerModuleFrameLengths[0] = new Vector3(1, 1, frameSize.x * _unitValue - (8.25f * 0.0254f));
+        _conerModuleFrameLengths[1] = new Vector3(1, 1, frameSize.x * _unitValue - (8.25f * 0.0254f));
+        _conerModuleFrameLengths[2] = new Vector3(1, 1, frameSize.y * _unitValue - (8.25f * 0.0254f));
+        _conerModuleFrameLengths[3] = new Vector3(1, 1, frameSize.y * _unitValue - (8.25f * 0.0254f));
         
-        _standardModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x-2);
-        _standardModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x-2);
-        _standardModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y);
-        _standardModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y);
+        _standardModuleFrameLengths[0] = new Vector3(1, 1, frameSize.x * _unitValue- (2 * 0.0254f));
+        _standardModuleFrameLengths[1] = new Vector3(1, 1, frameSize.x * _unitValue- (2 * 0.0254f));
+        _standardModuleFrameLengths[2] = new Vector3(1, 1, frameSize.y * _unitValue);
+        _standardModuleFrameLengths[3] = new Vector3(1, 1, frameSize.y * _unitValue);
         
-        _lowProfileModuleFrameLengths[0] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 7f);
-        _lowProfileModuleFrameLengths[1] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.x - 7f);
-        _lowProfileModuleFrameLengths[2] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 7f);
-        _lowProfileModuleFrameLengths[3] = new Vector3(1/0.0254f, 1/0.0254f, frameSize.y - 7f);
+        _lowProfileModuleFrameLengths[0] = new Vector3(1, 1, frameSize.x * _unitValue - (0.0254f * 7f));
+        _lowProfileModuleFrameLengths[1] = new Vector3(1, 1, frameSize.x * _unitValue - (0.0254f * 7f));
+        _lowProfileModuleFrameLengths[2] = new Vector3(1, 1, frameSize.y * _unitValue - (0.0254f * 7f));
+        _lowProfileModuleFrameLengths[3] = new Vector3(1, 1, frameSize.y * _unitValue - (0.0254f * 7f));
         
         _usedFrameLengths = moduleType switch
         {
@@ -320,30 +336,30 @@ public class BuildFrame : MonoBehaviour
 
                     _frameModels[i].PartName = _frameNames[i];
 
-                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+                    _frameModels[i].LoadedPartLocation = _framePosition[i];
 
                     _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
                         
-                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i];
                 } else if (_frameModels[i].Part !=_frameModel)
                 {
                     _frameModels[i].Part = _frameModel;
 
                     _frameModels[i].PartName = _frameNames[i];
 
-                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+                    _frameModels[i].LoadedPartLocation = _framePosition[i];
 
                     _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
                         
-                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i];
                 }
                 else if (_frameModels[i] != null)
                 {
-                    _frameModels[i].LoadedPartLocation = _framePosition[i] * 0.0254f;
+                    _frameModels[i].LoadedPartLocation = _framePosition[i];
 
                     _frameModels[i].LoadedPartRotation = Quaternion.Euler(_frameRotation[i]);
                         
-                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i] * 0.0254f;
+                    _frameModels[i].LoadedPartScale = _usedFrameLengths[i];
                 }
             }
         }
@@ -407,9 +423,6 @@ public class BuildFrame : MonoBehaviour
         _frameNames[1] = "back";
         _frameNames[2] = "left";
         _frameNames[3] = "right";
-
-        //set conversion unit (TEMP)
-        _unitValue = 0.0254f;
 
         //find generated objects at startup
         _driveTrain = Utils.FindChild("driveTrain", gameObject);
