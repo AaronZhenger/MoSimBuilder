@@ -1,10 +1,17 @@
 using System;
+using System.Collections.Generic;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
 
 namespace Util
 {
+    [Serializable]
+    public class InspectorDropdown
+    {
+        [HideInInspector] public List<String> canBeSelected = new List<String>();
+        [HideInInspector] public int selectedIndex = 0;
+    }
     [Serializable]
     public class SetPoint
     {

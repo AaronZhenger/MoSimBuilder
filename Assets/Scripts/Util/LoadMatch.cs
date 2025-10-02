@@ -6,12 +6,15 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Util;
 
 [ExecuteAlways]
 public class LoadMatch : MonoBehaviour
 {
     [SerializeField] private GameObject[] fieldPrefab;
     [SerializeField] private Transform spawnPoint;
+    [Header("Robot Selection")]
+    [SerializeField] private InspectorDropdown robotSelected;
     
      [HideInInspector] public int selectedRobotIndex = 0; 
     [NonSerialized]
@@ -21,16 +24,23 @@ public class LoadMatch : MonoBehaviour
     private GameObject _fieldHolder;
     private GameObject _activeRobot;
     private GameObject _1StCam;
-    
+
+    private void OnEnable()
+    {
+        CheckRobots();
+        robotSelected.canBeSelected = availableRobots.Select(x => x.name).ToList();
+        robotSelected.selectedIndex = selectedRobotIndex;
+    }
+
     private void Start()
     {
         CheckRobots(); 
-        
         ResetField();
     }
     
     private void Update()
     {
+        selectedRobotIndex = robotSelected.selectedIndex;
         
         if (!EditorApplication.isPlayingOrWillChangePlaymode && RobotLoaded())
         {
