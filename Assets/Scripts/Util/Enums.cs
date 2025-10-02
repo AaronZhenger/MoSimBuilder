@@ -12,6 +12,12 @@ namespace Util
         lowProfile
     }
 
+    public enum AutoAlginType
+    {
+        release,
+        button
+    }
+
     /// <summary>
     /// The type of setpoint that is being used
     /// </summary>
@@ -22,7 +28,7 @@ namespace Util
         Sequence
     }
 
-    public enum elevatorType
+    public enum ElevatorType
     {
         Cascade,
         Continuous

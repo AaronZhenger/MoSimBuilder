@@ -6,11 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Reef.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Reef.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildArm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Swerve/inverted.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Swerve/inverted.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Swerve/lowProfile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Swerve/lowProfile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Swerve/standard.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Swerve/standard.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Swerve/standardCorner.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Swerve/standardCorner.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXOneXEighth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXOneXEighth.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXTwoXEighth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXTwoXEighth.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/TwoXTwoXEighth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Tubing/TwoXTwoXEighth.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/SwerveController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/SwerveController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildElevator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildFrame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildFrame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildTubing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Generators/BuildTubing.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/CustomUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/CustomUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/LoadMatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/LoadMatch.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Utils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Utils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,10 +32,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Editor/LoadMatchEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/BuilderLib/DriveMotor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/BuilderLib/SwerveController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/BuilderLib/WheelBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ExtensionModules/AutoAlign.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Generators/BuildTubing.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Util/JointController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -41,20 +52,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "BetaBranch",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;BetaBranch&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="_stageModels" />
@@ -171,7 +182,8 @@
       <workItem from="1758810816664" duration="266000" />
       <workItem from="1758898114912" duration="304000" />
       <workItem from="1758989281078" duration="4632000" />
-      <workItem from="1759416516620" duration="2105000" />
+      <workItem from="1759416516620" duration="3247000" />
+      <workItem from="1759437215909" duration="7101000" />
     </task>
     <servers />
   </component>

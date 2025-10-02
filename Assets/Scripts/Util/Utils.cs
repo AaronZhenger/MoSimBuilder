@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Util
 {
-    public class Utils
+    public class Utils:MonoBehaviour
     {
         // Start is called before the first frame update
         public Utils()
@@ -119,6 +121,30 @@ namespace Util
         /// <returns></returns>
         public static float AngleDifference(float a, float b) {
             return (a - b + 540) % 360 - 180;
+        }
+        
+        public static List<GameObject> FindGameObjectsOnLayer(string layerName)
+        {
+            // 1. Get the integer ID for the layer name.
+            int layerID = LayerMask.NameToLayer(layerName);
+
+            // Check if the layer name is valid (returns -1 if invalid).
+            if (layerID == -1)
+            {
+                Debug.LogWarning($"Layer '{layerName}' not found in Unity's layer settings.");
+                return new List<GameObject>();
+            }
+
+            // 2. Find all active GameObjects in the scene.
+            // NOTE: This can be a slow operation and shouldn't be called every frame (e.g., in Update).
+            GameObject[] allGameObjects = FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            // 3. Filter the array to only include objects on the target layer.
+            List<GameObject> objectsOnLayer = allGameObjects
+                .Where(go => go.layer == layerID)
+                .ToList();
+
+            return objectsOnLayer;
         }
     }
 }

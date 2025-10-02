@@ -40,4 +40,13 @@ namespace Util
 
 
     }
+    
+    [Serializable]
+    public struct PID
+    {
+        public float p;
+        public float i;
+        public float d;
+        public float max;
+    }
 }

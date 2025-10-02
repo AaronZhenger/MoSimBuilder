@@ -15,7 +15,7 @@ public class Buildelevator : MonoBehaviour
     [Header("General Settings")] [SerializeField]
     private SetPoint[] setPoints;
 
-    [SerializeField] private elevatorType elevatorType;
+    [SerializeField] private ElevatorType elevatorType;
 
     [Header("ModelSettings")] [SerializeField]
     private bool model;
@@ -194,7 +194,7 @@ public class Buildelevator : MonoBehaviour
                 BuildModel();
             }
         }
-        else if (elevatorType == elevatorType.Cascade)
+        else if (elevatorType == ElevatorType.Cascade)
         {
             CascadeMovement();
         }

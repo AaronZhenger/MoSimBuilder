@@ -16,7 +16,7 @@ public class LoadMatch : MonoBehaviour
     [Header("Robot Selection")]
     [SerializeField] private InspectorDropdown robotSelected;
     
-     [HideInInspector] public int selectedRobotIndex = 0; 
+     [HideInInspector] public int selectedRobotIndex; 
     [NonSerialized]
     public List<GameObject> availableRobots = new List<GameObject>();
     

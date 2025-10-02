@@ -43,6 +43,9 @@ public class SwerveController : MonoBehaviour
     private InputAction _rotateAction;
     
     private string[] _moduleNames = new string[4];
+
+    private bool inputsOveriden;
+    private bool inputsOveridable;
     // Start is called before the first frame update
     void Start()
     {
@@ -71,16 +74,34 @@ public class SwerveController : MonoBehaviour
                 _modules[i]._rb = rb;
             }
         }
+
+        inputsOveriden = false;
+    }
+
+    public void overideInputs(float x, float y, float angle, bool disruptable = false)
+    {
+        _translateValue = new Vector2(x, y);
+        _rotateValue = new Vector2(angle, 0);
+        inputsOveriden = true;
+        inputsOveridable = disruptable;
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {
-        
+    { 
         //update controls
-        _translateValue = _translateAction.ReadValue<Vector2>();
-        _rotateValue = _rotateAction.ReadValue<Vector2>();
-        
+        if (_translateAction.ReadValue<Vector2>().magnitude > 0.05f && inputsOveridable)
+        {
+            _translateValue = _translateAction.ReadValue<Vector2>();
+            _rotateValue = _rotateAction.ReadValue<Vector2>();
+            inputsOveriden = false;
+        }
+        else if (!inputsOveriden)
+        {
+            _translateValue = _translateAction.ReadValue<Vector2>();
+            _rotateValue = _rotateAction.ReadValue<Vector2>();
+        }
+
         //rotate input to match alliance and scheme
         Vector3 driveInput = new Vector3(_translateValue.y, 0, _translateValue.x);
 
@@ -98,8 +119,10 @@ public class SwerveController : MonoBehaviour
 
         float fwd, str;
 
-        if (fieldCentric)
+        
+        if (fieldCentric ||  inputsOveriden)
         {
+            inputsOveriden = false;
             if (!reversed)
             {
                 fwd = fieldRelativeAngle.x * velocityMp;
