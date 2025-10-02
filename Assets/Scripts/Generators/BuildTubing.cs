@@ -7,10 +7,12 @@ namespace Generators
     public class BuildTubing : GeneratePart
     {
         [SerializeField] private TubeType tubeType;
-
+        
+        [SerializeField] private Units units;
+        
         [SerializeField] private float length;
 
-        [SerializeField] private Units units;
+        
 
         private GameObject _tube;
 
