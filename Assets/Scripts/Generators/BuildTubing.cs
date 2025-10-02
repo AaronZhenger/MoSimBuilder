@@ -24,7 +24,7 @@ namespace Generators
             Startup();
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             Startup();
         }

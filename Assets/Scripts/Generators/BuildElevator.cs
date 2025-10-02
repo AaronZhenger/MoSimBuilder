@@ -104,6 +104,11 @@ public class Buildelevator : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Startup();
+    }
+
     private void Startup()
     {
         var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];

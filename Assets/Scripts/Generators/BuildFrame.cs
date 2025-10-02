@@ -108,7 +108,7 @@ public class BuildFrame : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void OnEnable()
     {
         Startup();
     }

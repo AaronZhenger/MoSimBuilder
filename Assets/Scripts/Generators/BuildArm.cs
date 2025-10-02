@@ -79,6 +79,11 @@ public class BuildArm : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Startup();
+    }
+
     // Update is called once per frame
     void Update()
     {
