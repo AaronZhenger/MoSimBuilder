@@ -12,84 +12,92 @@ using Random = Unity.Mathematics.Random;
 [ExecuteAlways]
 public class Buildelevator : MonoBehaviour
 {
-    [Header("General Settings")]
-    [SerializeField] private SetPoint[] setPoints;
-    
+    [Header("General Settings")] [SerializeField]
+    private SetPoint[] setPoints;
+
     [SerializeField] private elevatorType elevatorType;
-    
-    [Header("ModelSettings")]
-    [SerializeField] private bool model;
+
+    [Header("ModelSettings")] [SerializeField]
+    private bool model;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
     private Units units = Units.Inch;
-    [ConditionalField(nameof(model), false)]
-    [SerializeField] private float width;
-    [ConditionalField(nameof(model), false)]
-    [SerializeField] private float height;
-    [ConditionalField(nameof(model), false)]
-    [SerializeField] private int stages;
-    [ConditionalField(nameof(model), false)]
-    [SerializeField] private bool carriage = true;
-    [ConditionalField(true, nameof(Predicate))]
-    [SerializeField] private float carriageHeight;
+
+    [ConditionalField(nameof(model), false)] [SerializeField]
+    private float width;
+
+    [ConditionalField(nameof(model), false)] [SerializeField]
+    private float height;
+
+    [ConditionalField(nameof(model), false)] [SerializeField]
+    private int stages;
+
+    [ConditionalField(nameof(model), false)] [SerializeField]
+    private bool carriage = true;
+
+    [ConditionalField(true, nameof(Predicate))] [SerializeField]
+    private float carriageHeight;
+
     private bool Predicate() => model && carriage;
 
-    [Tooltip("The final stage is the carriage stage")]
-    [SerializeField] private float[] stageWeights;
+    [Tooltip("The final stage is the carriage stage")] [SerializeField]
+    private float[] stageWeights;
 
-    [Header("advanced Settings")]
-    [SerializeField] private bool useAdvancedSettings = false;
+    [Header("advanced Settings")] [SerializeField]
+    private bool useAdvancedSettings = false;
 
-    [ConditionalField(nameof(useAdvancedSettings), false)]
-    [SerializeField]private float maxSpeed;
+    [ConditionalField(nameof(useAdvancedSettings), false)] [SerializeField]
+    private float maxSpeed;
 
-    [ConditionalField(nameof(useAdvancedSettings), false)]
-    [SerializeField]private float kP;
-    [ConditionalField(nameof(useAdvancedSettings), false)]
-    [SerializeField]private float kI;
-    [ConditionalField(nameof(useAdvancedSettings), false)]
-    [SerializeField]private float kD;
+    [ConditionalField(nameof(useAdvancedSettings), false)] [SerializeField]
+    private float kP;
+
+    [ConditionalField(nameof(useAdvancedSettings), false)] [SerializeField]
+    private float kI;
+
+    [ConditionalField(nameof(useAdvancedSettings), false)] [SerializeField]
+    private float kD;
 
     private Vector3 _startPose;
 
     private GameObject _connectedBody;
 
     private JointDrive _drive;
-    
+
     private GeneratePart[][] _tubings;
-    
+
     private GameObject _tubingObject;
-    
+
     private float _scaleFactor;
-    
+
     private GameObject[] _modelObjects;
 
     private GameObject[] _stageModels;
-    
+
     private Rigidbody[] _rigidbodies;
-    
+
     private ConfigurableJoint[] _joints;
 
     private JointDrive[] _drives;
-    
+
     private JointController[] _controllers;
 
     private bool[] _engaged;
-    
+
     private bool[] _wasEngaged;
-    
+
     private bool _wasCarriage;
-    
+
     private AudioSource _audioSource;
-    
+
     private AudioResource[] _audioClips;
-    
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
         Startup();
-        
+
         if (EditorApplication.isPlaying)
         {
             Initialize();
@@ -98,8 +106,7 @@ public class Buildelevator : MonoBehaviour
 
     private void Startup()
     {
-        
-        var loadedTubes =  Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+        var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
         foreach (var loadedTube in loadedTubes)
         {
@@ -108,8 +115,8 @@ public class Buildelevator : MonoBehaviour
                 _tubingObject = loadedTube;
             }
         }
-        
-        var loadedSounds =  Resources.LoadAll<AudioResource>("Sounds") as AudioResource[];
+
+        var loadedSounds = Resources.LoadAll<AudioResource>("Sounds") as AudioResource[];
 
         _audioClips = new AudioResource[2];
         foreach (var loadedSound in loadedSounds)
@@ -123,35 +130,32 @@ public class Buildelevator : MonoBehaviour
                 _audioClips[1] = loadedSound;
             }
         }
-        
-        
+
+
         _engaged = new bool[stages];
         _wasEngaged = new bool[stages];
 
         for (int i = 0; i < _engaged.Length; i++)
         {
-            _engaged[i] = false;   
+            _engaged[i] = false;
             _wasEngaged[i] = false;
-                
         }
-        
-        _stageModels = new GameObject[stages+1];
+
+        _stageModels = new GameObject[stages + 1];
         for (int i = 0; i <= stages; i++)
         {
             _stageModels[i] = Utils.FindChild("Stage" + i, gameObject);
         }
-        
-        _modelObjects = new GameObject[stages +1];
+
+        _modelObjects = new GameObject[stages + 1];
         for (int i = 0; i <= stages; i++)
         {
             _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
         }
-        
-        
     }
 
     private void Initialize()
-    { 
+    {
         GenerateRBs();
         GenerateJoints();
         generateControllers();
@@ -177,7 +181,7 @@ public class Buildelevator : MonoBehaviour
                 _scaleFactor = 0.001f;
                 break;
         }
-        
+
         if (!EditorApplication.isPlaying)
         {
             if (model)
@@ -202,13 +206,14 @@ public class Buildelevator : MonoBehaviour
     private void ContinuousMovement()
     {
         //TODO: add the continuously rigged motion to this function
-        
+
         for (int i = 0; i < _rigidbodies.Length; i++)
         {
             if (i == _rigidbodies.Length - 1)
             {
                 _controllers[i].setPoints = setPoints;
-                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - ((i) * 0.0254f);
+                _controllers[i].currentPosition =
+                    transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - ((i) * 0.0254f);
                 _controllers[i].follower = false;
                 continue; //skip follower calculations
             }
@@ -222,19 +227,21 @@ public class Buildelevator : MonoBehaviour
             float combinedHeight = 0;
             for (int j = i + 1; j < _rigidbodies.Length; j++)
             {
-                combinedHeight += ((height-(4 + (stages - (i-1)))) - (1 * ((j < 2) ? 0 : j - 1) - ((stages - j) * -2))) * 0.0254f;
+                combinedHeight +=
+                    ((height - (4 + (stages - (i - 1)))) - (1 * ((j < 2) ? 0 : j - 1) - ((stages - j) * -2))) * 0.0254f;
             }
 
             float heightOffset = carriage ? -(carriageHeight + 1) * 0.0254f : 0;
 
             float setPoint = 0;
-            if (combinedHeight < transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y - (i * 0.0254f) - heightOffset)
+            if (combinedHeight < transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y -
+                (i * 0.0254f) - heightOffset)
             {
                 _engaged[i] = true; //audio thingy
-                setPoint = combinedHeight - transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y - ((i + 1) * 0.0254f);
+                setPoint = combinedHeight - transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y -
+                           ((i + 1) * 0.0254f);
 
                 setPoint += (i * 1f) * 0.0254f;
-
             }
             else
             {
@@ -249,9 +256,10 @@ public class Buildelevator : MonoBehaviour
                 setPoint = 0;
             }
 
-            
+
             _controllers[i].FollowPosition(setPoint);
-            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - (((i * 1) + (i * 0.05f)) * 0.0254f);
+            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y -
+                                              (((i * 1) + (i * 0.05f)) * 0.0254f);
         }
     }
 
@@ -266,7 +274,7 @@ public class Buildelevator : MonoBehaviour
             {
                 RandomClick();
             }
-            
+
             _wasEngaged[i] = _engaged[i];
         }
     }
@@ -284,8 +292,8 @@ public class Buildelevator : MonoBehaviour
         if (randomNumber == 1)
         {
             _audioSource.resource = _audioClips[0];
-            
-        } else if (randomNumber == 2)
+        }
+        else if (randomNumber == 2)
         {
             _audioSource.resource = _audioClips[1];
         }
@@ -308,8 +316,9 @@ public class Buildelevator : MonoBehaviour
                 _controllers[i].follower = false;
                 _controllers[i].setPoints = setPoints;
                 float overlapLength = 0.0254f * 1.05f; // Example overlap length
-                float offset = (i+1) * overlapLength;
-                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - offset;
+                float offset = (i + 1) * overlapLength;
+                _controllers[i].currentPosition =
+                    transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - offset;
             }
             else
             {
@@ -332,6 +341,7 @@ public class Buildelevator : MonoBehaviour
                 {
                     target = 0;
                 }
+
                 _controllers[i].FollowPosition(target);
                 // The currentPosition should reflect the stage's local Y position.
                 _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
@@ -339,7 +349,7 @@ public class Buildelevator : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Generates Rigidbodies at startup
     /// </summary>
@@ -347,9 +357,9 @@ public class Buildelevator : MonoBehaviour
     {
         var driveTrain = Utils.FindParentRB(gameObject).GetComponent<Rigidbody>();
         _rigidbodies = new Rigidbody[_stageModels.Length - 1]; //stationary stage doesnt have a rb
-        for (int i = 0; i < _stageModels.Length-1; i++) //skip the stationary stage (0)
+        for (int i = 0; i < _stageModels.Length - 1; i++) //skip the stationary stage (0)
         {
-            _rigidbodies[i] = _stageModels[i+1].AddComponent<Rigidbody>();
+            _rigidbodies[i] = _stageModels[i + 1].AddComponent<Rigidbody>();
 
             _rigidbodies[i].mass = stageWeights[i];
             _rigidbodies[i].drag = 0;
@@ -360,7 +370,7 @@ public class Buildelevator : MonoBehaviour
             _rigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
     }
-    
+
     /// <summary>
     /// Generates the Joints at startup
     /// </summary>
@@ -369,9 +379,9 @@ public class Buildelevator : MonoBehaviour
         var driveTrain = Utils.FindParentRB(gameObject).GetComponent<Rigidbody>();
         _joints = new ConfigurableJoint[_stageModels.Length - 1]; //stationary stage doesnt have a rb
         _drives = new JointDrive[_stageModels.Length - 1];
-        for (int i = 0; i < _modelObjects.Length-1; i++) //skip the stationary stage (0)
+        for (int i = 0; i < _modelObjects.Length - 1; i++) //skip the stationary stage (0)
         {
-            _joints[i] = _stageModels[i+1].AddComponent<ConfigurableJoint>();
+            _joints[i] = _stageModels[i + 1].AddComponent<ConfigurableJoint>();
             _joints[i].connectedBody = driveTrain;
             _joints[i].xMotion = ConfigurableJointMotion.Locked;
             _joints[i].zMotion = ConfigurableJointMotion.Locked;
@@ -379,12 +389,12 @@ public class Buildelevator : MonoBehaviour
             _joints[i].angularZMotion = ConfigurableJointMotion.Locked;
             _joints[i].angularXMotion = ConfigurableJointMotion.Locked;
             _joints[i].yMotion = ConfigurableJointMotion.Free;
-            
+
             _drive.maximumForce = 8000000;
             _drive.positionDamper = 10000;
             _drive.positionSpring = 0;
             _drive.useAcceleration = false;
-            
+
             GenerateDrive(i);
         }
     }
@@ -395,9 +405,9 @@ public class Buildelevator : MonoBehaviour
     private void generateControllers()
     {
         _controllers = new JointController[_modelObjects.Length - 1];
-        for (int i = 0; i < _modelObjects.Length -1; i++)
+        for (int i = 0; i < _modelObjects.Length - 1; i++)
         {
-            _controllers[i] = _modelObjects[i+1].AddComponent<JointController>();
+            _controllers[i] = _modelObjects[i + 1].AddComponent<JointController>();
 
             if (useAdvancedSettings)
             {
@@ -415,7 +425,7 @@ public class Buildelevator : MonoBehaviour
                 _controllers[i].iSat = 0;
                 _controllers[i].max = 5;
             }
-            
+
             _controllers[i].angular = false;
             _controllers[i].driveAxis = new Vector3(0, 1, 0);
             _controllers[i].joint = _joints[i];
@@ -430,7 +440,7 @@ public class Buildelevator : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Generates a joint drive
     /// </summary>
@@ -443,7 +453,7 @@ public class Buildelevator : MonoBehaviour
         _drives[i].useAcceleration = false;
         _joints[i].yDrive = _drive;
     }
-    
+
     //ai warning
     // Separate function to handle the hierarchy reordering
     private void ReorderHierarchy()
@@ -488,7 +498,6 @@ public class Buildelevator : MonoBehaviour
     //generates the standard elevator model.
     private void BuildModel()
     {
-
         if (stageWeights == null)
         {
             stageWeights = new float[stages];
@@ -496,7 +505,7 @@ public class Buildelevator : MonoBehaviour
             {
                 stageWeights[i] = 5;
             }
-        } 
+        }
         else if (stageWeights.Length != stages)
         {
             float[] carriageWeightBuffer = stageWeights;
@@ -527,8 +536,6 @@ public class Buildelevator : MonoBehaviour
                         stageWeights[i] = carriageWeightBuffer[i - (stagesAdded)];
                     }
                 }
-                
-                
             }
         }
 
@@ -582,7 +589,7 @@ public class Buildelevator : MonoBehaviour
                     newStage.transform.localScale = Vector3.one;
                     _stageModels[i] = newStage;
                 }
-                
+
                 for (int i = 0; i < _stageModels.Length; i++)
                 {
                     var models = Utils.FindChild("Model" + (i), _stageModels[i]);
@@ -591,7 +598,7 @@ public class Buildelevator : MonoBehaviour
                         DestroyImmediate(models);
                     }
                 }
-                
+
                 ReorderHierarchy();
             }
             else // Shrinking - Revised to shift later GameObjects down
@@ -630,7 +637,7 @@ public class Buildelevator : MonoBehaviour
 
                 for (int i = 0; i < _stageModels.Length; i++)
                 {
-                    var models = Utils.FindChild("Model" + (i+(oldLength - newLength)), _stageModels[i]);
+                    var models = Utils.FindChild("Model" + (i + (oldLength - newLength)), _stageModels[i]);
                     if (models != null)
                     {
                         DestroyImmediate(models);
@@ -661,18 +668,18 @@ public class Buildelevator : MonoBehaviour
                 }
             }
         } //end ai warning
-        
+
         int nonCrossBraceStages = 1;
         if (carriage)
         {
             nonCrossBraceStages = 2;
         }
-        
+
         if (_stageModels.Length == 0)
         {
-            _modelObjects = new GameObject[stages+1];
-            
-            _tubings = new GeneratePart[stages+1][];
+            _modelObjects = new GameObject[stages + 1];
+
+            _tubings = new GeneratePart[stages + 1][];
         }
         else if (_stageModels.Length != stages + 1)
         {
@@ -684,9 +691,9 @@ public class Buildelevator : MonoBehaviour
                 }
             }
 
-            _modelObjects = new GameObject[stages+1];
-            
-            _tubings = new GeneratePart[stages+1][];
+            _modelObjects = new GameObject[stages + 1];
+
+            _tubings = new GeneratePart[stages + 1][];
         }
         else
         {
@@ -700,10 +707,10 @@ public class Buildelevator : MonoBehaviour
                 _modelObjects = new GameObject[stages + 1];
             }
         }
-        
+
         for (int i = 0; i <= stages; i++) //0 is stationary so 1 stage should generate 2
         {
-            if (i <= stages-nonCrossBraceStages || i == 0) //determines cross brace stage models
+            if (i <= stages - nonCrossBraceStages || i == 0) //determines cross brace stage models
             {
                 _modelObjects[i] = Utils.FindChild("Model" + i, _stageModels[i]);
                 if (_modelObjects[i] == null)
@@ -721,11 +728,12 @@ public class Buildelevator : MonoBehaviour
                     };
                 }
 
-                
-                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
+
+                _modelObjects[i].transform.localPosition =
+                    new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 6);
-                    
+
                 if (tubing[0] == null)
                 {
                     tubing[0] = _modelObjects[i].AddComponent<GeneratePart>();
@@ -736,7 +744,9 @@ public class Buildelevator : MonoBehaviour
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
                         new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0))) * 0.0254f); //if stationary width goes outside height
+                            (width * _scaleFactor) -
+                            ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0) *
+                             0.0254f)); //if stationary width goes outside height
                 }
                 else
                 {
@@ -745,47 +755,65 @@ public class Buildelevator : MonoBehaviour
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
                         new Vector3(1, 1,
-                            (width - ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0))) * 0.0254f); //if stationary width goes outside height
+                            (width * _scaleFactor) -
+                            ((2 + ((i) * 2)) * ((i > 0) ? 1.25f : 0) *
+                             0.0254f)); //if stationary width goes outside height
                 }
-                
+
                 if (tubing[1] == null)
                 {
                     tubing[1] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[1].Part = _tubingObject;
                     tubing[1].PartName = "left Upright (" + i + ")";
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
                 else
                 {
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
-                
+
                 if (tubing[2] == null)
                 {
                     tubing[2] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[2].Part = _tubingObject;
                     tubing[2].PartName = "right Upright (" + i + ")";
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
                 else
                 {
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
 
                 if (tubing[3] == null)
@@ -794,58 +822,71 @@ public class Buildelevator : MonoBehaviour
                     tubing[3].Part = _tubingObject;
                     tubing[3].PartName = "left cross brace standoff (" + i + ")";
                     tubing[3].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1 * (i)))) * -0.0254f, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -2 * 0.0254f);
+                        new Vector3(((width / 2.0f) * -_scaleFactor) - ((0.5f + (1 * (i))) * -0.0254f),
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -2 * 0.0254f);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1, 1, 2 * 0.0254f); 
+                        new Vector3(1, 1, 2 * 0.0254f);
                 }
                 else
                 {
                     tubing[3].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -2 * 0.0254f);
+                        new Vector3(((width / 2.0f) * -_scaleFactor) - ((0.5f + (1.5f * (i))) * -0.0254f),
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -2 * 0.0254f);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1, 1, 2 * 0.0254f); 
+                        new Vector3(1, 1, 2 * 0.0254f);
                 }
-                
+
                 if (tubing[4] == null)
                 {
                     tubing[4] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[4].Part = _tubingObject;
                     tubing[4].PartName = "right cross brace standoff (" + i + ")";
                     tubing[4].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -2 * 0.0254f);
+                        new Vector3(((width / 2.0f) * _scaleFactor) - ((0.5f + (1.5f * (i))) * 0.0254f),
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -2 * 0.0254f);
                     tubing[4].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
                     tubing[4].LoadedPartScale =
-                        new Vector3(1, 1, 2 * 0.0254f); 
+                        new Vector3(1, 1, 2 * 0.0254f);
                 }
                 else
                 {
                     tubing[4].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -2 * 0.0254f);
+                        new Vector3(((width / 2.0f) * _scaleFactor) - ((0.5f + (1.5f * (i))) * 0.0254f),
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -2 * 0.0254f);
                     tubing[4].LoadedPartRotation = Quaternion.Euler(0, 0, 0);
                     tubing[4].LoadedPartScale =
-                        new Vector3(1, 1, 2 * 0.0254f); 
+                        new Vector3(1, 1, 2 * 0.0254f);
                 }
-                
+
                 if (tubing[5] == null)
                 {
                     tubing[5] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[5].Part = _tubingObject;
                     tubing[5].PartName = "upper cross brace (" + i + ")";
                     tubing[5].LoadedPartLocation =
-                        new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -3.5f * 0.0254f);
+                        new Vector3(0,
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -3.5f * 0.0254f);
                     tubing[5].LoadedPartRotation = Quaternion.Euler(0, 90, 0);
                     tubing[5].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)) * (1)) + 2) * 0.0254f); 
+                        new Vector3(1, 1, (width * _scaleFactor) - ((2 + ((i) * 2)) * (1) * 0.0254f) + (2 * 0.0254f));
                 }
                 else
                 {
                     tubing[5].LoadedPartLocation =
-                        new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))) * 0.0254f, -3.5f * 0.0254f);
+                        new Vector3(0,
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f), -3.5f * 0.0254f);
                     tubing[5].LoadedPartRotation = Quaternion.Euler(0, 90, 0);
                     tubing[5].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2) * 1.5f) * (1)) + 2) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) - ((2 + ((i) * 2) * 1.5f) * (1) * 0.0254f) + (2 * 0.0254f));
                 }
 
                 _tubings[i] = tubing;
@@ -869,11 +910,12 @@ public class Buildelevator : MonoBehaviour
                     };
                 }
 
-                
-                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
+
+                _modelObjects[i].transform.localPosition =
+                    new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 4);
-                    
+
                 if (tubing[0] == null)
                 {
                     tubing[0] = _modelObjects[i].AddComponent<GeneratePart>();
@@ -883,7 +925,9 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) -
+                            ((2 + ((i) * 2) * 1.5f) * (1) * 0.0254f)); //if stationary width goes outside height
                 }
                 else
                 {
@@ -891,67 +935,73 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); //if stationary width goes outside height
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) -
+                            ((2 + ((i) * 2) * 1.5f) * (1) * 0.0254f)); //if stationary width goes outside height
                 }
-                
+
                 if (tubing[1] == null)
                 {
                     tubing[1] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[1].Part = _tubingObject;
                     tubing[1].PartName = "left Upright (" + i + ")";
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, ((carriageHeight/2) ) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            ((carriageHeight / 2)) * _scaleFactor, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
+                        new Vector3(1, 1, (carriageHeight * _scaleFactor));
                 }
                 else
                 {
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, ((carriageHeight/2) ) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            ((carriageHeight / 2)) * _scaleFactor, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
+                        new Vector3(1, 1, (carriageHeight * _scaleFactor));
                 }
-                
+
                 if (tubing[2] == null)
                 {
                     tubing[2] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[2].Part = _tubingObject;
                     tubing[2].PartName = "right Upright (" + i + ")";
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, ((carriageHeight/2)) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            ((carriageHeight / 2)) * _scaleFactor, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
+                        new Vector3(1, 1, (carriageHeight * _scaleFactor));
                 }
                 else
                 {
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, ((carriageHeight/2)) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            ((carriageHeight / 2)) * _scaleFactor, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (carriageHeight * 0.0254f)); 
+                        new Vector3(1, 1, (carriageHeight * _scaleFactor));
                 }
-                
+
                 if (tubing[3] == null)
                 {
                     tubing[3] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[3].Part = _tubingObject;
                     tubing[3].PartName = "upper cross brace (" + i + ")";
                     tubing[3].LoadedPartLocation =
-                        new Vector3(0, ((carriageHeight-0.5f) * 0.0254f), 0);
+                        new Vector3(0, ((carriageHeight * _scaleFactor) - (0.5f * 0.0254f)), 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); 
+                        new Vector3(1, 1, (width * _scaleFactor) - ((2 + ((i) * 2) * 1.5f) * (1) * 0.0254f));
                 }
                 else
                 {
                     tubing[3].LoadedPartLocation =
-                        new Vector3(0, ((carriageHeight-0.5f) * 0.0254f), 0);
+                        new Vector3(0, ((carriageHeight * _scaleFactor) - (0.5f * 0.0254f)), 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + ((i) * 2)*1.5f) * (1))) * 0.0254f); 
+                        new Vector3(1, 1, (width * _scaleFactor) - ((2 + ((i) * 2) * 1.5f) * (1) * 0.0254f));
                 }
             }
             else if (stages - i <= nonCrossBraceStages || !carriage)
@@ -972,11 +1022,12 @@ public class Buildelevator : MonoBehaviour
                     };
                 }
 
-                
-                _modelObjects[i].transform.localPosition = new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
+
+                _modelObjects[i].transform.localPosition =
+                    new Vector3(0, ((i * 1) + (i * 0.05f)) * 0.0254f, 0); //step the bottom up by 1 inch
 
                 var tubing = CheckTubes(_modelObjects[i], i, 4);
-                    
+
                 if (tubing[0] == null)
                 {
                     tubing[0] = _modelObjects[i].AddComponent<GeneratePart>();
@@ -986,7 +1037,10 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) - (((2 + (i * 2)) * (1)) * 0.0254f) -
+                            (((i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) * 1) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f));
                 }
                 else
                 {
@@ -994,72 +1048,100 @@ public class Buildelevator : MonoBehaviour
                         new Vector3(0, 0.5f * 0.0254f, 0); //raise model by an inch so 0,0,0 is the absolute bottom.
                     tubing[0].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[0].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) - (((2 + (i * 2)) * (1)) * 0.0254f) -
+                            (((i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) * 1) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f));
                 }
-                
+
                 if (tubing[1] == null)
                 {
                     tubing[1] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[1].Part = _tubingObject;
                     tubing[1].PartName = "left Upright (" + i + ")";
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
                 else
                 {
                     tubing[1].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * -0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * -_scaleFactor - (0.5f + (1.5f * (i))) * -0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[1].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[1].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
-                
+
                 if (tubing[2] == null)
                 {
                     tubing[2] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[2].Part = _tubingObject;
                     tubing[2].PartName = "right Upright (" + i + ")";
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
                 else
                 {
                     tubing[2].LoadedPartLocation =
-                        new Vector3(((width/2.0f) - (0.5f + (1.5f * (i)))) * 0.0254f, (1.0f + (height/2) - (i >= 1 ? 1 + ((i-1) * 0.5f) : 0) - ((stages - (carriage? 1:0) - i))) * 0.0254f, 0);
+                        new Vector3((width / 2.0f) * _scaleFactor - (0.5f + (1.5f * (i))) * 0.0254f,
+                            (height / 2 * _scaleFactor) + (1.0f - (i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) -
+                                                           ((stages - (carriage ? 1 : 0) - i))) * 0.0254f, 0);
                     tubing[2].LoadedPartRotation = Quaternion.Euler(90, 0, 0);
                     tubing[2].LoadedPartScale =
-                        new Vector3(1, 1, (height - (1 * ((i < 2) ? 0 : i-1) - ((stages - (carriage? 1:0) - i) * -2))) * 0.0254f); 
+                        new Vector3(1, 1,
+                            (height * _scaleFactor) -
+                            (1 * ((i < 2) ? 0 : i - 1) - ((stages - (carriage ? 1 : 0) - i) * -2)) * 0.0254f);
                 }
-                
+
                 if (tubing[3] == null)
                 {
                     tubing[3] = _modelObjects[i].AddComponent<GeneratePart>();
                     tubing[3].Part = _tubingObject;
                     tubing[3].PartName = "upper cross brace (" + i + ")";
                     tubing[3].LoadedPartLocation =
-                        new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))+0.5f) * 0.0254f, 0);
+                        new Vector3(0,
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f) + (0.5f * 0.0254f), 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f);  
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) - (((2 + (i * 2)) * (1)) * 0.0254f) -
+                            (((i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) * 1) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f));
                 }
                 else
                 {
                     tubing[3].LoadedPartLocation =
-                        new Vector3(0, (height - (stages - (carriage? 1:0)) - ((stages - (carriage? 1:0) - i))+0.5f) * 0.0254f, 0);
+                        new Vector3(0,
+                            (height * _scaleFactor) - ((stages - (carriage ? 1 : 0)) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f) + (0.5f * 0.0254f), 0);
                     tubing[3].LoadedPartRotation = Quaternion.Euler(0, 90, 90);
                     tubing[3].LoadedPartScale =
-                        new Vector3(1,1, (width - ((2 + (i * 2)) * (1)) - ((i >= 1 ? 1 + ((i-1) * 0.5f) : 0) * 1) - ((stages - (carriage? 1:0) - i)))  * 0.0254f); 
+                        new Vector3(1, 1,
+                            (width * _scaleFactor) - (((2 + (i * 2)) * (1)) * 0.0254f) -
+                            (((i >= 1 ? 1 + ((i - 1) * 0.5f) : 0) * 1) * 0.0254f) -
+                            (((stages - (carriage ? 1 : 0) - i)) * 0.0254f));
                 }
-                
             }
         }
-        
+
         if (_wasCarriage != carriage && _modelObjects != null)
         {
             foreach (var modelObject in _modelObjects)
@@ -1070,7 +1152,7 @@ public class Buildelevator : MonoBehaviour
                 }
             }
         }
-        
+
         _wasCarriage = carriage;
     }
 
@@ -1088,9 +1170,9 @@ public class Buildelevator : MonoBehaviour
         {
             return new GeneratePart[length]; // Or handle the error differently
         }
-        
+
         GeneratePart[] unfiltered = parent.GetComponents<GeneratePart>();
-        
+
         GeneratePart[] filtered = new GeneratePart[length];
 
         foreach (var t in unfiltered)
@@ -1098,22 +1180,28 @@ public class Buildelevator : MonoBehaviour
             if (t.PartName == "lower crossbar (" + stageNum + ")")
             {
                 filtered[0] = t;
-            } else if (t.PartName == "left Upright (" + stageNum + ")")
+            }
+            else if (t.PartName == "left Upright (" + stageNum + ")")
             {
                 filtered[1] = t;
-            } else if (t.PartName == "right Upright (" + stageNum + ")")
+            }
+            else if (t.PartName == "right Upright (" + stageNum + ")")
             {
                 filtered[2] = t;
-            } else if (t.PartName == "left cross brace standoff (" + stageNum + ")" && length > 4)
+            }
+            else if (t.PartName == "left cross brace standoff (" + stageNum + ")" && length > 4)
             {
                 filtered[3] = t;
-            } else if (t.PartName == "right cross brace standoff (" + stageNum + ")" && length > 4)
+            }
+            else if (t.PartName == "right cross brace standoff (" + stageNum + ")" && length > 4)
             {
                 filtered[4] = t;
-            } else if (t.PartName == "upper cross brace (" + stageNum + ")" && length != 4)
+            }
+            else if (t.PartName == "upper cross brace (" + stageNum + ")" && length != 4)
             {
                 filtered[5] = t;
-            } else if (t.PartName == "upper cross brace (" + stageNum + ")") 
+            }
+            else if (t.PartName == "upper cross brace (" + stageNum + ")")
             {
                 filtered[3] = t;
             }
