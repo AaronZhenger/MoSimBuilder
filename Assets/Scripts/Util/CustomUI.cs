@@ -11,6 +11,7 @@ namespace Util
     {
         [HideInInspector] public List<String> canBeSelected = new List<String>();
         [HideInInspector] public int selectedIndex = 0;
+        [HideInInspector] public string selectedName = "";
     }
     [Serializable]
     public class SetPoint
@@ -36,9 +37,7 @@ namespace Util
         
         [Header("Control Settings")]
         public string controllerButton;
-        public string keyboardButton;
-
-
+        public string keyboardButton; 
     }
     
     [Serializable]

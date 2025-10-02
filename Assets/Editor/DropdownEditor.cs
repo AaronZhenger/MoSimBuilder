@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using Util;
@@ -12,6 +13,7 @@ namespace Editor
             EditorGUI.BeginProperty(position, label, property);
         
             SerializedProperty selectedIndexProp = property.FindPropertyRelative("selectedIndex");
+            SerializedProperty selectedNameProp = property.FindPropertyRelative("selectedName");
             SerializedProperty optionsProp = property.FindPropertyRelative("canBeSelected");
         
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
@@ -22,11 +24,29 @@ namespace Editor
         
             if (options != null && options.Length > 0)
             {
+                string selectedName = selectedNameProp.stringValue;
+                int currentSelectedIndex = selectedIndexProp.intValue;
+                
+                int newIndex = -1;
+                newIndex = Array.IndexOf(options, selectedName);
+                
+                
+                if (newIndex != -1)
+                {
+                    selectedIndexProp.intValue = newIndex;
+                }
+                else if (currentSelectedIndex >= options.Length || currentSelectedIndex < 0)
+                {
+                    selectedIndexProp.intValue = 0;
+                }
+                
                 selectedIndexProp.intValue = EditorGUI.Popup(
                     dropdownRect, 
-                    selectedIndexProp.intValue, 
+                    selectedIndexProp.intValue,
                     options
                 );
+                
+                selectedNameProp.stringValue = options[selectedIndexProp.intValue];
             }
             else
             {

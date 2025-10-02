@@ -16,7 +16,8 @@ public class LoadMatch : MonoBehaviour
     [Header("Robot Selection")]
     [SerializeField] private InspectorDropdown robotSelected;
     
-     [HideInInspector] public int selectedRobotIndex; 
+     private int selectedRobotIndex; 
+     private string selectedName;
     [NonSerialized]
     public List<GameObject> availableRobots = new List<GameObject>();
     
@@ -30,6 +31,15 @@ public class LoadMatch : MonoBehaviour
         CheckRobots();
         robotSelected.canBeSelected = availableRobots.Select(x => x.name).ToList();
         robotSelected.selectedIndex = selectedRobotIndex;
+        robotSelected.selectedName = selectedName;
+    }
+
+    private void LateUpdate()
+    {
+        CheckRobots();
+        robotSelected.canBeSelected = availableRobots.Select(x => x.name).ToList();
+        robotSelected.selectedIndex = selectedRobotIndex;
+        robotSelected.selectedName = selectedName;
     }
 
     private void Start()
@@ -40,6 +50,7 @@ public class LoadMatch : MonoBehaviour
     
     private void Update()
     {
+        selectedName = robotSelected.selectedName;
         selectedRobotIndex = robotSelected.selectedIndex;
         
         if (!EditorApplication.isPlayingOrWillChangePlaymode && RobotLoaded())
