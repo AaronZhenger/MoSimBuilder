@@ -54,6 +54,41 @@ namespace Util
             
             return t.gameObject;
         }
+
+        /// <summary>
+        /// Finds the first Parent objcet which contains a rigid body
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        public static T FindParentObjectComponent<T>(GameObject child) where T : Component
+        {
+            if (child == null)
+            {
+                return null;
+            }
+
+            Transform currentTransform = child.transform.parent;
+
+            // Iterate up the hierarchy
+            while (currentTransform != null)
+            {
+                // Try to get the component on the current parent
+                T component = currentTransform.GetComponent<T>();
+            
+                // If the component is found, return it
+                if (component != null)
+                {
+                    return component;
+                }
+
+                // Move up to the next parent
+                currentTransform = currentTransform.parent;
+            }
+
+            // Reached the top of the hierarchy (root) without finding the component
+            return null;
+        }
         
         /// <summary>
         /// finds the first parent object with a player input object.

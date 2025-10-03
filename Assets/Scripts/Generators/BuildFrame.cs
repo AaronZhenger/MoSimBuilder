@@ -89,6 +89,7 @@ public class BuildFrame : MonoBehaviour
 
         if (EditorApplication.isPlaying)
         {
+            gameObject.AddComponent<RestartMatch>();
             _inputAsset = Resources.Load("Controls/Builder") as InputActionAsset;
             var playerInput = gameObject.AddComponent<PlayerInput>();
             playerInput.actions = _inputAsset;

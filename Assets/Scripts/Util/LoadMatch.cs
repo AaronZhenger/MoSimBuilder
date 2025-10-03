@@ -100,7 +100,7 @@ public class LoadMatch : MonoBehaviour
         }
     }
     
-    private void ResetField()
+    public void ResetField()
     {
         DestroyField();
         LoadField();
