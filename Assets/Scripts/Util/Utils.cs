@@ -70,23 +70,15 @@ namespace Util
 
             Transform currentTransform = child.transform.parent;
 
-            // Iterate up the hierarchy
             while (currentTransform != null)
             {
-                // Try to get the component on the current parent
                 T component = currentTransform.GetComponent<T>();
-            
-                // If the component is found, return it
                 if (component != null)
                 {
                     return component;
                 }
-
-                // Move up to the next parent
                 currentTransform = currentTransform.parent;
             }
-
-            // Reached the top of the hierarchy (root) without finding the component
             return null;
         }
         
