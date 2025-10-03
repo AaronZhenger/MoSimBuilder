@@ -13,7 +13,10 @@ public class AutoAlign : MonoBehaviour
     [SerializeField] private AutoAlginType alginType = AutoAlginType.release;
 
     [ConditionalField(true, nameof(Predicate))] [SerializeField]
-    private string button;
+    private ControllerInputs controllerButton;
+
+    [ConditionalField(true, nameof(Predicate))] [SerializeField]
+    private KeyboardInputs keyboardButton;
 
     [SerializeField] private bool advanced;
 
@@ -147,10 +150,14 @@ public class AutoAlign : MonoBehaviour
         switch (alginType)
         {
             case AutoAlginType.button:
-                var controllerAction = _inputMap.FindAction(button);
-                var keyboardAction = _inputMap.FindAction(button);
+                var controllerAction = _inputMap.FindAction(controllerButton.ToString());
+                var keyboardAction = _inputMap.FindAction(keyboardButton.ToString());
+                var controllerHeld = controllerAction.IsPressed() && 
+                                     (controllerAction.activeControl?.device is Gamepad);
+                var keyboardHeld = keyboardAction.IsPressed() && 
+                                   (keyboardAction.activeControl?.device is Keyboard);
+                var buttonHeld = controllerHeld || keyboardHeld;
                 
-                var buttonHeld = controllerAction.IsPressed() || keyboardAction.IsPressed();
 
                 if (buttonHeld && distanceToClosestNode() <= alignDistance * 0.0254f)
                 {

@@ -36,8 +36,8 @@ namespace Util
         public float point;
         
         [Header("Control Settings")]
-        public string controllerButton;
-        public string keyboardButton; 
+        public ControllerInputs controllerButton;
+        public KeyboardInputs keyboardButton; 
     }
     
     [Serializable]

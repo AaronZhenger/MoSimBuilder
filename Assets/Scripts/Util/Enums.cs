@@ -71,4 +71,62 @@ namespace Util
         Centimeter,
         Millimeter
     }
+
+    public enum ControllerInputs
+    {
+        A,
+        B,
+        X,
+        Y,
+        DpadUp,
+        DpadDown,
+        DpadLeft,
+        DpadRight,
+        LeftTrigger,
+        RightTrigger,
+        LeftBumper,
+        RightBumper,
+    }
+    
+    public enum KeyboardInputs
+    {
+        D1,
+        D2,
+        D3,
+        D4,
+        D5,
+        D6,
+        D7,
+        D8,
+        D9,
+        D0,
+        B,
+        C,
+        E,
+        F,
+        G,
+        H,
+        I,
+        K,
+        M,
+        N,
+        O,
+        P,
+        Q,
+        T,
+        U,
+        V,
+        X,
+        Y,
+        Z,
+        LeftControl,
+        LeftAlt,
+        Tab,
+        Space,
+        Escape,
+        UpArrow,
+        DownArrow,
+        LeftArrow,
+        RightArrow,
+    }
 }

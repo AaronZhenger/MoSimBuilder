@@ -116,11 +116,29 @@ public class JointController : MonoBehaviour
         {
             
             var setPoint = setPoints[i];
-            var controllerAction = _inputMap.FindAction(setPoint.controllerButton);
-            var keyboardAction = _inputMap.FindAction(setPoint.keyboardButton);
-
-            var buttonPressed = controllerAction.triggered || keyboardAction.triggered;
-            var buttonHeld = controllerAction.IsPressed() || keyboardAction.IsPressed();
+            var controllerAction = _inputMap.FindAction(setPoint.controllerButton.ToString());
+            var keyboardAction = _inputMap.FindAction(setPoint.keyboardButton.ToString());
+            var buttonPressed = false;
+            if (controllerAction.triggered)
+            {
+                if (controllerAction.activeControl?.device is Gamepad) 
+                {
+                    buttonPressed = true;
+                }
+            }
+            if (keyboardAction.triggered)
+            {
+                if (keyboardAction.activeControl?.device is Keyboard)
+                {
+                    buttonPressed = true;
+                }
+            }
+            
+            var controllerHeld = controllerAction.IsPressed() && 
+                                 (controllerAction.activeControl?.device is Gamepad);
+            var keyboardHeld = keyboardAction.IsPressed() && 
+                               (keyboardAction.activeControl?.device is Keyboard);
+            var buttonHeld = controllerHeld || keyboardHeld;
 
             //I dont even know and I just finished.
             switch (setPoint.controlType)
