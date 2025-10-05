@@ -118,9 +118,7 @@ namespace BuilderLib
 
             rb.velocity = Vector3.zero;
             piece.transform.localPosition = Vector3.zero;
-            piece.rb.rotation = Quaternion.identity;
-            rb.useGravity = true;
-            rb.isKinematic = false;
+            piece.transform.localEulerAngles = Vector3.zero;
             Vector3 velocity;
             switch (action.Direction)
             {
@@ -142,7 +140,7 @@ namespace BuilderLib
         
             piece.state = GamePieceState.World;
 
-            transform.parent = piece.originalParent;
+            piece.transform.parent = piece.originalParent;
         
             return true;
         }

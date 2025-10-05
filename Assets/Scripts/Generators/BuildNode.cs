@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BuilderLib;
+using MyBox;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Util;
@@ -10,6 +12,9 @@ public class BuildNode: MonoBehaviour
 {
     [SerializeField] private Collider _intakeCollider;
     [SerializeField] private GamePiece _currentGamePiece;
+    [SerializeField] private bool Preload;
+    [ConditionalField(nameof(Preload))]
+    [SerializeField] private PieceNames pieceName;
     public NodeState currentState;
     public NodeAction[] Actions;
     private PlayerInput _playerInput;
@@ -36,6 +41,28 @@ public class BuildNode: MonoBehaviour
         _inputMap = _playerInput.actions.FindActionMap("Robot");
         
         _inputMap.Enable();
+        
+        var Pieces = Resources.LoadAll<GameObject>("Pieces");
+        switch (pieceName)
+        {
+            case PieceNames.Coral:
+                spawnPiece("Coral", Pieces);
+                break;
+            case PieceNames.Algae:
+                spawnPiece("Algae", Pieces);
+                break;
+        }
+    }
+
+    private void spawnPiece(string pieceName, GameObject[] pieces)
+    {
+        foreach (var piece in pieces)
+        {
+            if (piece.name != pieceName) continue;
+            _currentGamePiece = Instantiate(piece, transform.position, transform.rotation, transform).GetComponent<GamePiece>();
+            currentState = NodeState.Stowing;
+            return;
+        }
     }
 
     void Update()
@@ -235,7 +262,7 @@ public class BuildNode: MonoBehaviour
             var objectThing = coll.gameObject;
             var piece = Utils.FindParentObjectComponent<GamePiece>(objectThing);
             if (!piece) continue;
-            if (piece.pieceType != action.PieceType && piece.state != GamePieceState.World) continue;
+            if (piece.pieceType != action.PieceType || piece.state != GamePieceState.World) continue;
             pieces.Add(piece);
         }
         
