@@ -13,6 +13,19 @@ namespace Util
         {
         
         }
+        
+        public static Transform[] GetAllChildren(Transform transform)
+        {
+            List<Transform> children = new List<Transform>();
+            
+            foreach (Transform child in transform)
+            {
+                children.Add(child);
+            }
+
+            return children.ToArray();
+        }
+
 
         /// <summary>
         /// Finds a child with a given name by only searching the children instead of everything.
@@ -56,7 +69,7 @@ namespace Util
         }
 
         /// <summary>
-        /// Finds the first Parent objcet which contains a rigid body
+        /// Finds the first Parent objcet which contains a object T
         /// </summary>
         /// <param name="value"></param>
         /// <param name="child"></param>
@@ -73,7 +86,7 @@ namespace Util
             while (currentTransform != null)
             {
                 T component = currentTransform.GetComponent<T>();
-                if (component != null)
+                if (component)
                 {
                     return component;
                 }

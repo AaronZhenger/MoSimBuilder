@@ -72,6 +72,47 @@ namespace Util
         Millimeter
     }
 
+    public enum PieceNames
+    {
+        Coral,
+        Algae
+    }
+
+    public enum GamePieceState
+    {
+        World,
+        Stationary,
+        Moving
+    }
+
+    public enum NodeType
+    {
+        Intake,
+        Transfer,
+        Outake
+    }
+
+    public enum NodeControlType
+    {
+        Hold,
+        Tap
+    }
+
+    public enum NodeState
+    {
+        Intakeing,
+        Stowing,
+        Transfering,
+        Outaking
+    }
+
+    public enum Direction
+    {
+        forward,
+        sideways,
+        up
+    }
+
     public enum ControllerInputs
     {
         A,
