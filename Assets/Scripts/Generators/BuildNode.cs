@@ -134,7 +134,10 @@ public class BuildNode: MonoBehaviour
                                 break;
                             case NodeControlType.Tap:
                                 finished = transferPiece(buttonPressed, action);
-                                
+                                break;
+                            case NodeControlType.PassThrough:
+                                finished = transferPiece(true, action);
+                                actionPerformed = true;
                                 break;
                         }
                         if (finished)

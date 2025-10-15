@@ -95,7 +95,8 @@ namespace Util
     public enum NodeControlType
     {
         Hold,
-        Tap
+        Tap,
+        PassThrough,
     }
 
     public enum NodeState
