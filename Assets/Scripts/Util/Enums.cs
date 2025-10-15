@@ -100,8 +100,8 @@ namespace Util
 
     public enum NodeState
     {
-        Intakeing,
         Stowing,
+        Intakeing,
         Transfering,
         Outaking
     }
@@ -160,6 +160,7 @@ namespace Util
         X,
         Y,
         Z,
+        LeftShift,
         LeftControl,
         LeftAlt,
         Tab,

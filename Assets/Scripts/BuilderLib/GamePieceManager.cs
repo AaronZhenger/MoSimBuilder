@@ -150,6 +150,7 @@ namespace BuilderLib
         {
             piece.owner = action.MoveTo.transform;
             piece.transform.parent = action.MoveTo.transform;
+            action.MoveTo.currentGamePiece = piece;
             piece.state = GamePieceState.Stationary;
             return true;
         }

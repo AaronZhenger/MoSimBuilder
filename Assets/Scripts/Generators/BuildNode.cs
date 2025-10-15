@@ -11,7 +11,7 @@ using Util;
 public class BuildNode: MonoBehaviour
 {
     [SerializeField] private Collider _intakeCollider;
-    [SerializeField] private GamePiece _currentGamePiece;
+    public GamePiece currentGamePiece;
     [SerializeField] private bool Preload;
     [ConditionalField(nameof(Preload))]
     [SerializeField] private PieceNames pieceName;
@@ -56,10 +56,11 @@ public class BuildNode: MonoBehaviour
 
     private void spawnPiece(string pieceName, GameObject[] pieces)
     {
+        if (!Preload) return;
         foreach (var piece in pieces)
         {
             if (piece.name != pieceName) continue;
-            _currentGamePiece = Instantiate(piece, transform.position, transform.rotation, transform).GetComponent<GamePiece>();
+            currentGamePiece = Instantiate(piece, transform.position, transform.rotation, transform).GetComponent<GamePiece>();
             currentState = NodeState.Stowing;
             return;
         }
@@ -123,7 +124,7 @@ public class BuildNode: MonoBehaviour
                     break;
                 case NodeType.Transfer:
                     //null check
-                    if (action.MoveTo && _currentGamePiece)
+                    if (action.MoveTo && currentGamePiece)
                     {
                         var finished = false;
                         switch (action.ControlType)
@@ -143,7 +144,7 @@ public class BuildNode: MonoBehaviour
                     }
                     break;
                 case NodeType.Outake:
-                    if (_currentGamePiece)
+                    if (currentGamePiece)
                     {
                         var finished = false;
                         switch (action.ControlType)
@@ -152,16 +153,16 @@ public class BuildNode: MonoBehaviour
                                 if (buttonHeld)
                                 {
                                     currentState = NodeState.Outaking;
-                                    finished = GamePieceManager.ReleaseToWorld(_currentGamePiece, action);
-                                    StartCoroutine(GamePieceManager.enableColliders(_currentGamePiece));
+                                    finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
+                                    StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
                                 }
                                 break;
                             case NodeControlType.Tap:
                                 if (buttonPressed)
                                 {
                                     currentState = NodeState.Outaking;
-                                    finished = GamePieceManager.ReleaseToWorld(_currentGamePiece, action);
-                                    StartCoroutine(GamePieceManager.enableColliders(_currentGamePiece));
+                                    finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
+                                    StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
                                 }
                                 break;
                         }
@@ -175,30 +176,30 @@ public class BuildNode: MonoBehaviour
             }
         }
 
-        if (!actionPerformed && _currentGamePiece && currentState != NodeState.Intakeing)
+        if (!actionPerformed && currentGamePiece && currentState != NodeState.Intakeing)
         {
             currentState = NodeState.Stowing;
-            GamePieceManager.teleportTo(_currentGamePiece, transform);
+            GamePieceManager.teleportTo(currentGamePiece, transform);
         } else if (actionFinished)
         {
-            _currentGamePiece = null;
+            currentGamePiece = null;
         }
     }
 
     private bool transferPiece(bool button, NodeAction action)
     {
         var succeeded = false;
-        if (button && _currentGamePiece)
+        if (button && currentGamePiece)
         {
             if (action.Animate)
             {
                 currentState = NodeState.Transfering;
-                succeeded = GamePieceManager.AnimateTo(_currentGamePiece, action);
+                succeeded = GamePieceManager.AnimateTo(currentGamePiece, action);
             }
             else
             {
                 currentState = NodeState.Transfering;
-                succeeded = GamePieceManager.teleportTo(_currentGamePiece, action);
+                succeeded = GamePieceManager.teleportTo(currentGamePiece, action);
             }
         }
         
@@ -208,37 +209,37 @@ public class BuildNode: MonoBehaviour
     private bool intakePiece(bool button, NodeAction action)
     {
         //intake action
-        if (button && !_currentGamePiece)
+        if (button && !currentGamePiece)
         {
             var pieces = PoolObjects(action);
-            _currentGamePiece = closestPiece(pieces);
-            if (!_currentGamePiece) return false;
-            _currentGamePiece.startingDistance = distanceToPiece(_currentGamePiece);
+            currentGamePiece = closestPiece(pieces);
+            if (!currentGamePiece) return false;
+            currentGamePiece.startingDistance = distanceToPiece(currentGamePiece);
             currentState = NodeState.Intakeing;
-        } else if (currentState == NodeState.Intakeing && _currentGamePiece)
+        } else if (currentState == NodeState.Intakeing && currentGamePiece)
         {
             currentState = NodeState.Intakeing;
             if (action.Animate)
             {
-                if (GamePieceManager.AnimateTo(_currentGamePiece, action))
+                if (GamePieceManager.AnimateTo(currentGamePiece, action))
                 {
                     currentState = NodeState.Stowing;
                 }
                 else
                 {
-                    if (_currentGamePiece.startingDistance < distanceToPiece(_currentGamePiece))
+                    if (currentGamePiece.startingDistance < distanceToPiece(currentGamePiece))
                     {
                         currentState = NodeState.Stowing;
-                        _currentGamePiece.colliderParent.SetActive(true);
-                        _currentGamePiece.state = GamePieceState.World;
-                        _currentGamePiece.transform.parent = _currentGamePiece.originalParent;
-                        _currentGamePiece = null;
+                        currentGamePiece.colliderParent.SetActive(true);
+                        currentGamePiece.state = GamePieceState.World;
+                        currentGamePiece.transform.parent = currentGamePiece.originalParent;
+                        currentGamePiece = null;
                     }
                 }
             }
             else
             {
-                if (GamePieceManager.teleportTo(_currentGamePiece, transform))
+                if (GamePieceManager.teleportTo(currentGamePiece, transform))
                 {
                     currentState = NodeState.Stowing;
                 };
