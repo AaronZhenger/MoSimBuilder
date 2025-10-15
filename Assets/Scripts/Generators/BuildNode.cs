@@ -119,6 +119,9 @@ public class BuildNode: MonoBehaviour
                             case NodeControlType.Tap:
                                 actionPerformed = intakePiece(buttonPressed, action);
                                 break;
+                            case NodeControlType.AlwaysPerform:
+                                actionPerformed = intakePiece(true, action);
+                                break;
                         }
                     }
                     break;
@@ -135,7 +138,7 @@ public class BuildNode: MonoBehaviour
                             case NodeControlType.Tap:
                                 finished = transferPiece(buttonPressed, action);
                                 break;
-                            case NodeControlType.PassThrough:
+                            case NodeControlType.AlwaysPerform:
                                 finished = transferPiece(true, action);
                                 actionPerformed = true;
                                 break;
@@ -168,6 +171,12 @@ public class BuildNode: MonoBehaviour
                                     StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
                                 }
                                 break;
+                            case NodeControlType.AlwaysPerform:
+                                currentState = NodeState.Outaking;
+                                finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
+                                StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
+                                break;
+                                
                         }
 
                         if (finished)

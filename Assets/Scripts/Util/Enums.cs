@@ -96,7 +96,7 @@ namespace Util
     {
         Hold,
         Tap,
-        PassThrough,
+        AlwaysPerform,
     }
 
     public enum NodeState
