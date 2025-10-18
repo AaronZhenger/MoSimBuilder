@@ -154,7 +154,7 @@ public class JointController : MonoBehaviour
                             originalPositions.Clear();
                             originalPositions[setPoint] = home;
                             // Apply new position
-                            _targetPosition = setPoint.point;
+                            _targetPosition = setPoint.getPoint();
                         }
                     }
                     else if (originalPositions.ContainsKey(setPoint) && !buttonHeld)
@@ -175,7 +175,7 @@ public class JointController : MonoBehaviour
                         case (SequenceType.delay):
                             if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
                             {
-                                _targetPosition = setPoint.point;
+                                _targetPosition = setPoint.getPoint();
                                 _sequencePoint = setPoint.sequenceTo;
                                 _sequenceTime = setPoint.delay;
                                 _delayType = true;
@@ -196,7 +196,7 @@ public class JointController : MonoBehaviour
 
                                 if (!startPoint)
                                 {
-                                    _targetPosition = setPoint.point;
+                                    _targetPosition = setPoint.getPoint();
                                     _sequencePoint = setPoint.sequenceTo;
 
                                     _sequenceActive = _sequencePoint.Length > 0;
@@ -206,7 +206,7 @@ public class JointController : MonoBehaviour
                                 }
                             } else if (!_delayType && buttonPressed && _sequencePoint == setPoint.setpointName && !alreadyMoved)
                             {
-                                _targetPosition = setPoint.point;
+                                _targetPosition = setPoint.getPoint();
                                 _sequencePoint = setPoint.sequenceTo;
                                 _sequenceTime = setPoint.delay;
                                 _delayType = true;
@@ -221,7 +221,7 @@ public class JointController : MonoBehaviour
                         case (SequenceType.nextPress):
                             if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
                             {
-                                _targetPosition = setPoint.point;
+                                _targetPosition = setPoint.getPoint();
                                 _sequencePoint = setPoint.sequenceTo;
                                 _delayType = false;
 
@@ -233,7 +233,7 @@ public class JointController : MonoBehaviour
                                 _delayType = false;
                                 if (_sequenceActive && _sequencePoint == setPoint.setpointName && !alreadyMoved)
                                 {
-                                    _targetPosition = setPoint.point;
+                                    _targetPosition = setPoint.getPoint();
                                     _sequencePoint = setPoint.sequenceTo;
 
                                     _sequenceActive = _sequencePoint.Length > 0;
@@ -252,7 +252,7 @@ public class JointController : MonoBehaviour
 
                                     if (!startPoint)
                                     {
-                                        _targetPosition = setPoint.point;
+                                        _targetPosition = setPoint.getPoint();
                                         _sequencePoint = setPoint.sequenceTo;
 
                                         _sequenceActive = _sequencePoint.Length > 0;
@@ -276,8 +276,8 @@ public class JointController : MonoBehaviour
                         }
                         else
                         {
-                            originalPositions[setPoint] = setPoint.point;
-                            _targetPosition = setPoint.point;
+                            originalPositions[setPoint] = setPoint.getPoint();
+                            _targetPosition = setPoint.getPoint();
                         }
                     }
                     break;

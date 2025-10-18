@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using MyBox;
-using UnityEditor;
 using UnityEngine;
 
 namespace Util
@@ -33,8 +32,27 @@ namespace Util
         
         
         [Header("Generic")]
-        public float point;
+        [SerializeField]
+        private float point;
         
+        [SerializeField]
+        private bool shouldScaleToUnits = false;
+        [ConditionalField(nameof(shouldScaleToUnits))]
+        public Units units;
+
+        public float getPoint()
+        {
+            return shouldScaleToUnits ? point * units switch
+            {
+                Units.Inch => 0.0254f,
+                Units.Centimeter => 0.01f,
+                Units.Meter => 1.0f,
+                Units.Millimeter => 0.001f,
+                _ => 1.0f
+                
+            } : point;
+        }
+
         [Header("Control Settings")]
         public ControllerInputs controllerButton;
         public KeyboardInputs keyboardButton; 

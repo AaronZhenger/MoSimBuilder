@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Serialization;
 using Util;
 using Random = Unity.Mathematics.Random;
 
@@ -43,7 +40,7 @@ public class Buildelevator : MonoBehaviour
     [Tooltip("The final stage is the carriage stage")] [SerializeField]
     private float[] stageWeights;
 
-    [Header("advanced Settings")] [SerializeField]
+    [Header("Advanced Settings")] [SerializeField]
     private bool useAdvancedSettings = false;
 
     [ConditionalField(nameof(useAdvancedSettings), false)] [SerializeField]
@@ -314,44 +311,20 @@ public class Buildelevator : MonoBehaviour
     private void CascadeMovement()
     {
         //TODO: add the cascade rigged motion to this function
-        for (int i = 0; i < _rigidbodies.Length; i++)
+        float totalHeight = transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y;
+        
+        //Sets carriage position
+        _controllers[^1].follower = false;
+        _controllers[^1].setPoints = setPoints;
+        _controllers[^1].currentPosition = totalHeight;
+        
+        //Sets other stages to follow carriage
+        for (int i = 0; i < _rigidbodies.Length - 1; i++)
         {
-            if (i == _rigidbodies.Length - 1)
-            {
-                _controllers[i].follower = false;
-                _controllers[i].setPoints = setPoints;
-                float overlapLength = 0.0254f * 1.05f; // Example overlap length
-                float offset = (i + 1) * overlapLength;
-                _controllers[i].currentPosition =
-                    transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - offset;
-            }
-            else
-            {
-                //ai took over I give no promises
-                _controllers[i].follower = true;
-
-                float carriagePosition = transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y;
-                int totalStages = _rigidbodies.Length;
-                int currentStageIndex = i;
-                float overlapLength = 0.0254f * 1.5f; // Example overlap length
-
-                // The target position should be a fraction of the carriage's movement,
-                // offset by the accumulated overlap of the stages *below* it.
-                float target = carriagePosition * ((float)(currentStageIndex + 1) / totalStages);
-
-                // Each stage 'i' has 'i' stages below it that contribute to its initial offset.
-                target += (1 + currentStageIndex) * overlapLength * 0.0254f;
-
-                if (target < 0)
-                {
-                    target = 0;
-                }
-
-                _controllers[i].FollowPosition(target);
-                // The currentPosition should reflect the stage's local Y position.
-                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
-                //end ai takeover
-            }
+            float targetHeight = totalHeight * (i + 1) / _rigidbodies.Length;
+            _controllers[i].follower = true;
+            _controllers[i].FollowPosition(targetHeight);
+            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
         }
     }
 
