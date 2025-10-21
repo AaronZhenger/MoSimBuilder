@@ -212,8 +212,6 @@ public class Buildelevator : MonoBehaviour
     /// </summary>
     private void ContinuousMovement()
     {
-        //TODO: add the continuously rigged motion to this function
-
         for (int i = 0; i < _rigidbodies.Length; i++)
         {
             if (i == _rigidbodies.Length - 1)

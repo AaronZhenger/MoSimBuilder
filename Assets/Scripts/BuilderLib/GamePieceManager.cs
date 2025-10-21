@@ -112,6 +112,7 @@ namespace BuilderLib
     
         public static bool ReleaseToWorld(GamePiece piece, NodeAction action)
         {
+            if (piece.pieceType != action.PieceType) return false;
             var speed = action.Speed * 0.0254f;
             var rb = piece.rb;
             var transform = rb.transform;

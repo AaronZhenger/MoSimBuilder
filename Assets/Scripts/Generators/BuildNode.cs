@@ -68,7 +68,6 @@ public class BuildNode: MonoBehaviour
 
     void Update()
     {
-        var actionPerformed = false;
         var actionFinished = false;
         for (int i = 0; i < Actions.Length; i++)
         {
@@ -99,11 +98,6 @@ public class BuildNode: MonoBehaviour
                                (keyboardAction.activeControl?.device is Keyboard);
             var buttonHeld = controllerHeld || keyboardHeld;
 
-            if (buttonHeld || buttonPressed)
-            {
-                actionPerformed = true;
-            }
-
             switch (action.Type)
             {
                 case NodeType.Intake:
@@ -114,13 +108,13 @@ public class BuildNode: MonoBehaviour
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
-                                actionPerformed = intakePiece(buttonHeld, action);
+                                intakePiece(buttonHeld, action);
                                 break;
                             case NodeControlType.Tap:
-                                actionPerformed = intakePiece(buttonPressed, action);
+                                intakePiece(buttonPressed, action);
                                 break;
                             case NodeControlType.AlwaysPerform:
-                                actionPerformed = intakePiece(true, action);
+                                intakePiece(true, action);
                                 break;
                         }
                     }
@@ -129,23 +123,26 @@ public class BuildNode: MonoBehaviour
                     //null check
                     if (action.MoveTo && currentGamePiece)
                     {
-                        var finished = false;
-                        switch (action.ControlType)
+                        if (!action.MoveTo.currentGamePiece)
                         {
-                            case NodeControlType.Hold:
-                                 finished = transferPiece(buttonHeld, action);
-                                break;
-                            case NodeControlType.Tap:
-                                finished = transferPiece(buttonPressed, action);
-                                break;
-                            case NodeControlType.AlwaysPerform:
-                                finished = transferPiece(true, action);
-                                actionPerformed = true;
-                                break;
-                        }
-                        if (finished)
-                        {
-                            actionFinished = true;
+                            var finished = false;
+                            switch (action.ControlType)
+                            {
+                                case NodeControlType.Hold:
+                                    finished = transferPiece(buttonHeld, action);
+                                    break;
+                                case NodeControlType.Tap:
+                                    finished = transferPiece(buttonPressed, action);
+                                    break;
+                                case NodeControlType.AlwaysPerform:
+                                    finished = transferPiece(true, action);
+                                    break;
+                            }
+
+                            if (finished)
+                            {
+                                actionFinished = true;
+                            }
                         }
                     }
                     break;
@@ -188,7 +185,7 @@ public class BuildNode: MonoBehaviour
             }
         }
 
-        if (!actionPerformed && currentGamePiece && currentState != NodeState.Intakeing)
+        if (currentGamePiece && currentState == NodeState.Stowing)
         {
             currentState = NodeState.Stowing;
             GamePieceManager.teleportTo(currentGamePiece, transform);
@@ -201,6 +198,7 @@ public class BuildNode: MonoBehaviour
     private bool transferPiece(bool button, NodeAction action)
     {
         var succeeded = false;
+        if (currentGamePiece.pieceType != action.PieceType) return false;
         if (button && currentGamePiece)
         {
             if (action.Animate)
@@ -212,6 +210,11 @@ public class BuildNode: MonoBehaviour
             {
                 currentState = NodeState.Transfering;
                 succeeded = GamePieceManager.teleportTo(currentGamePiece, action);
+            }
+
+            if (succeeded)
+            {
+                action.MoveTo.currentState = NodeState.Stowing;
             }
         }
         
@@ -316,18 +319,33 @@ public class BuildNode: MonoBehaviour
 [Serializable]
 public struct NodeAction
 {
-    public string name;
+    public string Name;
+    [Header("Node Behaviour on Action")]
     public NodeType Type;
+    //interface stuff
+    [ConditionalField(true, nameof(IsNotOuttake))]
     public bool Animate;
+    [ConditionalField(true, nameof(SpeedVisible))]
     public float Speed;
-    public PieceNames PieceType;
+    [ConditionalField(true, nameof(SpeedVisible))]
     public float AngularSpeed;
+    [ConditionalField(true, nameof(IsTransfer))]
     public BuildNode MoveTo;
+    [ConditionalField(true, nameof(IsOuttake))]
     public Direction Direction;
+    [ConditionalField(true, nameof(IsOuttake))]
     public Vector3 Spin;
+    [Header("General Settings")]
+    public PieceNames PieceType;
     public NodeControlType ControlType;
     public ControllerInputs ControllerButton;
     public KeyboardInputs KeyboardButton;
+    
+    //Conditional values
+    private bool IsTransfer() => Type is NodeType.Transfer;
+    private bool IsOuttake() => Type is NodeType.Outake;
+    private bool IsNotOuttake() => Type is not NodeType.Outake;
+    private bool SpeedVisible() => (IsNotOuttake() && Animate) || IsOuttake();
 }
 
 
