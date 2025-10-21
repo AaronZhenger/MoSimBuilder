@@ -12,11 +12,11 @@ public class JointController : MonoBehaviour
     /// </summary>
     public float currentPosition; 
     /// <summary>
-    /// The joint for the controller to affect controll over
+    /// The joint for the controller to affect control over
     /// </summary>
     public ConfigurableJoint joint; 
     /// <summary>
-    /// Whether or not the joint is moving in a linear or angular axis (true is angular)
+    /// Whether the joint is moving in a linear or angular axis (true is angular)
     /// </summary>
     public bool angular;
 
@@ -24,7 +24,7 @@ public class JointController : MonoBehaviour
     public float noWrapAngle;
     
     /// <summary>
-    /// Specifies the EUler axis to controll. must be (1,0,0) (0,1,0) or (0,0,1)
+    /// Specifies the Euler axis to control. must be (1,0,0) (0,1,0) or (0,0,1)
     /// </summary>
     public Vector3 driveAxis;
     /// <summary>
@@ -32,7 +32,7 @@ public class JointController : MonoBehaviour
     /// </summary>
     public float home; 
     /// <summary>
-    /// Used when another scripts needs to controll the target instead of the passed through setpoints.
+    /// Used when another scripts needs to control the target instead of the passed through setpoints.
     /// </summary>
     public bool follower = false;
     
@@ -47,9 +47,11 @@ public class JointController : MonoBehaviour
     private Dictionary<SetPoint, float> originalPositions = new Dictionary<SetPoint, float>();
 
     private string _sequencePoint;
-    private bool _sequenceActive;
+    private bool _sequenceInterrupted, _isSequenceUsingDelay;
     private float _sequenceTime;
     private bool _delayType;
+    private string _activeSequenceName;
+    private SetPoint _nextSequencePoint;
 
     [HideInInspector] public float p;
     [HideInInspector] public float i;
@@ -67,7 +69,8 @@ public class JointController : MonoBehaviour
     {
         _sequenceTime = 0;
         _targetPosition = 0;
-        _sequenceActive = false;
+        _activeSequenceName = null;
+        _sequenceInterrupted = false;
         _delayType = false;
         _sequencePoint = "";
         _robotParent = Utils.FindParentPlayerInput(gameObject);
@@ -108,13 +111,11 @@ public class JointController : MonoBehaviour
             _sequenceTime -= Time.deltaTime;
         }
         
-        bool alreadyMoved = false;
-        
-        if (follower) return; 
-        
+        if (follower) return;
+
         for (int i = 0; i < setPoints.Length; i++)
         {
-            
+
             var setPoint = setPoints[i];
             var controllerAction = _inputMap.FindAction(setPoint.controllerButton.ToString());
             var keyboardAction = _inputMap.FindAction(setPoint.keyboardButton.ToString());
@@ -143,11 +144,48 @@ public class JointController : MonoBehaviour
             //I dont even know and I just finished.
             switch (setPoint.controlType)
             {
+                case ControlType.Sequence:
+                if (_isSequenceUsingDelay ? _sequenceTime <= 0 : buttonPressed)
+                {
+                    if (_nextSequencePoint != null)
+                    {
+                        _targetPosition = _nextSequencePoint.getPoint();
+                        switch (setPoint.sequenceType)
+                        {
+                            case SequenceType.delay:
+                                _sequenceTime = setPoint.delay;
+                                _isSequenceUsingDelay = true;
+                                break;
+                            case SequenceType.nextPress:
+                                _sequenceTime = 0;
+                                _isSequenceUsingDelay = false;
+                                break;
+                        }
+
+                        foreach (var t in setPoints)
+                        {
+                            if (t.setpointName != _nextSequencePoint.sequenceTo) continue;
+                            _nextSequencePoint = t;
+                            return;
+                        }
+
+                        _nextSequencePoint = null;
+                    }
+                    else if (_activeSequenceName != null)
+                    {
+                        _targetPosition = home;
+                        _nextSequencePoint = null;
+                        _activeSequenceName = null;
+                        return;
+                    }
+                }
+                
+                break;
                 
                 case ControlType.Hold:
-                    
                     if (buttonPressed)
                     {
+                        _sequenceInterrupted = true;
                         if (!originalPositions.ContainsKey(setPoint))
                         {
                             // Store original position
@@ -166,109 +204,59 @@ public class JointController : MonoBehaviour
 
                     break;
 
-                case ControlType.Sequence:
-                    // Implement Sequence logic
-                    //its cooked. just dont touch
-                    switch (setPoint.sequenceType)
+                case ControlType.SequenceStart:
+                    if (buttonPressed)
                     {
-                        //delay logic
-                        case (SequenceType.delay):
-                            if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
+                        if (_sequenceInterrupted)
+                        {
+                            _sequenceInterrupted = false;
+                            _nextSequencePoint = null;
+                            _activeSequenceName = null;
+                        }
+                        if (_nextSequencePoint == null && _activeSequenceName == null)
+                        {
+                            _sequenceInterrupted = false;
+                            _activeSequenceName = setPoint.setpointName;
+                            switch (setPoint.sequenceType)
                             {
-                                _targetPosition = setPoint.getPoint();
-                                _sequencePoint = setPoint.sequenceTo;
-                                _sequenceTime = setPoint.delay;
-                                _delayType = true;
-
-                                _sequenceActive = _sequencePoint.Length > 0;
-                                alreadyMoved = true;
-                            }
-                            else if (!_sequenceActive && buttonPressed)
-                            {
-                                bool startPoint = false;
-                                for (int j = 0; j < setPoints.Length; j++)
-                                {
-                                    if (setPoints[j].sequenceTo == setPoint.setpointName)
-                                    {
-                                        startPoint = true;
-                                    }
-                                }
-
-                                if (!startPoint)
-                                {
-                                    _targetPosition = setPoint.getPoint();
-                                    _sequencePoint = setPoint.sequenceTo;
-
-                                    _sequenceActive = _sequencePoint.Length > 0;
+                                case SequenceType.delay:
                                     _sequenceTime = setPoint.delay;
-                                    _delayType = true;
-                                    alreadyMoved = true;
-                                }
-                            } else if (!_delayType && buttonPressed && _sequencePoint == setPoint.setpointName && !alreadyMoved)
-                            {
-                                _targetPosition = setPoint.getPoint();
-                                _sequencePoint = setPoint.sequenceTo;
-                                _sequenceTime = setPoint.delay;
-                                _delayType = true;
-
-                                _sequenceActive = _sequencePoint.Length > 0;
-                                alreadyMoved = true;
+                                    _isSequenceUsingDelay = true;
+                                    break;
+                                case SequenceType.nextPress:
+                                    _sequenceTime = 0;
+                                    _isSequenceUsingDelay = false;
+                                    break;
                             }
 
-                            break;
+                            _targetPosition = setPoint.getPoint();
                         
-                        //next press logic
-                        case (SequenceType.nextPress):
-                            if (_sequenceActive && _sequencePoint == setPoint.setpointName && _sequenceTime <= 0 && _delayType)
+                            foreach (var t in setPoints)
                             {
-                                _targetPosition = setPoint.getPoint();
-                                _sequencePoint = setPoint.sequenceTo;
-                                _delayType = false;
-
-                                _sequenceActive = _sequencePoint.Length > 0;
-                                alreadyMoved = true;
+                                if (t.setpointName != setPoint.sequenceTo) continue;
+                                _nextSequencePoint = t;
+                                return;
                             }
-                            else if (buttonPressed && !alreadyMoved)
-                            {
-                                _delayType = false;
-                                if (_sequenceActive && _sequencePoint == setPoint.setpointName && !alreadyMoved)
-                                {
-                                    _targetPosition = setPoint.getPoint();
-                                    _sequencePoint = setPoint.sequenceTo;
+                            _nextSequencePoint = null;
+                            return;
+                        }
 
-                                    _sequenceActive = _sequencePoint.Length > 0;
-                                    alreadyMoved = true;
-                                }
-                                else if (!_sequenceActive && !alreadyMoved)
-                                {
-                                    bool startPoint = false;
-                                    for (int j = 0; j < setPoints.Length; j++)
-                                    {
-                                        if (setPoints[j].sequenceTo == setPoint.setpointName)
-                                        {
-                                            startPoint = true;
-                                        }
-                                    }
-
-                                    if (!startPoint)
-                                    {
-                                        _targetPosition = setPoint.getPoint();
-                                        _sequencePoint = setPoint.sequenceTo;
-
-                                        _sequenceActive = _sequencePoint.Length > 0;
-                                        alreadyMoved = true;
-                                    }
-                                }
-                            }
-
-                            break;
+                        if (_activeSequenceName == setPoint.setpointName)
+                        {
+                            _targetPosition = home;
+                            _nextSequencePoint = null;
+                            _activeSequenceName = null;
+                            return;
+                        }
                     }
-
+                    
                     break;
 
                 case ControlType.Toggle:
+                    //TODO: add delay
                     if (buttonPressed)
                     {
+                        _sequenceInterrupted = true;
                         if (originalPositions.ContainsKey(setPoint))
                         {
                             _targetPosition = home;

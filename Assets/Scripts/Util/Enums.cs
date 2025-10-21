@@ -25,7 +25,8 @@ namespace Util
     {
         Toggle,
         Hold,
-        Sequence
+        Sequence,
+        SequenceStart
     }
 
     public enum ElevatorType

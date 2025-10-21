@@ -20,15 +20,16 @@ namespace Util
         [Header("Behaviour Settings")]
         public ControlType controlType;
         
-        [ConditionalField(nameof(controlType), false,ControlType.Sequence)]
+        [ConditionalField(true, nameof(IsSequence))]
         public SequenceType sequenceType;
         
-        [ConditionalField(nameof(controlType), false,ControlType.Sequence)]
+        [ConditionalField(true,nameof(IsSequence))]
         public string sequenceTo;
         
-        [ConditionalField(true, nameof(Predicate))]
+        [ConditionalField(true, nameof(ShouldShowDelay))]
         public float delay;
-        private bool Predicate() => controlType == ControlType.Sequence && sequenceType == SequenceType.delay;
+        private bool ShouldShowDelay() => sequenceType != SequenceType.nextPress;
+        private bool IsSequence() => controlType is ControlType.Sequence or ControlType.SequenceStart;
         
         
         [Header("Generic")]
