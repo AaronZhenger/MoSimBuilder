@@ -1127,9 +1127,19 @@ public class Buildelevator : MonoBehaviour
         {
             foreach (var modelObject in _modelObjects)
             {
-                if (modelObject.GetComponent<GeneratePart>() != null)
+                if (!modelObject)
                 {
-                    DestroyImmediate(modelObject.GetComponent<GeneratePart>());
+                    continue; 
+                }
+                
+                GeneratePart[] componentsToDestroy = modelObject.GetComponents<GeneratePart>();
+
+                if (componentsToDestroy.Length > 0)
+                {
+                    foreach (var component in componentsToDestroy)
+                    {
+                        DestroyImmediate(component);
+                    }
                 }
             }
         }

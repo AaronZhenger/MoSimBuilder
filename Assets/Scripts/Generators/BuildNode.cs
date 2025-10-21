@@ -69,10 +69,11 @@ public class BuildNode: MonoBehaviour
     void Update()
     {
         var actionFinished = false;
+        var actionDone = false;
         for (int i = 0; i < Actions.Length; i++)
         {
 
-            var action = Actions[i];
+            ref NodeAction action = ref Actions[i];
             var controllerAction = _inputMap.FindAction(action.ControllerButton.ToString());
             var keyboardAction = _inputMap.FindAction(action.KeyboardButton.ToString());
             var buttonPressed = false;
@@ -97,6 +98,11 @@ public class BuildNode: MonoBehaviour
             var keyboardHeld = keyboardAction.IsPressed() &&
                                (keyboardAction.activeControl?.device is Keyboard);
             var buttonHeld = controllerHeld || keyboardHeld;
+
+            if (buttonPressed || buttonHeld)
+            {
+                actionDone = true;
+            }
 
             switch (action.Type)
             {
@@ -129,13 +135,13 @@ public class BuildNode: MonoBehaviour
                             switch (action.ControlType)
                             {
                                 case NodeControlType.Hold:
-                                    finished = transferPiece(buttonHeld, action);
+                                    finished = transferPiece(buttonHeld, buttonPressed,  ref action);
                                     break;
                                 case NodeControlType.Tap:
-                                    finished = transferPiece(buttonPressed, action);
+                                    StartCoroutine(transferPieceCo(buttonPressed, action));
                                     break;
                                 case NodeControlType.AlwaysPerform:
-                                    finished = transferPiece(true, action);
+                                    finished = transferPiece(true,  false, ref action);
                                     break;
                             }
 
@@ -150,6 +156,7 @@ public class BuildNode: MonoBehaviour
                     if (currentGamePiece)
                     {
                         var finished = false;
+                        if (!performTimerCheck(ref action, buttonPressed)) continue;
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
@@ -169,9 +176,10 @@ public class BuildNode: MonoBehaviour
                                 }
                                 break;
                             case NodeControlType.AlwaysPerform:
-                                currentState = NodeState.Outaking;
-                                finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
-                                StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
+                                
+                                    currentState = NodeState.Outaking;
+                                    finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
+                                    StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
                                 break;
                                 
                         }
@@ -185,7 +193,7 @@ public class BuildNode: MonoBehaviour
             }
         }
 
-        if (currentGamePiece && currentState == NodeState.Stowing)
+        if ((currentGamePiece && currentState == NodeState.Stowing) || (!actionDone && currentGamePiece))
         {
             currentState = NodeState.Stowing;
             GamePieceManager.teleportTo(currentGamePiece, transform);
@@ -195,8 +203,43 @@ public class BuildNode: MonoBehaviour
         }
     }
 
-    private bool transferPiece(bool button, NodeAction action)
+    private IEnumerator transferPieceCo(bool buttonHeld, NodeAction action)
     {
+        bool finished = false;
+        while (!finished)
+        {
+            finished = transferPiece(buttonHeld, buttonHeld, ref action);
+            yield return null;
+        }
+    }
+    
+    private bool performTimerCheck(ref NodeAction action, bool onPressed = false, bool dontReset = false)
+    {
+        if (onPressed)
+        {
+            action.performTimer = 0;
+        }
+        
+        action.performTimer += Time.deltaTime;
+        
+        print(action.performTimer);
+
+        //run timer
+        if (action.performTimer > action.DelayTimer || (action.DelayTimer == 0))
+        {
+            if (dontReset) return true;
+            action.performTimer = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool transferPiece(bool button, bool butonPressed, ref NodeAction action)
+    {
+        if (!performTimerCheck(ref action, butonPressed, true)) return false;
         var succeeded = false;
         if (currentGamePiece.pieceType != action.PieceType) return false;
         if (button && currentGamePiece)
@@ -215,6 +258,7 @@ public class BuildNode: MonoBehaviour
             if (succeeded)
             {
                 action.MoveTo.currentState = NodeState.Stowing;
+                action.performTimer = 0;
             }
         }
         
@@ -335,9 +379,13 @@ public struct NodeAction
     public Direction Direction;
     [ConditionalField(true, nameof(IsOuttake))]
     public Vector3 Spin;
+    [ConditionalField(true, nameof(IsNotIntake))]
+    public float DelayTimer;
     [Header("General Settings")]
     public PieceNames PieceType;
     public NodeControlType ControlType;
+    [HideInInspector]
+    public float performTimer;
     public ControllerInputs ControllerButton;
     public KeyboardInputs KeyboardButton;
     
@@ -345,6 +393,7 @@ public struct NodeAction
     private bool IsTransfer() => Type is NodeType.Transfer;
     private bool IsOuttake() => Type is NodeType.Outake;
     private bool IsNotOuttake() => Type is not NodeType.Outake;
+    private bool IsNotIntake() => Type is not NodeType.Intake;
     private bool SpeedVisible() => (IsNotOuttake() && Animate) || IsOuttake();
 }
 

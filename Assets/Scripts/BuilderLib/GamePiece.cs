@@ -13,9 +13,14 @@ public class GamePiece: MonoBehaviour
     [HideInInspector] public Vector3 startPosition;
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public float startingDistance;
+    private bool hasId;
 
-    void Start()
+    private void LateUpdate()
     {
-        originalParent = transform.parent;
+        if (hasId) return;
+        var core = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
+        var returnTo = core.getFieldHolder().transform.GetChild(0);
+        originalParent = returnTo;
+        hasId = true;
     }
 }

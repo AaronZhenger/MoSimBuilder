@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using Util;
 /// <summary>
 /// Generates a part object can be used multiple times on one object to create complex models
 /// </summary>
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class GeneratePart : MonoBehaviour
 {
     [SerializeField] private string partName;
@@ -42,7 +43,7 @@ public class GeneratePart : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         Startup();
     }
@@ -51,6 +52,11 @@ public class GeneratePart : MonoBehaviour
     {
         // It's good practice to cancel invokes when the object is disabled
         CancelInvoke(nameof(run));
+    }
+
+    private void OnDestroy()
+    {
+       DestroyImmediate(_loadedPart);
     }
 
     // Update is called once per frame

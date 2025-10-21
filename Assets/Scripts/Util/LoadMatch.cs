@@ -107,6 +107,11 @@ public class LoadMatch : MonoBehaviour
         SpawnRobot();
         addCamera();
     }
+
+    public GameObject getFieldHolder()
+    {
+        return _fieldHolder;
+    }
     
     private void SpawnRobot()
     {
