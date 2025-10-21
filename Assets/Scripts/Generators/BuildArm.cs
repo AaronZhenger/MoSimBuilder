@@ -101,6 +101,10 @@ public class BuildArm : MonoBehaviour
         
         if (!EditorApplication.isPlaying)
         {
+            foreach (var point in setPoints)
+            {
+                point.shouldScaleToUnits = false;
+            }
             BuildModel();
         }
         else

@@ -186,6 +186,11 @@ public class Buildelevator : MonoBehaviour
 
         if (!EditorApplication.isPlaying)
         {
+            foreach (var point in setPoints)
+            {
+                point.shouldScaleToUnits = true;
+                point.units = units;
+            }
             if (model)
             {
                 BuildModel();

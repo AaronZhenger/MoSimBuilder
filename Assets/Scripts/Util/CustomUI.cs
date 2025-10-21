@@ -36,9 +36,9 @@ namespace Util
         [SerializeField]
         private float point;
         
-        [SerializeField]
-        private bool shouldScaleToUnits = false;
-        [ConditionalField(nameof(shouldScaleToUnits))]
+        [HideInInspector]
+        public bool shouldScaleToUnits = false;
+        [HideInInspector]
         public Units units;
 
         public float getPoint()
