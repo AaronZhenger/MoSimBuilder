@@ -221,8 +221,6 @@ public class BuildNode: MonoBehaviour
         }
         
         action.performTimer += Time.deltaTime;
-        
-        print(action.performTimer);
 
         //run timer
         if (action.performTimer > action.DelayTimer || (action.DelayTimer == 0))
