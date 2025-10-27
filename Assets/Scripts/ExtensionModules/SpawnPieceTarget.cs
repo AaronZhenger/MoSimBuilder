@@ -10,15 +10,17 @@ public class SpawnPieceTarget : MonoBehaviour
     public float SpawnDistance;
 
     public float Velocity;
-    // Start is called before the first frame update
-    void Start()
+
+    void OnEnable()
     {
-        SpawnGamePiece.Targets.Add(this);
+        if (!SpawnGamePiece.Targets.Contains(this))
+        {
+            SpawnGamePiece.Targets.Add(this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        
+        SpawnGamePiece.Targets.Remove(this);
     }
 }

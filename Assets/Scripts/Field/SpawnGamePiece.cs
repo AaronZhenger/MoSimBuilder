@@ -24,7 +24,7 @@ public class SpawnGamePiece : MonoBehaviour
     [SerializeField] private int thresholdCount = 1;
 
     private static Dictionary<PieceNames, GameObject> _piecesMap;
-    public static List<SpawnPieceTarget> Targets = new List<SpawnPieceTarget>();
+    public static readonly List<SpawnPieceTarget> Targets = new List<SpawnPieceTarget>();
     
     private bool _pieceSpawned;
     private float _timer;
@@ -73,49 +73,61 @@ public class SpawnGamePiece : MonoBehaviour
         }
     }
 
-    private void SpawnPiece(PieceNames pieceTypeEnum, float velocityValue)
+    private void SpawnPiece(PieceNames pieceTypeEnum, float velocityValue, Vector3 spawnPosition)
     {
         if (_pieceSpawned || !_piecesMap.TryGetValue(pieceTypeEnum, out GameObject piecePrefab)) 
             return;
 
-        var item = Instantiate(piecePrefab, transform.position, transform.rotation, transform)
+        var item = Instantiate(piecePrefab, spawnPosition, transform.rotation, transform)
             .GetComponent<GamePiece>();
-        
+    
+        // Use local directions transformed to world space
+        Vector3 finalVelocity;
+    
         if (Mathf.Approximately(velocityValue, velocity))
         {
-            item.rb.velocity = velocityDirection switch
+            finalVelocity = velocityDirection switch
             {
-                Direction.forward => _cachedForwardVelocity,
-                Direction.sideways => _cachedSidewaysVelocity,
-                Direction.up => _cachedUpVelocity,
-                _ => _cachedForwardVelocity
+                Direction.forward => transform.forward * velocity,
+                Direction.sideways => transform.right * velocity,
+                Direction.up => transform.up * velocity,
+                _ => transform.forward * velocity
             };
         }
         else
         {
-            item.rb.velocity = velocityDirection switch
+            finalVelocity = velocityDirection switch
             {
-                Direction.forward => Vector3.forward * velocityValue,
-                Direction.sideways => Vector3.right * velocityValue,
-                Direction.up => Vector3.up * velocityValue,
-                _ => Vector3.forward * velocityValue
+                Direction.forward => transform.forward * velocityValue,
+                Direction.sideways => transform.right * velocityValue,
+                Direction.up => transform.up * velocityValue,
+                _ => transform.forward * velocityValue
             };
         }
-        
+    
+        item.rb.velocity = finalVelocity;
         _pieceSpawned = true;
     }
 
     private Vector3 GetClosestPointOnAxis(Vector3 targetPosition, Direction slideDirection)
     {
         Vector3 spawnerPos = transform.position;
-        
-        return slideDirection switch
+    
+        // Get the spawner's local axis in world space
+        Vector3 axisDirection = slideDirection switch
         {
-            Direction.sideways => new Vector3(targetPosition.x, spawnerPos.y, spawnerPos.z),
-            Direction.up => new Vector3(spawnerPos.x, targetPosition.y, spawnerPos.z),
-            Direction.forward => new Vector3(spawnerPos.x, spawnerPos.y, targetPosition.z),
-            _ => spawnerPos
+            Direction.sideways => transform.right,   // Local X axis
+            Direction.forward => transform.forward,  // Local Z axis
+            Direction.up => transform.up,            // Local Y axis
+            _ => transform.forward
         };
+    
+        // Project the vector from spawner to target onto the axis
+        Vector3 toTarget = targetPosition - spawnerPos;
+        float projectionLength = Vector3.Dot(toTarget, axisDirection);
+    
+        // Return the point along the spawner's axis
+        return spawnerPos + axisDirection * projectionLength;
     }
 
     private bool CheckInternalThreshold()
@@ -149,52 +161,80 @@ public class SpawnGamePiece : MonoBehaviour
     }
 
     void FixedUpdate()
+{
+    if (_pieceSpawned) return;
+
+    bool shouldSpawn = false;
+    float targetVelocity = velocity;
+    Vector3 spawnPosition = transform.position;
+    bool hasDistanceTargets = false;
+
+    // Check distance-based targets first
+    for (int i = 0; i < Targets.Count; i++)
     {
-        if (_pieceSpawned) return;
+        var target = Targets[i];
+        if (!target) continue;
 
-        bool shouldSpawn = false;
-        float targetVelocity = velocity;
-
-        for (int i = 0; i < Targets.Count; i++)
+        if (target.spawnType == SpawnType.Distance)
         {
-            var target = Targets[i];
-            if (!target) continue;
-
-            if (target.spawnType == SpawnType.Distance)
+            hasDistanceTargets = true;
+            
+            Vector3 effectiveSpawnPosition = axisSlides 
+                ? GetClosestPointOnAxis(target.transform.position, direction)
+                : transform.position;
+            
+            float distanceSq = (effectiveSpawnPosition - target.transform.position).sqrMagnitude;
+            
+            if (distanceSq <= target.SpawnDistance * target.SpawnDistance)
             {
-                Vector3 effectiveSpawnPosition = axisSlides 
-                    ? GetClosestPointOnAxis(target.transform.position, direction)
-                    : transform.position;
-                
-                float distanceSq = (effectiveSpawnPosition - target.transform.position).sqrMagnitude;
-                
-                if (distanceSq <= target.SpawnDistance * target.SpawnDistance)
-                {
-                    shouldSpawn = true;
-                    targetVelocity = target.Velocity;
-                    break;
-                }
-            }
-            else
-            {
-                if (!CheckInternalThreshold())
-                {
-                    shouldSpawn = true;
-                    targetVelocity = target.Velocity;
-                    break;
-                }
+                shouldSpawn = true;
+                targetVelocity = target.Velocity;
+                spawnPosition = effectiveSpawnPosition;
+                break;
             }
         }
-        
-        if (shouldSpawn)
+        else
         {
-            SpawnPiece(peiceType, targetVelocity);
-            return;
-        }
-
-        if (!CheckInternalThreshold())
-        {
-            SpawnPiece(peiceType, velocity);
         }
     }
+    
+    // If distance targets exist, only handle distance spawning
+    if (hasDistanceTargets)
+    {
+        if (shouldSpawn)
+        {
+            SpawnPiece(peiceType, targetVelocity, spawnPosition);
+        }
+    }
+    
+    // No distance targets - check threshold-based targets
+    for (int i = 0; i < Targets.Count; i++)
+    {
+        var target = Targets[i];
+        if (!target) continue;
+
+        if (target.spawnType == SpawnType.Threshold)
+        {
+            if (!CheckInternalThreshold())
+            {
+                shouldSpawn = true;
+                targetVelocity = target.Velocity;
+                spawnPosition = transform.position;
+                break;
+            }
+        }
+    }
+    
+    if (shouldSpawn)
+    {
+        SpawnPiece(peiceType, targetVelocity, spawnPosition);
+        return;
+    }
+
+    // Final fallback threshold check (only if no targets at all)
+    if (!CheckInternalThreshold() && !hasDistanceTargets)
+    {
+        SpawnPiece(peiceType, velocity, transform.position);
+    }
+}
 }
