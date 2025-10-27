@@ -25,12 +25,13 @@ namespace BuilderLib
         
             piece.colliderParent.SetActive(true);
         }
-        public static bool AnimateTo(GamePiece piece, NodeAction action)
+        public static bool AnimateTo(GamePiece piece, NodeAction action, Transform t = null)
         {
             var speed = action.Speed * 0.0254f;
 
             var transform = piece.rb.transform;
-            var target = action.MoveTo.transform;
+            var target = t ? t : action.MoveTo.transform;
+            
             if (piece.state != GamePieceState.Moving)
             {
                 piece.state = GamePieceState.Moving;
@@ -80,7 +81,7 @@ namespace BuilderLib
 
             if (distanceMagnitude <= 0.75f * 0.0254f)
             {
-                changeParent(piece, action);
+                changeParent(piece, action, t);
                 return true; // Reached target
             }
             else
@@ -147,11 +148,15 @@ namespace BuilderLib
         }
 
 
-        public static bool changeParent(GamePiece piece, NodeAction action)
+        public static bool changeParent(GamePiece piece, NodeAction action, Transform t = null)
         {
-            piece.owner = action.MoveTo.transform;
-            piece.transform.parent = action.MoveTo.transform;
-            action.MoveTo.currentGamePiece = piece;
+            var value = t ? t : action.MoveTo.transform;
+            piece.owner = value;
+            piece.transform.parent = value;
+            if (action.MoveTo)
+            {
+                action.MoveTo.currentGamePiece = piece;
+            }
             piece.state = GamePieceState.Stationary;
             return true;
         }

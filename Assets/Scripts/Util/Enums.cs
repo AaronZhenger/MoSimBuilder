@@ -52,6 +52,12 @@ namespace Util
         delay
     }
 
+    public enum SpawnType
+    {
+        Threshold,
+        Distance
+    }
+
     /// <summary>
     /// Tube sizing names.
     /// </summary>

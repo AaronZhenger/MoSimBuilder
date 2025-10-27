@@ -16,6 +16,7 @@ public class ScoreOnOccupy : FieldScorer
 
         foreach (var node in checkForDoubleScore)
         {
+            if (!node) break;
             if (node == this) continue;
             DoubleScored(occupyObjects, node.getOccupyPieces());   
         }

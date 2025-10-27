@@ -74,7 +74,7 @@ namespace Util
         /// <param name="value"></param>
         /// <param name="child"></param>
         /// <returns></returns>
-        public static T FindParentObjectComponent<T>(GameObject child) where T : Component
+        public static T FindParentObjectComponentActual<T>(GameObject child) where T : Component
         {
             if (child == null)
             {
@@ -93,6 +93,35 @@ namespace Util
                 currentTransform = currentTransform.parent;
             }
             return null;
+        }
+        
+        private static readonly Dictionary<GameObject, Component> ParentComponentCache = new Dictionary<GameObject, Component>();
+
+        public static T FindParentObjectComponent<T>(GameObject child) where T : Component
+        {
+            // 1. Check the cache first
+            if (ParentComponentCache.TryGetValue(child, out Component cachedComponent) && cachedComponent is T resultT)
+            {
+                return resultT;
+            }
+
+            // 2. Perform the expensive traversal
+            T foundComponent = FindParentObjectComponentActual<T>(child);
+
+            // 3. Cache the result (even if null)
+            if (foundComponent != null)
+            {
+                ParentComponentCache[child] = foundComponent;
+            }
+            else
+            {
+                // Cache a marker for "not found" to prevent future null searches
+                // A common technique is to cache a known dummy component or null, 
+                // but for simplicity here we'll just skip caching null for now
+                // as it would require more complex cache management.
+            }
+
+            return foundComponent;
         }
         
         /// <summary>

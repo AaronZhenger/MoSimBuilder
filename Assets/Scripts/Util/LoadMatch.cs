@@ -126,7 +126,11 @@ public class LoadMatch : MonoBehaviour
     {
         return _activeRobot != null;
     }
-    
+
+    public GameObject GetRobotLoaded()
+    {
+        return _activeRobot;
+    }
     private void DeleteRobot()
     {
         DestroyImmediate(_activeRobot);

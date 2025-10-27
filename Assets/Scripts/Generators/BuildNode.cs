@@ -21,6 +21,7 @@ public class BuildNode: MonoBehaviour
     private InputActionMap _inputMap;
     private GameObject _robotParent;
     private Vector3 _halfExtents;
+    private List<GamePiece> pieces = new List<GamePiece>();
     
     private void Start()
     {
@@ -278,7 +279,8 @@ public class BuildNode: MonoBehaviour
             currentState = NodeState.Intakeing;
             if (action.Animate)
             {
-                if (GamePieceManager.AnimateTo(currentGamePiece, action))
+                if (!currentGamePiece) return false;
+                if (GamePieceManager.AnimateTo(currentGamePiece, action, transform))
                 {
                     currentState = NodeState.Stowing;
                 }
@@ -311,7 +313,7 @@ public class BuildNode: MonoBehaviour
 
     private List<GamePiece> PoolObjects(NodeAction action)
     {
-        List<GamePiece> pieces = new List<GamePiece>();
+        pieces.Clear();
         var mask = LayerMask.GetMask("Piece");
         var colliders = Physics.OverlapBox(_intakeCollider.transform.position, _halfExtents,
             _intakeCollider.transform.rotation, mask);

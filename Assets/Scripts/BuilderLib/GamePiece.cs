@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,9 +16,15 @@ public class GamePiece: MonoBehaviour
     [HideInInspector] public float startingDistance;
     private bool hasId;
 
-    private void LateUpdate()
+    private void Start()
+    {
+        hasId = false;
+    }
+
+    private void Update()
     {
         if (hasId) return;
+        if (!rb) rb = GetComponent<Rigidbody>();
         var core = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         var returnTo = core.getFieldHolder().transform.GetChild(0);
         originalParent = returnTo;
