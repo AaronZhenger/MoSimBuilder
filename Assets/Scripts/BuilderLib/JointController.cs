@@ -114,6 +114,7 @@ public class JointController : MonoBehaviour
         
         if (follower) return;
 
+        bool buttonPushed = false;
         for (int i = 0; i < setPoints.Length; i++)
         {
 
@@ -136,6 +137,8 @@ public class JointController : MonoBehaviour
                 }
             }
             
+            if (buttonPressed) buttonPushed = true;
+            
             var controllerHeld = controllerAction.IsPressed() && 
                                  (controllerAction.activeControl?.device is Gamepad);
             var keyboardHeld = keyboardAction.IsPressed() && 
@@ -150,7 +153,21 @@ public class JointController : MonoBehaviour
                 {
                     if (_nextSequencePoint != null)
                     {
-                        _targetPosition = _nextSequencePoint.getPoint();
+                        if (!_nextSequencePoint.getPersist() || _nextSequencePoint.sequenceType != SequenceType.end)
+                        {
+                            _targetPosition = _nextSequencePoint.getPoint();
+                        }
+                        
+                        if (_nextSequencePoint.sequenceType == SequenceType.end) 
+                        {
+                            originalPositions.Clear();
+                            originalPositions[_nextSequencePoint] = _nextSequencePoint.getPoint();
+                            _nextSequencePoint = null; 
+                            _isSequenceUsingDelay = false;
+                            _sequenceTime = 0;
+                            return; 
+                        }
+                        
                         switch (setPoint.sequenceType)
                         {
                             case SequenceType.delay:
@@ -265,6 +282,25 @@ public class JointController : MonoBehaviour
                         }
                         else
                         {
+                            originalPositions[setPoint] = setPoint.getPoint();
+                            _targetPosition = setPoint.getPoint();
+                        }
+                    }
+                    break;
+                case ControlType.LastPressed:
+                    if (buttonPressed)
+                    {
+                        _sequenceInterrupted = true;
+
+                        if (originalPositions.ContainsKey(setPoint))
+                        {
+                            _targetPosition = home;
+                            originalPositions.Remove(setPoint);
+                        }
+                        else
+                        {
+                            originalPositions.Clear();
+
                             originalPositions[setPoint] = setPoint.getPoint();
                             _targetPosition = setPoint.getPoint();
                         }

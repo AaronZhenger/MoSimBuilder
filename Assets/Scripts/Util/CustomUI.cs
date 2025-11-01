@@ -23,16 +23,23 @@ namespace Util
         [ConditionalField(true, nameof(IsSequence))]
         public SequenceType sequenceType;
         
-        [ConditionalField(true,nameof(IsSequence))]
+        [ConditionalField(true,nameof(ShowSequenceTo))]
         public string sequenceTo;
         
         [ConditionalField(true, nameof(ShouldShowDelay))]
         public float delay;
-        private bool ShouldShowDelay() => sequenceType != SequenceType.nextPress;
+        private bool ShouldShowDelay() => sequenceType == SequenceType.delay;
         private bool IsSequence() => controlType is ControlType.Sequence or ControlType.SequenceStart;
-        
-        
-        [Header("Generic")]
+        private bool ShowPersist() => sequenceType == SequenceType.end && controlType is ControlType.Sequence;
+        private bool ShowSequenceTo() => IsSequence() && sequenceType != SequenceType.end;
+
+        private bool HidePoint() => ShowPersist() && persist && controlType is ControlType.Sequence;
+
+
+        [Header("Generic")] 
+        [ConditionalField(true, nameof(ShowPersist))] [SerializeField]
+        private bool persist;
+        [ConditionalField(true, nameof(HidePoint), true)]
         [SerializeField]
         private float point;
         
@@ -52,6 +59,11 @@ namespace Util
                 _ => 1.0f
                 
             } : point;
+        }
+
+        public bool getPersist()
+        {
+            return persist;
         }
 
         [Header("Control Settings")]

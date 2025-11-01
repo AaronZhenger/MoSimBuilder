@@ -25,8 +25,9 @@ namespace Util
     {
         Toggle,
         Hold,
+        LastPressed,
+        SequenceStart,
         Sequence,
-        SequenceStart
     }
 
     public enum ElevatorType
@@ -49,7 +50,8 @@ namespace Util
     public enum SequenceType
     {
         nextPress,
-        delay
+        delay,
+        end
     }
 
     public enum SpawnType
