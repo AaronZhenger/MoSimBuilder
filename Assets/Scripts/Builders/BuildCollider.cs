@@ -14,40 +14,38 @@ public class BuildCollider : MonoBehaviour
     private BoxCollider box;
 
     private float _scale;
-    private 
     // Start is called before the first frame update
-    void Start()
+    private float GetUnitScale()
     {
-        
+        return units switch
+        {
+            Units.Inch => 0.0254f,
+            Units.Meter => 1.0f,
+            Units.Centimeter => 0.01f,
+            Units.Millimeter => 0.001f,
+            _ => 0.0254f
+        };
+    }
+    
+    private void Awake()
+    {
+        box = GetComponentInChildren<BoxCollider>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnValidate()
     {
-        if (!EditorApplication.isPlaying)
+        if (EditorApplication.isPlaying) return;
+
+        if (!box)
         {
-            _scale = units switch
-            {
-                Units.Inch => 0.0254f,
-                Units.Meter => 1,
-                Units.Centimeter => 0.01f,
-                Units.Millimeter => 0.001f,
-                _ => 0.0254f
-            };
-            
-            if (!box)
-            {
-                var intakeParent = Utils.TryGetAddChild("IntakeBox", gameObject);
-                box = Utils.TryGetAddComponent<BoxCollider>(intakeParent);
-                box.size = ColliderSize * _scale;
-            }
-            else
-            {
-                box.size = ColliderSize * _scale;
-                box.transform.localPosition = Vector3.zero;
-                box.transform.localRotation = Quaternion.identity;
-            }
-                
+            var colliderObject = Utils.TryGetAddChild("Collider", gameObject); 
+            box = Utils.TryGetAddComponent<BoxCollider>(colliderObject);
         }
+
+        var scale = GetUnitScale();
+        box.size = ColliderSize * scale;
+        
+        box.transform.localPosition = Vector3.zero;
+        box.transform.localRotation = Quaternion.identity;
     }
 }
