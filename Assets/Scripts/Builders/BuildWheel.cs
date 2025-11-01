@@ -14,7 +14,7 @@ namespace Generators
 
         private GameObject _wheel;
 
-        [SerializeField] private ColliderDisabler colliderDisabler;
+        private ColliderDisabler colliderDisabler;
 
         // Start is called before the first frame update
         private void Start()
