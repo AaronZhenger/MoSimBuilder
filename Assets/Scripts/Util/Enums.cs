@@ -58,6 +58,20 @@ namespace Util
         Distance
     }
 
+    public enum WheelTypes
+    {
+        TwoInSquish,
+        TwoInStealth,
+        ThreeInSquish,
+        ThreeInStealth,
+        FourInSquish,
+        FourInStealth,
+        FourInOmni,
+        FourInBillet,
+        FiveInFlywheel,
+        SixInOmni,
+    }
+
     /// <summary>
     /// Tube sizing names.
     /// </summary>

@@ -12,8 +12,8 @@ using Util;
 [ExecuteAlways]
 public class GeneratePart : MonoBehaviour
 {
-    [SerializeField] private string partName;
-    [SerializeField] public bool ObjectSpawned;
+    private string partName;
+    [HideInInspector] public bool ObjectSpawned;
     
     /// <summary>
     /// The name of the Object to use
@@ -50,7 +50,6 @@ public class GeneratePart : MonoBehaviour
     
     void OnDisable()
     {
-        // It's good practice to cancel invokes when the object is disabled
         CancelInvoke(nameof(run));
     }
 
@@ -59,25 +58,21 @@ public class GeneratePart : MonoBehaviour
        DestroyImmediate(_loadedPart);
     }
 
-    // Update is called once per frame
-    public void run()
+    protected void run()
     {
         if (PartName != null && Part != null)
         {
             partName = PartName;
-            ObjectSpawned = _loadedPart != null;
-            if (_loadedPart != null)
+            ObjectSpawned = _loadedPart;
+            if (_loadedPart)
             {
-                if (_loadedPart.name != PartName)
-                {
-                    DestroyImmediate(_loadedPart);
-                } else if (currentPart != Part)
+                if (_loadedPart.name != PartName || currentPart != Part)
                 {
                     DestroyImmediate(_loadedPart);
                 }
             }
 
-            if (_loadedPart == null && Part != null)
+            if (!_loadedPart && Part)
             {
                 currentPart = Part;
                 _loadedPart = Instantiate(Part, LoadedPartLocation, LoadedPartRotation, transform);
@@ -92,10 +87,10 @@ public class GeneratePart : MonoBehaviour
             _loadedPart.transform.localScale = scaleAdjustedScale;
         }
 
-        ObjectSpawned = _loadedPart != null;
+        ObjectSpawned = _loadedPart;
     }
 
-    public void Startup()
+    protected void Startup()
     {
         if (partName != null)
         {

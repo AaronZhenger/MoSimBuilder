@@ -42,23 +42,15 @@ namespace Generators
                 _ => 0.0254f
             };
 
-            loadedTubes ??= Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+            loadedTubes ??= Resources.LoadAll<GameObject>("Parts/Tubing") as GameObject[];
 
             foreach (var loadedTube in loadedTubes)
             {
-                if (loadedTube.name == TubeType.OneXTwoXEighth.ToString() && tubeType == TubeType.OneXTwoXEighth)
-                {
-                    _tube = loadedTube;
-                } else if (loadedTube.name == TubeType.OneXOneXEighth.ToString() && tubeType == TubeType.OneXOneXEighth)
-                {
-                    _tube = loadedTube;
-                } else if (loadedTube.name == TubeType.TwoXTwoXEighth.ToString() && tubeType == TubeType.TwoXTwoXEighth)
+                if (loadedTube.name == tubeType.ToString())
                 {
                     _tube = loadedTube;
                 }
             }
-        
-        
 
             if (!Part)
             {
@@ -93,8 +85,6 @@ namespace Generators
 
                 LoadedPartScale = new Vector3(1,1,length * _factor);
             }
-            
-            base.run();
         }
     }
 }

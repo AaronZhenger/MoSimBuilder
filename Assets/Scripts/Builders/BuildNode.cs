@@ -35,6 +35,7 @@ public class BuildNode: MonoBehaviour
     
     private void Start()
     {
+        if (!EditorApplication.isPlaying) return; 
         foreach (var child in Utils.GetAllChildren(transform))
         {
             if (child.TryGetComponent(typeof(BoxCollider), out var col))

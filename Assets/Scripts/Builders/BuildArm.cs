@@ -138,7 +138,7 @@ public class BuildArm : MonoBehaviour
     private void Startup()
     {
         scaleModifier = 0.0254f;
-        var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+        var loadedTubes = Resources.LoadAll<GameObject>("Parts/Tubing") as GameObject[];
 
         _tubingObject = new GameObject[2];
         foreach (var loadedTube in loadedTubes)

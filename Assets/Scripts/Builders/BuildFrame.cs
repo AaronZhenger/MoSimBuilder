@@ -266,7 +266,7 @@ public class BuildFrame : MonoBehaviour
             }
         }
         
-        var loadedTubes =  Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+        var loadedTubes =  Resources.LoadAll<GameObject>("Parts/Tubing") as GameObject[];
 
         foreach (var loadedTube in loadedTubes)
         {
