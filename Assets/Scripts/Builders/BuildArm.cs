@@ -56,7 +56,7 @@ public class BuildArm : MonoBehaviour
 
     private JointDrive _drive;
     
-    private GameObject[] _tubingObject;
+    private static GameObject[] _tubingObject;
 
     private ArmModel _oldModel;
 
@@ -64,8 +64,6 @@ public class BuildArm : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Startup();
-        
         if (EditorApplication.isPlaying)
         {
             CreateAngleHolderParent();
@@ -138,23 +136,26 @@ public class BuildArm : MonoBehaviour
     private void Startup()
     {
         scaleModifier = 0.0254f;
-        var loadedTubes = Resources.LoadAll<GameObject>("Parts/Tubing") as GameObject[];
-
-        _tubingObject = new GameObject[2];
-        foreach (var loadedTube in loadedTubes)
+        
+        if (_tubingObject == null)
         {
-            if (loadedTube.name == "OneXTwoXEighth")
+            var loadedTubes = Resources.LoadAll<GameObject>("Parts/Tubing") as GameObject[];
+            _tubingObject = new GameObject[2];
+            foreach (var loadedTube in loadedTubes)
             {
-                _tubingObject[0] = loadedTube;
-            }
-            else if (loadedTube.name == "TwoXTwoXEighth")
-            {
-                _tubingObject[1] = loadedTube;   
+                if (loadedTube.name == "OneXTwoXEighth")
+                {
+                    _tubingObject[0] = loadedTube;
+                }
+                else if (loadedTube.name == "TwoXTwoXEighth")
+                {
+                    _tubingObject[1] = loadedTube;
+                }
             }
         }
 
         var detectedPart = Utils.FindChild("Model", gameObject);
-        if (detectedPart != null)
+        if (detectedPart)
         {
             _modelObject = detectedPart.gameObject;
         }
@@ -239,7 +240,7 @@ public class BuildArm : MonoBehaviour
     {
         _parts = CheckTubes(_modelObject, 2);
 
-        if (_parts[0] == null)
+        if (!_parts[0])
         {
             _parts[0] = _modelObject.AddComponent<GeneratePart>();
             _parts[0].Part = _tubingObject[0];
@@ -249,7 +250,7 @@ public class BuildArm : MonoBehaviour
             _parts[0].LoadedPartScale = new Vector3(1, 1, length * scaleModifier);
         }
 
-        if (_parts[1] == null)
+        if (!_parts[1])
         {
             _parts[1] = _modelObject.AddComponent<GeneratePart>();
             _parts[1].Part = _tubingObject[0];
@@ -306,17 +307,17 @@ public class BuildArm : MonoBehaviour
             switch (armModel)
             {
                 case ArmModel.Single:
-                    if (t.name == "Single")
+                    if (t.PartName == "Single")
                     {
                         filtered[0] = t;
                     }
                     break;
                 case ArmModel.SplitParallel:
-                    if (t.name == "DoubleL")
+                    if (t.PartName == "DoubleL")
                     {
                         filtered[0] = t;
                     } 
-                    else if (t.name == "DoubleR")
+                    else if (t.PartName == "DoubleR")
                     {
                         filtered[1] = t;
                     }
