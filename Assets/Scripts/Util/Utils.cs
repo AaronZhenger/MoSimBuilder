@@ -47,6 +47,50 @@ namespace Util
             
             return null;
         }
+        
+        /// <summary>
+        /// attempts to get the component. if it is not on the object it adds it
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T TryGetAddComponent<T>(GameObject parent) where T: Component
+        {
+            // 1. Try to get the component.
+            if (parent.TryGetComponent(typeof(T), out var existingComponent))
+            {
+                // Found it, return the existing component.
+                return (T)existingComponent;
+            }
+
+            // 2. Not found, add the component.
+            Component newComponent = parent.AddComponent(typeof(T));
+
+            // 3. Return the newly created component.
+            return (T)newComponent;
+        }
+        
+        /// <summary>
+        /// attempts to get the component. if it is not on the object it adds it
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static GameObject TryGetAddChild(string childName,GameObject parent)
+        {
+            var child = FindChild(childName, parent);
+            
+            if (child) return child;
+            
+            child = new GameObject(childName);
+            child.transform.SetParent(parent.transform);
+            var transform = child.transform;
+            transform.parent = parent.transform;
+            transform.localEulerAngles = UnityEngine.Vector3.zero;
+            transform.localPosition = UnityEngine.Vector3.zero;
+
+            return child;
+        }
 
         /// <summary>
         /// Finds the first Parent objcet which contains a rigid body

@@ -4,15 +4,20 @@ using System.Collections.Generic;
 using BuilderLib;
 using MyBox;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Util;
 
+[ExecuteAlways]
 public class BuildNode: MonoBehaviour
 {
-    [SerializeField] private Collider _intakeCollider;
+    private BoxCollider _intakeCollider;
     public GamePiece currentGamePiece;
     [SerializeField] private bool Preload;
+
+    [ConditionalField(nameof(hasIntake))] [SerializeField]
+    private Vector3 intakeSize;
     [ConditionalField(nameof(Preload))]
     [SerializeField] private PieceNames pieceName;
     public NodeState currentState;
@@ -22,6 +27,11 @@ public class BuildNode: MonoBehaviour
     private GameObject _robotParent;
     private Vector3 _halfExtents;
     private List<GamePiece> pieces = new List<GamePiece>();
+    private static GameObject[] Pieces;
+    private bool hasIntake = false;
+    
+    private Vector3 lastIntakePosition;
+    private Quaternion lastIntakeRotation;
     
     private void Start()
     {
@@ -29,7 +39,7 @@ public class BuildNode: MonoBehaviour
         {
             if (child.TryGetComponent(typeof(BoxCollider), out var col))
             {
-                _intakeCollider = (Collider)col;
+                _intakeCollider = (BoxCollider)col;
                 
                 _halfExtents = _intakeCollider.bounds.extents / 2;
             }
@@ -43,19 +53,11 @@ public class BuildNode: MonoBehaviour
         
         _inputMap.Enable();
         
-        var Pieces = Resources.LoadAll<GameObject>("Pieces");
-        switch (pieceName)
-        {
-            case PieceNames.Coral:
-                spawnPiece("Coral", Pieces);
-                break;
-            case PieceNames.Algae:
-                spawnPiece("Algae", Pieces);
-                break;
-        }
+        Pieces ??= Resources.LoadAll<GameObject>("Pieces");
+        SpawnPiece(pieceName.ToString(), Pieces);
     }
 
-    private void spawnPiece(string pieceName, GameObject[] pieces)
+    private void SpawnPiece(string pieceName, GameObject[] pieces)
     {
         if (!Preload) return;
         foreach (var piece in pieces)
@@ -69,6 +71,51 @@ public class BuildNode: MonoBehaviour
 
     void Update()
     {
+        
+        if (!EditorApplication.isPlaying)
+        {
+            bool hasIntake = false;
+            foreach (var action in Actions)
+            {
+                if (action.Type == NodeType.Intake)
+                {
+                    hasIntake = true;
+                    break;
+                }
+            }
+
+            this.hasIntake = hasIntake;
+
+            if (hasIntake)
+            {
+                if (!_intakeCollider)
+                {
+                    var intakeParent = Utils.TryGetAddChild("IntakeBox", gameObject);
+                    _intakeCollider = Utils.TryGetAddComponent<BoxCollider>(intakeParent);
+                    _intakeCollider.size = intakeSize * 0.0254f;
+                    _intakeCollider.transform.position = lastIntakePosition;
+                    _intakeCollider.transform.rotation = lastIntakeRotation;
+                }
+                else
+                {
+                    _intakeCollider.size = intakeSize * 0.0254f;
+                    _intakeCollider.isTrigger = true;
+                    lastIntakePosition = _intakeCollider.transform.position;
+                    lastIntakeRotation = _intakeCollider.transform.rotation;
+                }
+                
+            }
+            else
+            {
+                var box = Utils.FindChild("IntakeBox", gameObject);
+                if (box)
+                {
+                    DestroyImmediate(box);
+                }
+            }
+            
+            return;
+        };
         var actionFinished = false;
         var actionDone = false;
         for (int i = 0; i < Actions.Length; i++)
@@ -115,13 +162,13 @@ public class BuildNode: MonoBehaviour
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
-                                intakePiece(buttonHeld, action);
+                                IntakePiece(buttonHeld, action);
                                 break;
                             case NodeControlType.Tap:
-                                intakePiece(buttonPressed, action);
+                                IntakePiece(buttonPressed, action);
                                 break;
                             case NodeControlType.AlwaysPerform:
-                                intakePiece(true, action);
+                                IntakePiece(true, action);
                                 break;
                         }
                     }
@@ -136,13 +183,13 @@ public class BuildNode: MonoBehaviour
                             switch (action.ControlType)
                             {
                                 case NodeControlType.Hold:
-                                    finished = transferPiece(buttonHeld, buttonPressed,  ref action);
+                                    finished = TransferPiece(buttonHeld, buttonPressed,  ref action);
                                     break;
                                 case NodeControlType.Tap:
-                                    StartCoroutine(transferPieceCo(buttonPressed, action));
+                                    StartCoroutine(TransferPieceCo(buttonPressed, action));
                                     break;
                                 case NodeControlType.AlwaysPerform:
-                                    finished = transferPiece(true,  false, ref action);
+                                    finished = TransferPiece(true,  false, ref action);
                                     break;
                             }
 
@@ -157,7 +204,7 @@ public class BuildNode: MonoBehaviour
                     if (currentGamePiece)
                     {
                         var finished = false;
-                        if (!performTimerCheck(ref action, buttonPressed)) continue;
+                        if (!PerformTimerCheck(ref action, buttonPressed)) continue;
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
@@ -204,17 +251,17 @@ public class BuildNode: MonoBehaviour
         }
     }
 
-    private IEnumerator transferPieceCo(bool buttonHeld, NodeAction action)
+    private IEnumerator TransferPieceCo(bool buttonHeld, NodeAction action)
     {
         bool finished = false;
         while (!finished)
         {
-            finished = transferPiece(buttonHeld, buttonHeld, ref action);
+            finished = TransferPiece(buttonHeld, buttonHeld, ref action);
             yield return null;
         }
     }
     
-    private bool performTimerCheck(ref NodeAction action, bool onPressed = false, bool dontReset = false)
+    private bool PerformTimerCheck(ref NodeAction action, bool onPressed = false, bool dontReset = false)
     {
         if (onPressed)
         {
@@ -236,9 +283,9 @@ public class BuildNode: MonoBehaviour
         }
     }
 
-    private bool transferPiece(bool button, bool butonPressed, ref NodeAction action)
+    private bool TransferPiece(bool button, bool butonPressed, ref NodeAction action)
     {
-        if (!performTimerCheck(ref action, butonPressed, true)) return false;
+        if (!PerformTimerCheck(ref action, butonPressed, true)) return false;
         var succeeded = false;
         if (currentGamePiece.pieceType != action.PieceType) return false;
         if (button && currentGamePiece)
@@ -264,15 +311,15 @@ public class BuildNode: MonoBehaviour
         return succeeded;
     }
 
-    private bool intakePiece(bool button, NodeAction action)
+    private bool IntakePiece(bool button, NodeAction action)
     {
         //intake action
         if (button && !currentGamePiece)
         {
             var pieces = PoolObjects(action);
-            currentGamePiece = closestPiece(pieces);
+            currentGamePiece = ClosestPiece(pieces);
             if (!currentGamePiece) return false;
-            currentGamePiece.startingDistance = distanceToPiece(currentGamePiece);
+            currentGamePiece.startingDistance = DistanceToPiece(currentGamePiece);
             currentState = NodeState.Intakeing;
         } else if (currentState == NodeState.Intakeing && currentGamePiece)
         {
@@ -286,7 +333,7 @@ public class BuildNode: MonoBehaviour
                 }
                 else
                 {
-                    if (currentGamePiece.startingDistance < distanceToPiece(currentGamePiece))
+                    if (currentGamePiece.startingDistance < DistanceToPiece(currentGamePiece))
                     {
                         currentState = NodeState.Stowing;
                         currentGamePiece.colliderParent.SetActive(true);
@@ -329,7 +376,7 @@ public class BuildNode: MonoBehaviour
         return pieces;
     }
 
-    private GamePiece closestPiece(List<GamePiece> pieces)
+    private GamePiece ClosestPiece(List<GamePiece> pieces)
     {
         switch (pieces.Count)
         {
@@ -340,11 +387,11 @@ public class BuildNode: MonoBehaviour
         }
 
         var closest = pieces[0];
-        var distance = distanceToPiece(closest);
+        var distance = DistanceToPiece(closest);
 
         foreach (var piece in pieces)
         {
-            if (distanceToPiece(piece) < distance)
+            if (DistanceToPiece(piece) < distance)
             {
                 closest = piece;
             }
@@ -353,7 +400,7 @@ public class BuildNode: MonoBehaviour
         return closest;
     }
 
-    private float distanceToPiece(GamePiece piece)
+    private float DistanceToPiece(GamePiece piece)
     {
         var pose = transform.InverseTransformPoint(piece.transform.position);
         return pose.magnitude;

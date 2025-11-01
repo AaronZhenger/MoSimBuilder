@@ -12,7 +12,7 @@ namespace Generators
         
         [SerializeField] private float length;
 
-        
+        private static GameObject[] loadedTubes;
 
         private GameObject _tube;
 
@@ -42,7 +42,7 @@ namespace Generators
                 _ => 0.0254f
             };
 
-            var loadedTubes = Resources.LoadAll<GameObject>("Tubing") as GameObject[];
+            loadedTubes ??= Resources.LoadAll<GameObject>("Tubing") as GameObject[];
 
             foreach (var loadedTube in loadedTubes)
             {
