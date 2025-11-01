@@ -39,8 +39,6 @@ public class JointController : MonoBehaviour
     private PlayerInput _playerInput;
     public InputActionMap _inputMap;
     public float _targetPosition;
-
-    private GameObject _robotParent;
     
     private PIDController _pidController;
     
@@ -73,9 +71,7 @@ public class JointController : MonoBehaviour
         _sequenceInterrupted = false;
         _delayType = false;
         _sequencePoint = "";
-        _robotParent = Utils.FindParentPlayerInput(gameObject);
-
-        _playerInput = _robotParent.GetComponent<PlayerInput>();
+        _playerInput = Utils.FindParentObjectComponent<PlayerInput>(gameObject);
         
         _inputMap = _playerInput.actions.FindActionMap("Robot");
         
@@ -104,6 +100,11 @@ public class JointController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_playerInput)
+        {
+            _playerInput = Utils.FindParentObjectComponent<PlayerInput>(gameObject);
+            return;
+        }
         noWrapAngle = Mathf.Repeat(noWrapAngle, 360);
         
         if (_sequenceTime > 0)
