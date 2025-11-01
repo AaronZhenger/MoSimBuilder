@@ -6,113 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacyCorner.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacyCorner.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacyLift.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacyLift.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacySide.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/LegacySide.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/ModernCorner.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/ModernCorner.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/ModernSide.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumpers/ModernSide.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/AngryFishMotor.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/AngryFishMotor.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/Midget.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/Midget.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/PowerfulBird.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/PowerfulBird.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/Tornado.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/Tornado.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/eon.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/eon.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/eon55.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Motors/eon55.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/90degBracket.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/90degBracket.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/Rectangle.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/Rectangle.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/RightTriangle.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/RightTriangle.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/TBraket.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Plate/TBraket.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/Dead.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/Dead.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/HalfHex.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/HalfHex.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/Spline.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Shafts/Spline.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/Hex.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/Hex.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/QuarterInch.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/QuarterInch.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/Spline.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Spacers/Spline.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/3inCastWheel.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/3inCastWheel.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/4inUerethayneWheels.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/4inUerethayneWheels.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/InvertedCornerModule.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/InvertedCornerModule.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/InvertedModule.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/InvertedModule.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/SDSWheel.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/SDSWheel.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/StandardCornerModule.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/StandardCornerModule.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/StandardModule.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/StandardModule.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/lowProfileModule.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Swerve/lowProfileModule.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/OneXOneXEigth.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/OneXOneXEigth.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/Solid-0.125-1x2.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/Solid-0.125-1x2.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/TwoXTwoXEigth.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Tubing/TwoXTwoXEigth.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/2inSquish.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/2inSquish.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/2inStealth.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/2inStealth.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/3inSquish.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/3inSquish.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/3inStealth.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/3inStealth.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inBillet.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inBillet.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inOmni.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inOmni.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inSquish.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inSquish.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inStealth.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/4inStealth.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/5inFlywheel.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/5inFlywheel.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/6inOmni.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheels/6inOmni.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FiveInFlywheel.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FiveInFlywheel.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInBillet.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInBillet.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInOmni.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInOmni.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInSquish.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInSquish.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInStealth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/FourInStealth.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/SixInOmni.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/SixInOmni.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/ThreeInSquish.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/ThreeInSquish.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/ThreeInStealth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/ThreeInStealth.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/TwoInSquish.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/TwoInSquish.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/TwoInStealth.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Wheel/TwoInStealth.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXOneXEighth.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXOneXEighth.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXTwoXEighth.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/OneXTwoXEighth.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/TwoXTwoXEighth.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tubing/TwoXTwoXEighth.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildTubing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildTubing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildWheel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildWheel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Utils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Utils.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,7 +202,8 @@
       <workItem from="1761057904764" duration="3286000" />
       <workItem from="1761082557729" duration="8031000" />
       <workItem from="1761505872272" duration="21696000" />
-      <workItem from="1761958666961" duration="6740000" />
+      <workItem from="1761958666961" duration="6948000" />
+      <workItem from="1762015706020" duration="3559000" />
     </task>
     <servers />
   </component>

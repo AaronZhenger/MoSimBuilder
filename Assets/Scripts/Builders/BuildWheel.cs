@@ -14,8 +14,10 @@ namespace Generators
 
         private GameObject _wheel;
 
+        [SerializeField] private ColliderDisabler colliderDisabler;
+
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             Startup();
         }
@@ -28,6 +30,14 @@ namespace Generators
         // Update is called once per frame
         void Update()
         {
+            if (colliderDisabler)
+            {
+                colliderDisabler.SetState(shouldCollide);
+            }
+            else if (getLoadedPart())
+            {
+                colliderDisabler = Utils.TryGetComponentOnChild<ColliderDisabler>(getLoadedPart());
+            }
 
             loadedWheels ??= Resources.LoadAll<GameObject>("Parts/Wheel") as GameObject[];
 

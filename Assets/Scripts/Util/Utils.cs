@@ -26,6 +26,13 @@ namespace Util
             return children.ToArray();
         }
 
+        public static T TryGetComponentOnChild<T>(GameObject parent) where T : Component
+        {
+            var children = GetAllChildren(parent.transform);
+
+            return children.Select(child => child.GetComponent<T>()).FirstOrDefault(component => component);
+        }
+
 
         /// <summary>
         /// Finds a child with a given name by only searching the children instead of everything.

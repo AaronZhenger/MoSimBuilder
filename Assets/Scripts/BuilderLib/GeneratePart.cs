@@ -47,6 +47,11 @@ public class GeneratePart : MonoBehaviour
     {
         Startup();
     }
+
+    protected GameObject getLoadedPart()
+    {
+        return _loadedPart;
+    }
     
     void OnDisable()
     {
