@@ -153,6 +153,7 @@ public class JointController : MonoBehaviour
                 {
                     if (_nextSequencePoint != null)
                     {
+                        if (setPoint.setpointName != _nextSequencePoint.setpointName) continue;
                         if (!_nextSequencePoint.getPersist() || _nextSequencePoint.sequenceType != SequenceType.end)
                         {
                             _targetPosition = _nextSequencePoint.getPoint();
@@ -165,7 +166,7 @@ public class JointController : MonoBehaviour
                             _nextSequencePoint = null; 
                             _isSequenceUsingDelay = false;
                             _sequenceTime = 0;
-                            return; 
+                            continue; 
                         }
                         
                         switch (setPoint.sequenceType)

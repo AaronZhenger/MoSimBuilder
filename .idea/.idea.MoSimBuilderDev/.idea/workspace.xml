@@ -8,8 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/JointController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/JointController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/CustomUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/CustomUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildNode.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +192,7 @@
       <workItem from="1761082557729" duration="8031000" />
       <workItem from="1761505872272" duration="21696000" />
       <workItem from="1761958666961" duration="6948000" />
-      <workItem from="1762015706020" duration="15325000" />
+      <workItem from="1762015706020" duration="19292000" />
     </task>
     <servers />
   </component>

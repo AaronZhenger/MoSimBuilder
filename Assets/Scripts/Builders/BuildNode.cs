@@ -225,7 +225,7 @@ public class BuildNode: MonoBehaviour
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
-                                if (buttonHeld)
+                                if (buttonHeld && action.PieceType == currentGamePiece.pieceType)
                                 {
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
@@ -233,7 +233,7 @@ public class BuildNode: MonoBehaviour
                                 }
                                 break;
                             case NodeControlType.Tap:
-                                if (buttonPressed)
+                                if (buttonPressed && action.PieceType == currentGamePiece.pieceType)
                                 {
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
@@ -241,10 +241,13 @@ public class BuildNode: MonoBehaviour
                                 }
                                 break;
                             case NodeControlType.AlwaysPerform:
-                                
+                                if (action.PieceType == currentGamePiece.pieceType)
+                                {
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
                                     StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
+                                }
+
                                 break;
                                 
                         }
@@ -270,6 +273,10 @@ public class BuildNode: MonoBehaviour
 
     private IEnumerator TransferPieceCo(bool buttonPressed, NodeAction action)
     {
+        if (action.PieceType != currentGamePiece.pieceType)
+        {
+            yield return null;
+        }
         bool finished = false;
         while (!finished)
         {
@@ -304,6 +311,11 @@ public class BuildNode: MonoBehaviour
 
     private bool TransferPiece(bool button, bool butonPressed, ref NodeAction action)
     {
+        if (!currentGamePiece) return false;
+        if (action.PieceType != currentGamePiece.pieceType)
+        {
+            return false;
+        }
         if (!PerformTimerCheck(ref action, butonPressed, true)) return false;
         var succeeded = false;
         if (!currentGamePiece) return false;
