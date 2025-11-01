@@ -92,27 +92,27 @@ namespace BuilderLib
 
         public static bool teleportTo(GamePiece piece, NodeAction action)
         {
-            disableColliders(piece);
-            var transform = piece.rb.transform;
             var target = action.MoveTo.transform;
-            transform.position = target.position;
-            transform.rotation = target.rotation;
+            teleportTo(piece, target, true);
             changeParent(piece, action);
             return true;
         }
     
-        public static bool teleportTo(GamePiece piece, Transform target)
+        public static bool teleportTo(GamePiece piece, Transform target, bool alreadyChanged = false)
         {
             disableColliders(piece);
             var transform = piece.rb.transform;
             transform.position = target.position;
             transform.rotation = target.rotation;
+            if (alreadyChanged) return true;
             changeParent(piece, target);
             return true;
         }
     
         public static bool ReleaseToWorld(GamePiece piece, NodeAction action)
         {
+            if (!piece) return false;
+            if (!piece.owner) return false;
             if (piece.pieceType != action.PieceType) return false;
             var speed = action.Speed * 0.0254f;
             var rb = piece.rb;
@@ -143,6 +143,8 @@ namespace BuilderLib
             piece.state = GamePieceState.World;
 
             piece.transform.parent = piece.originalParent;
+            
+            piece.owner = null;
         
             return true;
         }
@@ -151,13 +153,12 @@ namespace BuilderLib
         public static bool changeParent(GamePiece piece, NodeAction action, Transform t = null)
         {
             var value = t ? t : action.MoveTo.transform;
-            piece.owner = value;
-            piece.transform.parent = value;
             if (action.MoveTo)
             {
                 action.MoveTo.currentGamePiece = piece;
+                action.MoveTo.currentState = NodeState.Stowing;
             }
-            piece.state = GamePieceState.Stationary;
+            changeParent(piece, value);
             return true;
         }
     

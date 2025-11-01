@@ -83,20 +83,25 @@ namespace Util
         /// <param name="parent"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static GameObject TryGetAddChild(string childName,GameObject parent)
+        public static GameObject TryGetAddChild(string childName,GameObject parent, out bool existed)
         {
             var child = FindChild(childName, parent);
-            
-            if (child) return child;
+
+            if (child)
+            {
+                existed = true;
+                return child;
+            }
             
             child = new GameObject(childName);
-            child.transform.SetParent(parent.transform);
-            var transform = child.transform;
-            transform.parent = parent.transform;
-            transform.localEulerAngles = UnityEngine.Vector3.zero;
-            transform.localPosition = UnityEngine.Vector3.zero;
-
+            child.transform.SetParent(parent.transform, false);
+            existed = false;
             return child;
+        }
+
+        public static GameObject TryGetAddChild(string childName, GameObject parent)
+        {
+            return TryGetAddChild(childName, parent, out bool existed);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ public class BuildNode: MonoBehaviour
     public GamePiece currentGamePiece;
     [SerializeField] private bool Preload;
 
-    [ConditionalField(nameof(hasIntake))] [SerializeField]
+    [ConditionalField(true, nameof(showIntakeStuff))] [SerializeField]
     private Vector3 intakeSize;
     [ConditionalField(nameof(Preload))]
     [SerializeField] private PieceNames pieceName;
@@ -29,13 +29,15 @@ public class BuildNode: MonoBehaviour
     private List<GamePiece> pieces = new List<GamePiece>();
     private static GameObject[] Pieces;
     private bool hasIntake = false;
+    private bool showIntakeStuff() => hasIntake;
     
-    private Vector3 lastIntakePosition;
-    private Quaternion lastIntakeRotation;
+    private Vector3 _lastIntakePosition;
+    private Quaternion _lastIntakeRotation;
     
     private void Start()
     {
-        if (!EditorApplication.isPlaying) return; 
+        if (!EditorApplication.isPlaying) return;
+        
         foreach (var child in Utils.GetAllChildren(transform))
         {
             if (child.TryGetComponent(typeof(BoxCollider), out var col))
@@ -44,6 +46,12 @@ public class BuildNode: MonoBehaviour
                 
                 _halfExtents = _intakeCollider.bounds.extents / 2;
             }
+        }
+        
+        if (_intakeCollider)
+        {
+            _lastIntakePosition = _intakeCollider.transform.localPosition; 
+            _lastIntakeRotation = _intakeCollider.transform.localRotation;
         }
         
         _robotParent = Utils.FindParentPlayerInput(gameObject);
@@ -70,6 +78,11 @@ public class BuildNode: MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        
+    }
+
     void Update()
     {
         
@@ -91,18 +104,21 @@ public class BuildNode: MonoBehaviour
             {
                 if (!_intakeCollider)
                 {
-                    var intakeParent = Utils.TryGetAddChild("IntakeBox", gameObject);
+                    var intakeParent = Utils.TryGetAddChild("IntakeBox", gameObject, out var existed);
                     _intakeCollider = Utils.TryGetAddComponent<BoxCollider>(intakeParent);
-                    _intakeCollider.size = intakeSize * 0.0254f;
-                    _intakeCollider.transform.position = lastIntakePosition;
-                    _intakeCollider.transform.rotation = lastIntakeRotation;
+                    if (!existed)
+                    {
+                        _intakeCollider.size = intakeSize * 0.0254f;
+                        _intakeCollider.transform.localPosition = _lastIntakePosition;
+                        _intakeCollider.transform.localRotation = _lastIntakeRotation;
+                    }
                 }
                 else
                 {
                     _intakeCollider.size = intakeSize * 0.0254f;
                     _intakeCollider.isTrigger = true;
-                    lastIntakePosition = _intakeCollider.transform.position;
-                    lastIntakeRotation = _intakeCollider.transform.rotation;
+                    _lastIntakePosition = _intakeCollider.transform.localPosition;
+                    _lastIntakeRotation = _intakeCollider.transform.localRotation;
                 }
                 
             }
@@ -252,14 +268,16 @@ public class BuildNode: MonoBehaviour
         }
     }
 
-    private IEnumerator TransferPieceCo(bool buttonHeld, NodeAction action)
+    private IEnumerator TransferPieceCo(bool buttonPressed, NodeAction action)
     {
         bool finished = false;
         while (!finished)
         {
-            finished = TransferPiece(buttonHeld, buttonHeld, ref action);
+            finished = TransferPiece(buttonPressed, buttonPressed, ref action);
             yield return null;
         }
+        
+        currentGamePiece = null;
     }
     
     private bool PerformTimerCheck(ref NodeAction action, bool onPressed = false, bool dontReset = false)
@@ -288,6 +306,7 @@ public class BuildNode: MonoBehaviour
     {
         if (!PerformTimerCheck(ref action, butonPressed, true)) return false;
         var succeeded = false;
+        if (!currentGamePiece) return false;
         if (currentGamePiece.pieceType != action.PieceType) return false;
         if (button && currentGamePiece)
         {
