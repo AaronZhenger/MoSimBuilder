@@ -5,6 +5,8 @@ The project is in alpha, the current public version is a proof of concept test d
 ## [Getting Started Documentation](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/GettingStarted.md)
 I have put together what is hopefully an extremely useful set of documentation to teach users the basics of the system and how to use it to its fullest.
 
+### [FAQ](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/FAQ.md)
+
 ## [Changelogs](https://github.com/masonmm3/MoSimBuilder/blob/Experimental/Documentation/ChangeLogs.md)
 
 ## Contributing.
