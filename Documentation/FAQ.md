@@ -6,6 +6,7 @@
 ### Stretching mechanisms.
  * there are two kinds of stretching, one cant be avoided but the other is a simple mistake.
  * The one that can be avoided is a result of losing scale, which happens if you creat a game object as a child of one of the model objects
+   
    ![image](https://github.com/user-attachments/assets/d5824021-9716-428c-805b-204b1d9e5f03)
 ![image](https://github.com/user-attachments/assets/395dc3f9-86fb-40e4-b7ae-6d4a6cad09d4)
    * the one that cant be is joints being dislocated under extreme load.
