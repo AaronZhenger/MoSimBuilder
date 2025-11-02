@@ -34,10 +34,13 @@
 ## Getting Started
 
 ### Familiarizing
-* in the photo below There is a photo of what is called the _Project Window_ this is where files and scenes are stored.
+* once the project is open you will see below.
+  <img width="1911" height="1014" alt="image" src="https://github.com/user-attachments/assets/26b95c99-6aba-4704-86a2-31255e5ba393" />
+* looking to the bottom of the screen you will see the photo below. This is a photo of what is called the _Project Window_ this is where files and scenes are stored.
   ![c43656f0-f2d7-4133-ae5d-ecb374d28579](https://github.com/user-attachments/assets/666f7452-7d31-4656-8ca6-d95f3a99b3ac)
-* in the photo above I have entered the Scenes folder, and double clicked the Field scene to open into the field.
-* The Field scene is where all the magic happens all of the individual componenets come together to create the visualization of designs.
+* on the Left Side of the project window is the file browser, scroll and then double click the scenes folder to make yours look like mine.
+* in the middle of the above photo is the file viewer. Double click the file named Field, this is a scene, open the field viewer.
+* This scene is where all the magic happens all of the individual componenets come together to create the visualization of designs.
 * Looking up to the center of the screen we are greeted by the Hierarchy on the left, and the Scene/Game View in the middle with the Play button above the scene view.
 ![4eb4c310-33f1-4662-9b2c-350a3a5cac3f](https://github.com/user-attachments/assets/f023d61d-2e1f-44bb-9a21-2bd49921e62f)
 * In the Hierarchy we see a couple of things. GameHandler, GameManagement, DsColliders, AimFinder.
@@ -45,7 +48,9 @@
    * The Game management houses ui and other static elements
    * DsColliders houses the non field side colliders for the driver stations
    * AimFinder is a blank object that can be used to find the cordinates of an aiming point.
-* This brings us to the final thing, the Inspector window. When you select an object this window on the right side of the screen will populate with the "componenets" on the object.
+* The Scene/Game View is where you actually work
+* The Play, Pause and Step buttons located above the Scene view are what spawns robots and initializes gameplay
+* This brings us to the final thing, the Inspector window. When you select an object using either scene view or the Hierarchy this window on the right side of the screen will populate with the "componenets" on the object.
    * When you select the GameHandler object in the Heirarchy using a left click the inspector menu will populate as it is below
 ![f35c028a-07b7-4fee-ae88-200d59513959](https://github.com/user-attachments/assets/8b3ea1da-bfae-4a9b-ab5e-cb95bacafb5d)
    * This is where the bulk of the changes will occur.
