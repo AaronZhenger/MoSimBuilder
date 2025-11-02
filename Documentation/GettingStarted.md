@@ -8,6 +8,8 @@
 ### The first step is going to be to download unity hub
   * [Download Here](https://unity.com/download)
   * once installed open the app.
+  * use a personal liscence
+  * DO NOT install editor versions during setup
 ### The Second Step is to download the MoSimBuilder source. This can be done more than one way
   * simple install
     * install from the main page using Code -> Download Zip
@@ -17,6 +19,7 @@
      * File -> clone Repository -> fill out fields
 ### The final Step is to let unity hub install the correct version of unity for you
   * in the unity hub app click the Add button in the top right
+    <img width="772" height="582" alt="image" src="https://github.com/user-attachments/assets/770bfcd8-a7a9-49fd-877f-ed4e6ccb9a3e" />
   * next add project from disk
   * double click your project folder to open the outer layer. then select the folder with the name MoSimBuilder - V0.0.....
   * if you selected properly is will ask you if you want to install the correct version of unity, click yes.
