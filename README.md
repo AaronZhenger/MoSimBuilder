@@ -1,5 +1,7 @@
 The goal of this project is to be able to progress early season prototyping in FRC after crayon cadding by making an easy to use tool for making simulated versions of robots in unity. Allowing for FRC robots to be conceptualized then put through virtual representations that assume perfect execution of the design.
 
+The project is in alpha, the current public version is a proof of concept test deemed "good enough" to release.
+
 ## [Getting Started Documentation](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/GettingStarted.md)
 I have put together what is hopefully an extremely useful set of documentation to teach users the basics of the system and how to use it to its fullest.
 
