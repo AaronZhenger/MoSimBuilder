@@ -10,6 +10,7 @@
 * Set Height to 12, leave width at 14.
 * Set stow angle to -60
 * Set limits of -65 and 125. Limits are not required and can be left at 0,0 (min, max). These simply prevent the arm from traveling the fastest path if that path is through another system.
+    * NOTE: LIMITS are extremely unstabel and ofter dont work (this is an alpha afterall)
 * Set Control type to Hold, set the setpoint to 120, button to Lt,
 * Move it to the rear of the robot.
 * Set up and Intake, Stow, and Outake, on the arm all as childs of ArmSec1. Intake on Lt, outake on Rt, outake speed of 5, direction forward.
