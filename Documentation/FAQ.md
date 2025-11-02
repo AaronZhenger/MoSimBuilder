@@ -8,6 +8,7 @@
  * The one that can be avoided is a result of losing scale, which happens if you creat a game object as a child of one of the model objects
    ![image](https://github.com/user-attachments/assets/d5824021-9716-428c-805b-204b1d9e5f03)
 ![image](https://github.com/user-attachments/assets/395dc3f9-86fb-40e4-b7ae-6d4a6cad09d4)
+   * the one that cant be is joints being dislocated under extreme load.
 
  * pictured above is what this looks like.
  * the other kind of stretch is usually charachterized by mechanisms not staying in place when under load, this is an issue with unity.
@@ -16,4 +17,9 @@
  * This is usually a result of stacked DOF. Unity does not appreceate stacking more than 4 dof. (elevators always count as 2)
  * This also can happen when putting elevators on arms. if the elevators size is larger than that of the arm, or not centered you may have to adjust your weights to keep it from flopping.
 
-### treat it like real life and it should behave
+### My arm misbehaves and jitters a lot
+   * make sure the arm joint only has rotation in ONE axis.
+   * If it continues to misbehave make sure the arm is rotating on the X axis not the other axis.
+
+
+### As a general rule treat it like real life and it should behave
