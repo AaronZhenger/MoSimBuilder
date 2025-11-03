@@ -22,6 +22,8 @@ public class BuildFrame : MonoBehaviour
     [SerializeField] private float gearRatio = 5.85f;
     
     [SerializeField] private ModuleType moduleType;
+    
+    [SerializeField] private bool generateBumpers = true;
 
     [Header("Model Settings")] [SerializeField]
     private bool useFrameModel = true;
