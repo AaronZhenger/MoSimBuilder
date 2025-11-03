@@ -27,6 +27,19 @@ namespace Util
         TBracket
     }
 
+    public enum BumperType
+    {
+        Legacy,
+        Modern
+    }
+
+    public enum BumperVariants
+    {
+        Side,
+        Corner,
+        Lift
+    }
+
     public enum PlateMaterials
     {
         Aluminum,
