@@ -15,25 +15,25 @@ public class Buildelevator : MonoBehaviour
     [SerializeField] private ElevatorType elevatorType;
 
     [Header("ModelSettings")] [SerializeField]
-    private bool model;
+    private bool model = true;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
     private Units units = Units.Inch;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
-    private float width;
+    private float width = 10;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
-    private float height;
+    private float height = 20;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
-    private int stages;
+    private int stages = 2;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
     private bool carriage = true;
 
     [ConditionalField(true, nameof(Predicate))] [SerializeField]
-    private float carriageHeight;
+    private float carriageHeight = 3;
 
     private bool Predicate() => model && carriage;
 
@@ -186,14 +186,16 @@ public class Buildelevator : MonoBehaviour
 
         if (!EditorApplication.isPlaying)
         {
+            if (model)
+            {
+                BuildModel();
+            }
+
+            if (setPoints == null) return;
             foreach (var point in setPoints)
             {
                 point.shouldScaleToUnits = true;
                 point.units = units;
-            }
-            if (model)
-            {
-                BuildModel();
             }
         }
         else if (elevatorType == ElevatorType.Cascade)
@@ -217,8 +219,7 @@ public class Buildelevator : MonoBehaviour
             if (i == _rigidbodies.Length - 1)
             {
                 _controllers[i].setPoints = setPoints;
-                _controllers[i].currentPosition =
-                    transform.InverseTransformPoint(_rigidbodies[i].transform.position).y - ((i) * 0.0254f);
+                _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
                 _controllers[i].follower = false;
                 continue; //skip follower calculations
             }
@@ -229,42 +230,22 @@ public class Buildelevator : MonoBehaviour
 
             //there are so many things wrong with this but PLEASE just leave it. I have lost so much time trying to 
             //trying to make it not jank.
-            float combinedHeight = 0;
-            for (int j = i + 1; j < _rigidbodies.Length; j++)
+            
+            var combinedHeight = carriage? (-carriageHeight * _scaleFactor) - (3f * 0.0254f) - ((i) * 0.0254f): 0;
+            for (int j = i; j < stages-1; j++)
             {
-                combinedHeight +=
-                    ((height - (4 + (stages - (i - 1)))) - (1 * ((j < 2) ? 0 : j - 1) - ((stages - j) * -2))) * 0.0254f;
+                combinedHeight += (height * _scaleFactor) - (j < stages-2 ? (5 * 0.0254f) + (((stages-j)*2) * 0.0254f): 0);
             }
-
-            float heightOffset = carriage ? -(carriageHeight + 1) * 0.0254f : 0;
-
+            
             float setPoint = 0;
-            if (combinedHeight < transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y -
-                (i * 0.0254f) - heightOffset)
+
+            if (combinedHeight < transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y)
             {
-                _engaged[i] = true; //audio thingy
-                setPoint = combinedHeight - transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y -
-                           ((i + 1) * 0.0254f);
-
-                setPoint += (i * 1f) * 0.0254f;
+                setPoint = transform.InverseTransformPoint(_rigidbodies[^1].transform.position).y - combinedHeight;
             }
-            else
-            {
-                setPoint = 0;
-                _engaged[i] = false;
-            }
-
-            setPoint = -setPoint;
-
-            if (setPoint <= 0)
-            {
-                setPoint = 0;
-            }
-
 
             _controllers[i].FollowPosition(setPoint);
-            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y -
-                                              (((i * 1) + (i * 0.05f)) * 0.0254f);
+            _controllers[i].currentPosition = transform.InverseTransformPoint(_rigidbodies[i].transform.position).y;
         }
     }
 
@@ -400,24 +381,24 @@ public class Buildelevator : MonoBehaviour
             }
             else
             {
-                _controllers[i].p = 5;
+                _controllers[i].p = 10;
                 _controllers[i].i = 0;
                 _controllers[i].d = 0.0005f;
                 _controllers[i].iSat = 0;
-                _controllers[i].max = 5;
+                _controllers[i].max = 4;
             }
 
             _controllers[i].angular = false;
             _controllers[i].driveAxis = new Vector3(0, 1, 0);
             _controllers[i].joint = _joints[i];
 
-            if (i != _modelObjects.Length - 2)
+            if (i < _modelObjects.Length - 2)
             {
                 _controllers[i].p = 50;
                 _controllers[i].i = 0;
                 _controllers[i].d = 0.005f;
                 _controllers[i].iSat = 0;
-                _controllers[i].max = 50;
+                _controllers[i].max = 500;
             }
         }
     }

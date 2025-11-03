@@ -18,8 +18,7 @@ public class LoadMatch : MonoBehaviour
     
      private int selectedRobotIndex; 
      private string selectedName;
-    [NonSerialized]
-    public List<GameObject> availableRobots = new List<GameObject>();
+     private List<GameObject> availableRobots = new List<GameObject>();
     
     
     private GameObject _fieldHolder;
@@ -30,8 +29,6 @@ public class LoadMatch : MonoBehaviour
     {
         CheckRobots();
         robotSelected.canBeSelected = availableRobots.Select(x => x.name).ToList();
-        robotSelected.selectedIndex = selectedRobotIndex;
-        robotSelected.selectedName = selectedName;
     }
 
     private void LateUpdate()
@@ -44,6 +41,8 @@ public class LoadMatch : MonoBehaviour
 
     private void Start()
     {
+        selectedName = robotSelected.selectedName;
+        selectedRobotIndex = robotSelected.selectedIndex;
         CheckRobots(); 
         ResetField();
     }

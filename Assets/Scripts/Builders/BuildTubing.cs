@@ -10,7 +10,7 @@ namespace Generators
         
         [SerializeField] private Units units;
         
-        [SerializeField] private float length;
+        [SerializeField] private float length = 10;
 
         private static GameObject[] loadedTubes;
 

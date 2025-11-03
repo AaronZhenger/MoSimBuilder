@@ -17,7 +17,7 @@ public class BuildNode: MonoBehaviour
     [SerializeField] private bool Preload;
 
     [ConditionalField(true, nameof(showIntakeStuff))] [SerializeField]
-    private Vector3 intakeSize;
+    private Vector3 intakeSize = new Vector3(3f, 3f, 3f);
     [ConditionalField(nameof(Preload))]
     [SerializeField] private PieceNames pieceName;
     public NodeState currentState;
@@ -89,12 +89,15 @@ public class BuildNode: MonoBehaviour
         if (!EditorApplication.isPlaying)
         {
             bool hasIntake = false;
-            foreach (var action in Actions)
+            if (Actions != null)
             {
-                if (action.Type == NodeType.Intake)
+                foreach (var action in Actions)
                 {
-                    hasIntake = true;
-                    break;
+                    if (action.Type == NodeType.Intake)
+                    {
+                        hasIntake = true;
+                        break;
+                    }
                 }
             }
 

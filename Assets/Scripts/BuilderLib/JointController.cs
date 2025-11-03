@@ -56,7 +56,7 @@ public class JointController : MonoBehaviour
     [HideInInspector] public float d;
     [HideInInspector] public float iSat;
     [HideInInspector] public float max;
-    
+    [HideInInspector] public float offset = 0;
     /// <summary>
     /// The setpoint struct to base the logic around.
     /// </summary>
@@ -80,11 +80,11 @@ public class JointController : MonoBehaviour
         _pidController = new PIDController
         {
             proportionalGain = p,
-            derivativeGain = 0,
-            integralGain = 0,
+            derivativeGain = d,
+            integralGain = i,
             outputMax = max,
             outputMin = -max,
-            integralSaturation = 0
+            integralSaturation = iSat
         };
     }
 
@@ -316,6 +316,7 @@ public class JointController : MonoBehaviour
         
         float rawPID;
 
+        currentPosition -= offset;
         if (angular)
         {
             float targetForPid = -_targetPosition;
@@ -347,7 +348,6 @@ public class JointController : MonoBehaviour
                     targetForPid = -_targetPosition;
                 }
             }
-            
             rawPID = _pidController.UpdateAngle(Time.fixedDeltaTime,currentPosition, targetForPid);
             joint.targetAngularVelocity = rawPID * driveAxis;
         }
