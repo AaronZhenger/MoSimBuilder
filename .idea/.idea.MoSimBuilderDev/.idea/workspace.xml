@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/RobotB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/RobotB.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
-    </list>
+    <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -194,7 +189,7 @@
       <workItem from="1761958666961" duration="6948000" />
       <workItem from="1762015706020" duration="19292000" />
       <workItem from="1762131470256" duration="11258000" />
-      <workItem from="1762203027061" duration="420000" />
+      <workItem from="1762203027061" duration="701000" />
     </task>
     <servers />
   </component>
