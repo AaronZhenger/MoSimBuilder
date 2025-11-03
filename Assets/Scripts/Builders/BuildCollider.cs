@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Util;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class BuildCollider : MonoBehaviour
 {
     [SerializeField] Vector3 ColliderSize;

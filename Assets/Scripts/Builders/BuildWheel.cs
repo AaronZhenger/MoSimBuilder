@@ -3,7 +3,7 @@ using Util;
 
 namespace Generators
 {
-    [ExecuteAlways]
+    [ExecuteInEditMode]
     public class BuildWheel : GeneratePart
     {
         [SerializeField] private WheelTypes wheelType;

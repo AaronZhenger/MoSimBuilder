@@ -19,6 +19,21 @@ namespace Util
         Dead
     }
 
+    public enum PlateType
+    {
+        Rectangle,
+        Triangle,
+        CornerBracket,
+        TBracket
+    }
+
+    public enum PlateMaterials
+    {
+        Aluminum,
+        Polycarb,
+        Abs
+    }
+
     public enum AutoAlginType
     {
         release,

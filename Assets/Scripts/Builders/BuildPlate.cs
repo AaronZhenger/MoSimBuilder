@@ -1,32 +1,38 @@
-using System.Diagnostics;
+using System;
 using MyBox;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 
 namespace Generators
 {
     [ExecuteInEditMode]
-    public class BuildShaft : GeneratePart
+    public class BuildPlate : GeneratePart
     {
-        [SerializeField] private ShaftType shaftType;
+        [SerializeField] private PlateType plateType;
 
-        [SerializeField] private bool shouldCollide = true;
-
+        private bool IsCustomPlate() => plateType is PlateType.Rectangle or PlateType.Triangle;
+        
+        [ConditionalField(true, nameof(IsCustomPlate))]
+        [SerializeField] private PlateMaterials plateMaterial;
+        
+        [ConditionalField(true, nameof(IsCustomPlate))]
         [SerializeField] private Units units;
 
-        [SerializeField] private float shaftLength = 10;
-
-        [ConditionalField(true,  nameof(isDead))]
-        [SerializeField] private float shaftDiameter = 2;
+        [ConditionalField(true, nameof(IsCustomPlate))] [SerializeField]
+        private float plateHeight = 5;
         
-        private bool isDead() => shaftType == ShaftType.Dead;
-        
-        private static GameObject[] loadedShafts;
+        [ConditionalField(true, nameof(IsCustomPlate))]
+        [SerializeField] private float plateWidth = 5;
 
-        private GameObject _shaft;
+        [SerializeField] private bool shouldCollide = true;
+        
+        private static GameObject[] loadedPlates;
+
+        private GameObject _plate;
 
         private ColliderDisabler colliderDisabler;
-
+        
         private float _scaleFactor;
 
         // Start is called before the first frame update
@@ -68,36 +74,42 @@ namespace Generators
                 colliderDisabler = Utils.TryGetComponentOnChild<ColliderDisabler>(getLoadedPart());
             }
 
-            loadedShafts ??= Resources.LoadAll<GameObject>("Parts/Shafts") as GameObject[];
+            loadedPlates ??= Resources.LoadAll<GameObject>("Parts/Plates") as GameObject[];
 
-            foreach (var loadedShaft in loadedShafts)
+            foreach (var plate in loadedPlates)
             {
-                if (loadedShaft.name == shaftType.ToString())
+                if (IsCustomPlate())
                 {
-                    _shaft = loadedShaft;
+                    if (plate.name == plateMaterial.ToString() + plateType.ToString())
+                    {
+                        _plate = plate;
+                    }
+                }
+                if (plate.name == plateType.ToString())
+                {
+                    _plate = plate;
                 }
             }
 
-            Vector3 partScale = new Vector3(shaftLength * _scaleFactor, 1, 1);
-
-            if (isDead())
+            Vector3 plateScale = Vector3.one;
+            if (IsCustomPlate())
             {
-                partScale.z = shaftDiameter * _scaleFactor;
-                partScale.y = shaftDiameter * _scaleFactor;
+                plateScale.x = plateWidth * _scaleFactor;
+                plateScale.z = plateHeight * _scaleFactor;
             }
 
-            if (!Part || Part != _shaft)
+            if (!Part || Part != _plate)
             {
 
-                Part = _shaft;
+                Part = _plate;
 
-                PartName = "shaft";
+                PartName = "plate";
 
                 LoadedPartLocation = Vector3.zero;
 
                 LoadedPartRotation = Quaternion.Euler(Vector3.zero);
 
-                LoadedPartScale = partScale;
+                LoadedPartScale = plateScale;
             }
             else if (Part)
             {
@@ -105,7 +117,7 @@ namespace Generators
 
                 LoadedPartRotation = Quaternion.Euler(Vector3.zero);
 
-                LoadedPartScale = partScale;
+                LoadedPartScale = plateScale;
             }
         }
     }

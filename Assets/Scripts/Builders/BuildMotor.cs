@@ -4,7 +4,7 @@ using Util;
 
 namespace Generators
 {
-    [ExecuteAlways]
+    [ExecuteInEditMode]
     public class BuildMotor : GeneratePart
     {
         [SerializeField] private MotorTypes motorType;
@@ -41,8 +41,7 @@ namespace Generators
             }
 
             loadedMotors ??= Resources.LoadAll<GameObject>("Parts/Motor") as GameObject[];
-
-            Debug.Log(loadedMotors.Length);
+            
             foreach (var loadedMotor in loadedMotors)
             {
                 if (loadedMotor.name == motorType.ToString())

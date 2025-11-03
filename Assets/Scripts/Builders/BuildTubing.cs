@@ -3,7 +3,7 @@ using Util;
 
 namespace Generators
 {
-    [ExecuteAlways]
+    [ExecuteInEditMode]
     public class BuildTubing : GeneratePart
     {
         [SerializeField] private TubeType tubeType;
