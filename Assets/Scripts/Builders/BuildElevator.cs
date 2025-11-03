@@ -227,9 +227,6 @@ public class Buildelevator : MonoBehaviour
             {
                 _controllers[i].follower = true;
             }
-
-            //there are so many things wrong with this but PLEASE just leave it. I have lost so much time trying to 
-            //trying to make it not jank.
             
             var combinedHeight = carriage? (-carriageHeight * _scaleFactor) - (3f * 0.0254f) - ((i) * 0.0254f): 0;
             for (int j = i; j < stages-1; j++)

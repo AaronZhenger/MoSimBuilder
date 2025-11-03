@@ -12,6 +12,13 @@ namespace Util
         lowProfile
     }
 
+    public enum ShaftType
+    {
+        Hex,
+        Spline,
+        Dead
+    }
+
     public enum AutoAlginType
     {
         release,
