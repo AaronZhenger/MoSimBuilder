@@ -74,6 +74,16 @@ namespace Util
         SixInOmni,
     }
 
+    public enum MotorTypes
+    {
+        AngryFish,
+        Eon,
+        Eon55,
+        Midget,
+        PowerfulBird,
+        Tornado
+    }
+
     /// <summary>
     /// Tube sizing names.
     /// </summary>

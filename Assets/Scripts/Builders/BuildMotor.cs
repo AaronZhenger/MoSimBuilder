@@ -1,0 +1,77 @@
+using System;
+using UnityEngine;
+using Util;
+
+namespace Generators
+{
+    [ExecuteAlways]
+    public class BuildMotor : GeneratePart
+    {
+        [SerializeField] private MotorTypes motorType;
+
+        [SerializeField] private bool shouldCollide = true;
+        
+        private static GameObject[] loadedMotors;
+
+        private GameObject _motor;
+
+        private ColliderDisabler colliderDisabler;
+
+        // Start is called before the first frame update
+        private void Start()
+        {
+            Startup();
+        }
+
+        private void OnEnable()
+        {
+            Startup();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (colliderDisabler)
+            {
+                colliderDisabler.SetState(shouldCollide);
+            }
+            else if (getLoadedPart())
+            {
+                colliderDisabler = Utils.TryGetComponentOnChild<ColliderDisabler>(getLoadedPart());
+            }
+
+            loadedMotors ??= Resources.LoadAll<GameObject>("Parts/Motor") as GameObject[];
+
+            Debug.Log(loadedMotors.Length);
+            foreach (var loadedMotor in loadedMotors)
+            {
+                if (loadedMotor.name == motorType.ToString())
+                {
+                    _motor = loadedMotor;
+                }
+            }
+
+            if (!Part || Part != _motor)
+            {
+
+                Part = _motor;
+
+                PartName = "motor";
+
+                LoadedPartLocation = Vector3.zero;
+
+                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+
+                LoadedPartScale = Vector3.one;
+            }
+            else if (Part)
+            {
+                LoadedPartLocation = Vector3.zero;
+
+                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+
+                LoadedPartScale = Vector3.one;
+            }
+        }
+    }
+}
