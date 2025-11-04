@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using MyBox;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
 
+[ExecuteInEditMode]
 public class BuildBumper : GeneratePart
 {
     [SerializeField] private BumperType bumperType;
@@ -25,6 +27,10 @@ public class BuildBumper : GeneratePart
 
     private float _scaleFactor;
 
+    [HideInInspector] public Vector3 position { private get; set; }
+    
+    [HideInInspector] public Vector3 rotation  { private get; set; }
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -36,9 +42,36 @@ public class BuildBumper : GeneratePart
         Startup();
     }
 
+    public void setUnits(Units units)
+    {
+        this.units = units;
+    }
+
+    public void setLength(float length)
+    {
+        bumperLength = length;
+    }
+
+    public void SetBumper(BumperType type, BumperVariants variant)
+    {
+        bumperType = type;
+        bumperVariant = variant;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        this.position = position;
+    }
+
+    public void SetRotation(Vector3 rotation)
+    {
+        this.rotation = rotation;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (EditorApplication.isPlaying) return;
         switch (units)
         {
             case Units.Inch:
@@ -83,17 +116,17 @@ public class BuildBumper : GeneratePart
 
             PartName = "Bumper";
 
-            LoadedPartLocation = Vector3.zero;
+            LoadedPartLocation = position;
 
-            LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+            LoadedPartRotation = Quaternion.Euler(rotation);
 
             LoadedPartScale = bumperScale;
         }
         else if (Part)
         {
-            LoadedPartLocation = Vector3.zero;
+            LoadedPartLocation = position;
 
-            LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+            LoadedPartRotation = Quaternion.Euler(rotation);
 
             LoadedPartScale = bumperScale;
         }

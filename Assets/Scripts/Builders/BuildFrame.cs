@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MyBox;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -24,6 +25,9 @@ public class BuildFrame : MonoBehaviour
     [SerializeField] private ModuleType moduleType;
     
     [SerializeField] private bool generateBumpers = true;
+
+    [ConditionalField(nameof(generateBumpers))] [SerializeField]
+    private BumperType bumperStyle;
 
     [Header("Model Settings")] [SerializeField]
     private bool useFrameModel = true;
@@ -76,6 +80,12 @@ public class BuildFrame : MonoBehaviour
     
     //
     
+    private GameObject[] bumpers;
+
+    private GameObject bumperParent;
+    
+    //
+    
     private InputActionAsset _inputAsset;
     
     [HideInInspector] public string playerNumber = "Player1";
@@ -88,6 +98,7 @@ public class BuildFrame : MonoBehaviour
     private void Start()
     {
         Startup();
+        BuildBumpers();
 
         if (EditorApplication.isPlaying)
         {
@@ -114,6 +125,7 @@ public class BuildFrame : MonoBehaviour
     private void OnEnable()
     {
         Startup();
+        BuildBumpers();
     }
 
     // Update is called once per frame
@@ -373,8 +385,64 @@ public class BuildFrame : MonoBehaviour
                 DestroyImmediate(_frame);
             }
         }
+
+        if (generateBumpers)
+        {
+            BuildBumpers();
+        }
     }
 
+
+    private void BuildBumpers()
+    {
+        if (!bumperParent && _driveTrain)
+        {
+            bumperParent = Utils.TryGetAddChild("bumpers", _driveTrain);
+        }
+        else
+        {
+            if (bumpers == null)
+            {
+                bumpers = new GameObject[8];
+            }
+            bumpers[0] = Utils.TryGetAddChild("FrontBumper", bumperParent);
+            bumpers[1] = Utils.TryGetAddChild("BackBumper", bumperParent);
+            bumpers[2] = Utils.TryGetAddChild("LeftBumper", bumperParent);
+            bumpers[3] = Utils.TryGetAddChild("RightBumper", bumperParent);
+            bumpers[4] = Utils.TryGetAddChild("LeftFrontCornerBumper", bumperParent);
+            bumpers[5] = Utils.TryGetAddChild("RightFrontCornerBumper", bumperParent);
+            bumpers[6] = Utils.TryGetAddChild("LeftBackCornerBumper", bumperParent);
+            bumpers[7] = Utils.TryGetAddChild("RightBackCornerBumper", bumperParent);
+
+            var height = 1 * 0.0254f;
+
+            if (moduleType == ModuleType.lowProfile)
+            {
+                height = 2 * 0.0254f;
+            }
+            
+            setBumper(bumpers[0], BumperVariants.Side, new Vector3(0,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,-90,0), frameSize.y);
+            setBumper(bumpers[1], BumperVariants.Side, new Vector3(0,height,-frameSize.y * _unitValue * 0.5f), new Vector3(0,90,0), frameSize.y);
+            setBumper(bumpers[2], BumperVariants.Side, new Vector3(frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,0,0), frameSize.x);
+            setBumper(bumpers[3], BumperVariants.Side, new Vector3(-frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,180,0), frameSize.x);
+            
+            setBumper(bumpers[4], BumperVariants.Corner, new Vector3(-frameSize.x * _unitValue * 0.5f,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,-90,0), 1);
+            setBumper(bumpers[5], BumperVariants.Corner, new Vector3(frameSize.x * _unitValue * 0.5f,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,0,0), 1);
+            setBumper(bumpers[6], BumperVariants.Corner, new Vector3(-frameSize.x * _unitValue * 0.5f,height,-frameSize.y * _unitValue * 0.5f), new Vector3(0,180,0), 1);
+            setBumper(bumpers[7], BumperVariants.Corner, new Vector3(frameSize.x * _unitValue * 0.5f,height,-frameSize.y * _unitValue * 0.5f), new Vector3(0,90,0), 1);
+        }
+        
+    }
+
+    private void setBumper(GameObject bumper, BumperVariants variant, Vector3 position, Vector3 rotation, float size)
+    {
+        var builder = Utils.TryGetAddComponent<BuildBumper>(bumper);
+        builder.setUnits(units);
+        builder.SetBumper(bumperStyle, variant);
+        builder.setLength(size);
+        builder.SetRotation(rotation);
+        builder.SetPosition(position);
+    }
     private void Startup()
     {
         //load module models

@@ -29,8 +29,8 @@ namespace Util
 
     public enum BumperType
     {
-        Legacy,
-        Modern
+        Modern,
+        Legacy
     }
 
     public enum BumperVariants
