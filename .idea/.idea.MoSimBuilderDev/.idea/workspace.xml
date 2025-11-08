@@ -6,13 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Parts/Bumper/ModernSide.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Parts/Bumper/ModernSide.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/RobotB.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/RobotB.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/GeneratePart.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildBumper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildBumper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Util/Enums.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +31,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildAssembly.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildBumper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildCollider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildTubing.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildWheel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ExtensionModules/AutoAlign.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ExtensionModules/SpawnPieceTarget.cs" root0="FORCE_HIGHLIGHTING" />
@@ -201,6 +199,8 @@
       <workItem from="1762131470256" duration="11258000" />
       <workItem from="1762203027061" duration="701000" />
       <workItem from="1762203935029" duration="12794000" />
+      <workItem from="1762378250130" duration="1737000" />
+      <workItem from="1762639438371" duration="420000" />
     </task>
     <servers />
   </component>

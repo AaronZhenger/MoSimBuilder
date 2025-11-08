@@ -417,7 +417,7 @@ public class BuildArm : MonoBehaviour
     {
         _rigidbody = gameObject.AddComponent<Rigidbody>();
         _rigidbody.mass = armWeight;
-        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        _rigidbody.interpolation = RigidbodyInterpolation.None;
+        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
     }
 }

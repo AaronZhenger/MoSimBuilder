@@ -110,8 +110,9 @@ public class BuildFrame : MonoBehaviour
             playerInput.defaultControlScheme = playerNumber;
             playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
             var rb = gameObject.AddComponent<Rigidbody>();
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            Utils.TryGetAddComponent<CustomInterpolation>(gameObject);
+            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rb.interpolation = RigidbodyInterpolation.None;
             rb.mass = robotWeight;
             rb.drag = 0.5f;
             rb.angularDrag = 0.05f;

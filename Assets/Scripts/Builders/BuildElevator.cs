@@ -325,8 +325,8 @@ public class Buildelevator : MonoBehaviour
             _rigidbodies[i].angularDrag = driveTrain.angularDrag;
             _rigidbodies[i].useGravity = true;
             _rigidbodies[i].isKinematic = false;
-            _rigidbodies[i].interpolation = RigidbodyInterpolation.Interpolate;
-            _rigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Continuous;
+            _rigidbodies[i].interpolation = RigidbodyInterpolation.None;
+            _rigidbodies[i].collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
     }
 
