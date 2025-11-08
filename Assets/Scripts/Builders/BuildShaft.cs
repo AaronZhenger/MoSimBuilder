@@ -28,7 +28,10 @@ namespace Generators
         private ColliderDisabler colliderDisabler;
 
         private float _scaleFactor;
-
+        
+        private Vector3 position;
+        private Vector3 rotation;
+        
         // Start is called before the first frame update
         private void Start()
         {
@@ -40,8 +43,43 @@ namespace Generators
             Startup();
         }
 
+        public void setUnits(Units units)
+        {
+            this.units = units;
+            buildObjects();
+        }
+
+        public void setLength(float length)
+        {
+            shaftLength = length;
+            buildObjects();
+        }
+
+        public void setDiameter(float diameter)
+        {
+            this.shaftDiameter = diameter;
+            buildObjects();
+        }
+
+        public void SetShaft(ShaftType type)
+        {
+            shaftType = type;
+            buildObjects();
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            this.position = position;
+            buildObjects();
+        }
+
         // Update is called once per frame
         void Update()
+        {
+            buildObjects();
+        }
+
+        private void buildObjects()
         {
             switch (units)
             {
@@ -93,9 +131,9 @@ namespace Generators
 
                 PartName = "shaft";
 
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(rotation);
 
                 LoadedPartScale = partScale;
             }
@@ -103,9 +141,9 @@ namespace Generators
             {
                 LoadedPartLocation = Vector3.zero;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartLocation = position;
 
-                LoadedPartScale = partScale;
+                LoadedPartRotation = Quaternion.Euler(rotation);
             }
         }
     }

@@ -17,6 +17,9 @@ namespace Generators
         private GameObject _tube;
 
         private float _factor;
+        
+        private Vector3 position;
+        private Vector3 rotation;
 
         // Start is called before the first frame update
         void Start()
@@ -28,11 +31,46 @@ namespace Generators
         {
             Startup();
         }
+        
+        public void setUnits(Units units)
+        {
+            this.units = units;
+            buildObjects();
+        }
+
+        public void setTube(TubeType tubeType)
+        {
+            this.tubeType = tubeType;
+            buildObjects();
+        }
+
+        public void setLength(float length)
+        {
+            length = length;
+            buildObjects();
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            this.position = position;
+            buildObjects();
+        }
+
+        public void SetRotation(Vector3 rotation)
+        {
+            this.rotation = rotation;
+            buildObjects();
+        }
+        
 
         // Update is called once per frame
         void Update()
         {
-        
+            buildObjects();
+        }
+
+        private void buildObjects()
+        {
             _factor = units switch
             {
                 Units.Inch => 0.0254f,
@@ -71,17 +109,17 @@ namespace Generators
 
                 PartName = "tube";
 
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(rotation);
 
                 LoadedPartScale = new Vector3(1,1,length * _factor);
             }
             else if (Part != null)
             {
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(rotation);
 
                 LoadedPartScale = new Vector3(1,1,length * _factor);
             }

@@ -12,6 +12,18 @@ public class BuildCollider : MonoBehaviour
     [SerializeField] private Units units;
     
     private BoxCollider box;
+    
+    public void setUnits(Units units)
+    {
+        this.units = units;
+        buildObjects();
+    }
+
+    public void setSize(Vector3 size)
+    {
+        ColliderSize = size;
+        buildObjects();
+    }
 
     private float _scale;
     // Start is called before the first frame update
@@ -32,7 +44,12 @@ public class BuildCollider : MonoBehaviour
         box = GetComponentInChildren<BoxCollider>();
     }
 
-    private void OnValidate()
+    private void Update()
+    {
+        buildObjects();
+    }
+
+    private void buildObjects()
     {
         if (EditorApplication.isPlaying) return;
 

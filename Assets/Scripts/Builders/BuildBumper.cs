@@ -45,31 +45,41 @@ public class BuildBumper : GeneratePart
     public void setUnits(Units units)
     {
         this.units = units;
+        buildObjects();
     }
 
     public void setLength(float length)
     {
         bumperLength = length;
+        buildObjects();
     }
 
     public void SetBumper(BumperType type, BumperVariants variant)
     {
         bumperType = type;
         bumperVariant = variant;
+        buildObjects();
     }
 
     public void SetPosition(Vector3 position)
     {
         this.position = position;
+        buildObjects();
     }
 
     public void SetRotation(Vector3 rotation)
     {
         this.rotation = rotation;
+        buildObjects();
     }
 
     // Update is called once per frame
     void Update()
+    {
+       buildObjects();
+    }
+
+    private void buildObjects()
     {
         if (EditorApplication.isPlaying) return;
         switch (units)

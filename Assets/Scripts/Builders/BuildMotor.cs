@@ -17,6 +17,17 @@ namespace Generators
 
         private ColliderDisabler colliderDisabler;
 
+        public void setMotor(MotorTypes motor)
+        {
+            this.motorType = motor;
+            BuildPart();
+        }
+        public void setCollide(bool enabled)
+        {
+            shouldCollide = enabled;
+            BuildPart();
+        }
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -30,6 +41,11 @@ namespace Generators
 
         // Update is called once per frame
         void Update()
+        {
+            BuildPart();
+        }
+
+        private void BuildPart()
         {
             if (colliderDisabler)
             {
