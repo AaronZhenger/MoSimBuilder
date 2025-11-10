@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Util;
 
@@ -20,10 +21,12 @@ public class FieldScorer : MonoBehaviour
 
     private int lastAddedPoints;
 
+    private int scoredInAuto;
+
     private void OnEnable()
     {
         occupyObjects = new List<GamePiece>();
-        occupyObjects = new List<GamePiece>();
+        scoredInAuto = 0;
         halfExtents = new Vector3[occupyColliders.Length];
         for (int i = 0; i < occupyColliders.Length; i++)
         {
@@ -43,19 +46,30 @@ public class FieldScorer : MonoBehaviour
         bool matchOver = FMS.MatchState == MatchState.finished;
 
         if (matchOver) return;
+
+        int autoAdded = 0;
+        if (auto)
+        {
+            scoredInAuto += multiplyer - scoredInAuto;
+            if (scoredInAuto < 0) scoredInAuto = 0;
+        }
+        else
+        {
+            autoAdded = scoredInAuto * (autoScoreToAdd - scoreToAdd);
+        }
         
         if (isBlue)
         {
             ScoreHolder.BlueScore -= lastAddedPoints;
-            ScoreHolder.BlueScore += (auto? autoScoreToAdd : scoreToAdd * multiplyer);
+            ScoreHolder.BlueScore += ((auto ? autoScoreToAdd : scoreToAdd) * multiplyer) + autoAdded;
         }
         else
         {
             ScoreHolder.RedScore -= lastAddedPoints;
-            ScoreHolder.RedScore += (auto? autoScoreToAdd : scoreToAdd) * multiplyer;
+            ScoreHolder.RedScore += ((auto ? autoScoreToAdd : scoreToAdd) * multiplyer) + autoAdded;
         }
 
-        lastAddedPoints = scoreToAdd * multiplyer;
+        lastAddedPoints = ((auto ? autoScoreToAdd : scoreToAdd) * multiplyer) + autoAdded;
     }
     
     public List<GamePiece> getOccupyPieces()
@@ -76,9 +90,9 @@ public class FieldScorer : MonoBehaviour
                 var objectThing = collider.gameObject;
                 var piece = Utils.FindParentObjectComponent<GamePiece>(objectThing);
                 if (!piece) continue;
+                if (!scorePieces.Contains(piece.pieceType)) continue;
                 if (uniquePieces.Contains(piece)) continue;
                 if (piece.state != GamePieceState.World) continue;
-                if (pieces.Contains(piece)) continue;
                 uniquePieces.Add(piece);
             }
         }

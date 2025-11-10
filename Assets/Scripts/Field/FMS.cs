@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Util;
 
@@ -19,6 +20,7 @@ public class FMS : MonoBehaviour
     private MatchState previousMatchState;
 
     private LoadMatch matchLoader;
+    private TextMeshProUGUI timer;
 
     public RobotState robotState;
     // Start is called before the first frame update
@@ -54,15 +56,29 @@ public class FMS : MonoBehaviour
             switch (MatchState)
             {
                 case MatchState.teleop:
+                    MatchState = MatchState.auto;
                     StartCoroutine(wait(autoDisableTime));
+                    MatchState = MatchState.teleop;
                     break;
                 case MatchState.finished:
+                    MatchState = MatchState.endgame;
                     StartCoroutine(wait(matchDisabledTime));
+                    MatchState = MatchState.finished;
                     break;
             }
         }
         
         previousMatchState = MatchState;
+        
+        float minutes = Mathf.FloorToInt(MatchTimer / 60); 
+        
+        // The remainder after dividing by 60 gives the remaining seconds
+        float seconds = Mathf.FloorToInt(MatchTimer % 60);
+        
+        if (minutes < 0) minutes = 0;
+        if (seconds < 0) seconds = 0;
+        
+        timer.text = $"{minutes:00}:{seconds:00}";
     }
 
     private IEnumerator wait(float time)
@@ -74,6 +90,7 @@ public class FMS : MonoBehaviour
 
     public void Restart()
     {
+        timer = GameObject.Find("TimerDisplay").GetComponent<TextMeshProUGUI>();
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         matchLoader.setFMS(this);
         MatchTimer = matchTime;

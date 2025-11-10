@@ -8,7 +8,6 @@ public class ScoreOnOccupy : FieldScorer
     [SerializeField] private int maxPeices;
     [SerializeField] private FieldScorer[] checkForDoubleScore;
 
-
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -25,7 +24,7 @@ public class ScoreOnOccupy : FieldScorer
 
         if (maxPeices > 0)
         {
-            maxPeices = Mathf.Clamp(pieces, 0, maxPeices);
+            pieces = Mathf.Clamp(pieces, 0, maxPeices);
         }
         
         ScorePoints(pieces);
