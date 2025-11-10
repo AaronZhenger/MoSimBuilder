@@ -111,6 +111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6292906819383515145}
   - component: {fileID: 8539601094089472035}
+  - component: {fileID: -3466382256402087675}
   m_Layer: 0
   m_Name: Reefscape
   m_TagString: Untagged
@@ -170,6 +171,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueScore: 0
+--- !u!114 &-3466382256402087675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413555982432225057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3b7e1833c24634fbe69b545f615622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matchTime: 150
+  autoTime: 15
+  autoDisableTime: 0.5
+  endgameTime: 20
+  matchDisabledTime: 3
 --- !u!1 &1491398356527058179
 GameObject:
   m_ObjectHideFlags: 0

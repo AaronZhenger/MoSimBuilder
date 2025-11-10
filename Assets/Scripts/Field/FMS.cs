@@ -14,6 +14,7 @@ public class FMS : MonoBehaviour
     public static float MatchTimer;
     public static RobotState RobotState;
     public static MatchState MatchState;
+    public MatchState state;
     
     private MatchState previousMatchState;
 
@@ -21,13 +22,13 @@ public class FMS : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        matchLoader.setFMS(this);
         Restart();
     }
 
     // Update is called once per frame
     void Update()
     {
+        state = MatchState;
         MatchTimer -= Time.deltaTime;
 
         if (MatchState != previousMatchState && MatchState != MatchState.endgame)
@@ -46,16 +47,16 @@ public class FMS : MonoBehaviour
         if (MatchTimer >= matchTime - autoTime)
         {
             MatchState = MatchState.auto;
-        } else if (MatchTimer <= endgameTime)
-        {
-            MatchState = MatchState.endgame;
-        } else if (MatchTimer >= 0)
+        }  else if (MatchTimer >= endgameTime)
         {
             MatchState = MatchState.teleop;
         }
-        else
+        else if (MatchTimer < 0)
         {
             MatchState = MatchState.finished;
+        } else if (MatchTimer <= endgameTime)
+        {
+            MatchState = MatchState.endgame;
         }
         
         previousMatchState = MatchState;
@@ -71,6 +72,7 @@ public class FMS : MonoBehaviour
     public void Restart()
     {
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
+        matchLoader.setFMS(this);
         MatchTimer = matchTime;
         previousMatchState = MatchState.auto;
         MatchState = MatchState.auto;
