@@ -105,6 +105,7 @@ public class LoadMatch : MonoBehaviour
         LoadField();
         SpawnRobot();
         addCamera();
+        Utils.resetParentCache();
     }
 
     public GameObject getFieldHolder()

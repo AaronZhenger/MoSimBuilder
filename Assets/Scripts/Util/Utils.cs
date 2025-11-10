@@ -153,6 +153,11 @@ namespace Util
         
         private static readonly Dictionary<GameObject, Component> ParentComponentCache = new Dictionary<GameObject, Component>();
 
+        public static void resetParentCache()
+        {
+            ParentComponentCache.Clear();
+        }
+        
         public static T FindParentObjectComponent<T>(GameObject child) where T : Component
         {
             // 1. Check the cache first
