@@ -105,6 +105,12 @@ public class JointController : MonoBehaviour
             _playerInput = Utils.FindParentObjectComponent<PlayerInput>(gameObject);
             return;
         }
+
+        if (FMS.RobotState == RobotState.disabled)
+        {
+            _targetPosition = angular? -currentPosition: currentPosition;
+            return;
+        }
         noWrapAngle = Mathf.Repeat(noWrapAngle, 360);
         
         if (_sequenceTime > 0)

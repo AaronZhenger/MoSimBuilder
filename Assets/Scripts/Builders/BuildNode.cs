@@ -176,6 +176,10 @@ public class BuildNode: MonoBehaviour
             {
                 case NodeType.Intake:
                     //intake null check
+                    if (FMS.RobotState == RobotState.disabled)
+                    {
+                        break;
+                    }
                     if (_intakeCollider)
                     {
                         //action type
@@ -221,6 +225,10 @@ public class BuildNode: MonoBehaviour
                     }
                     break;
                 case NodeType.Outake:
+                    if (FMS.RobotState == RobotState.disabled)
+                    {
+                        break;
+                    }
                     if (currentGamePiece)
                     {
                         var finished = false;

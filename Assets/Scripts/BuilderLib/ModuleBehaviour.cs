@@ -57,6 +57,11 @@ public class ModuleBehaviour : MonoBehaviour
         float targetRotation = Mathf.Repeat(targetModuleAngle-_startingRotation, 360);
         float realSpeed = (_wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z / (Mathf.PI * wheelDiameter)) * 60;
         
+        if (FMS.RobotState == RobotState.disabled)
+        {
+            targetVelocity = 0;
+        }
+        
         float feedForward = targetVelocity * 18; //Kv * target = voltage
         float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (80/6000); //error * target * p = Perror
         float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
@@ -69,17 +74,23 @@ public class ModuleBehaviour : MonoBehaviour
         for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
         {
             //drive wheel force
-            _rb.AddForceAtPosition((_wheelBehaviour.collisionNormals[i]*force)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
+                _rb.AddForceAtPosition(
+                    (_wheelBehaviour.collisionNormals[i] * force) / _wheelBehaviour.collisionPoints.Count,
+                    _wheelBehaviour.collisionPoints[i]);
             
+
             //friction force
             _rb.AddForceAtPosition((_wheelBehaviour.transform.right.normalized*friction)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
         }
-        
-        
-        
-        _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation, Quaternion.Euler(0,targetRotation,0), 360*Time.deltaTime).eulerAngles;
-        
-        _wheelModel.transform.Rotate( Vector3.right,realSpeed*Time.deltaTime);
-        
+
+
+        if (FMS.RobotState == RobotState.enabled)
+        {
+            _wheelBehaviour.transform.localEulerAngles = Quaternion.Lerp(_wheelBehaviour.transform.localRotation,
+                Quaternion.Euler(0, targetRotation, 0), 360 * Time.deltaTime).eulerAngles;
+
+            _wheelModel.transform.Rotate(Vector3.right, realSpeed * Time.deltaTime);
+        }
+
     }
 }

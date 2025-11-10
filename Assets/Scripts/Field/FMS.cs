@@ -19,6 +19,8 @@ public class FMS : MonoBehaviour
     private MatchState previousMatchState;
 
     private LoadMatch matchLoader;
+
+    public RobotState robotState;
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -29,20 +31,8 @@ public class FMS : MonoBehaviour
     void Update()
     {
         state = MatchState;
+        robotState = RobotState;
         MatchTimer -= Time.deltaTime;
-
-        if (MatchState != previousMatchState && MatchState != MatchState.endgame)
-        {
-            if (MatchState == MatchState.teleop)
-            {
-                StartCoroutine(wait(autoDisableTime));
-            } else if (MatchState == MatchState.finished)
-            {
-                StartCoroutine(wait(matchDisabledTime));
-            }
-            
-            previousMatchState = MatchState;
-        }
 
         if (MatchTimer >= matchTime - autoTime)
         {
@@ -57,6 +47,19 @@ public class FMS : MonoBehaviour
         } else if (MatchTimer <= endgameTime)
         {
             MatchState = MatchState.endgame;
+        }
+        
+        if (MatchState != previousMatchState && MatchState != MatchState.endgame)
+        {
+            switch (MatchState)
+            {
+                case MatchState.teleop:
+                    StartCoroutine(wait(autoDisableTime));
+                    break;
+                case MatchState.finished:
+                    StartCoroutine(wait(matchDisabledTime));
+                    break;
+            }
         }
         
         previousMatchState = MatchState;

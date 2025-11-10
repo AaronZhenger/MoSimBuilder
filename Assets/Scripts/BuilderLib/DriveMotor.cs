@@ -40,6 +40,11 @@ public class DriveMotor : MonoBehaviour
     {
         //reset drive speed to real speed
         motorSpeed = realSpeed;
+
+        if (FMS.RobotState == RobotState.disabled)
+        {
+            motorSpeed = realSpeed;
+        }
         //w = RPM Wm = Max Rpm Ts = stall Torque J = Moi
         //t = -((J*Wm)/Ts) * ln((Wm-w)/Wm)
         //dw = ((Wm-w)/Wm)*(Ts/(J*Wm)) * dt

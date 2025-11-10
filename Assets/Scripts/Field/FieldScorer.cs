@@ -39,15 +39,20 @@ public class FieldScorer : MonoBehaviour
 
     protected void ScorePoints(int multiplyer = 1)
     {
+        bool auto = FMS.MatchState == MatchState.auto;
+        bool matchOver = FMS.MatchState == MatchState.finished;
+
+        if (matchOver) return;
+        
         if (isBlue)
         {
             ScoreHolder.BlueScore -= lastAddedPoints;
-            ScoreHolder.BlueScore += scoreToAdd * multiplyer;
+            ScoreHolder.BlueScore += (auto? autoScoreToAdd : scoreToAdd * multiplyer);
         }
         else
         {
             ScoreHolder.RedScore -= lastAddedPoints;
-            ScoreHolder.RedScore += scoreToAdd * multiplyer;
+            ScoreHolder.RedScore += (auto? autoScoreToAdd : scoreToAdd) * multiplyer;
         }
 
         lastAddedPoints = scoreToAdd * multiplyer;
