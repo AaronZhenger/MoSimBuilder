@@ -25,6 +25,8 @@ public class LoadMatch : MonoBehaviour
     private GameObject _activeRobot;
     private GameObject _1StCam;
 
+    private FMS fms;
+
     private void OnEnable()
     {
         CheckRobots();
@@ -106,6 +108,15 @@ public class LoadMatch : MonoBehaviour
         SpawnRobot();
         addCamera();
         Utils.resetParentCache();
+        if (fms)
+        {
+            fms.Restart();
+        }
+    }
+
+    public void setFMS(FMS fms)
+    {
+        this.fms = fms;
     }
 
     public GameObject getFieldHolder()
