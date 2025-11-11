@@ -188,6 +188,8 @@ MonoBehaviour:
   autoDisableTime: 0.5
   endgameTime: 20
   matchDisabledTime: 3
+  state: 0
+  robotState: 0
 --- !u!1 &1491398356527058179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,6 +1339,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6292906819383515145}
     m_Modifications:
+    - target: {fileID: 1116132985633387074, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
+      propertyPath: scorePieces.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1116132985633387074, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
+      propertyPath: 'scorePieces.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1402186798057928584, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
       propertyPath: m_Name
       value: Barge
@@ -1379,6 +1389,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1764721191787006593, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422391024628586712, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
+      propertyPath: scorePieces.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422391024628586712, guid: d04b55a3c3e1d8b4b94592f020b0b973, type: 3}
+      propertyPath: 'scorePieces.Array.data[1]'
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

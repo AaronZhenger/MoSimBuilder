@@ -51,8 +51,6 @@ MonoBehaviour:
   scorePieces: 00000000
   occupyColliders:
   - {fileID: 3422792803407665998}
-  occupyColliders:
-  - {fileID: 3422792803407665998}
   maxPeices: 1
   checkForDoubleScore:
   - {fileID: 7743953603231098005}
@@ -530,9 +528,6 @@ MonoBehaviour:
   occupyColliders:
   - {fileID: 4488789594492260397}
   - {fileID: 8918926322349544066}
-  occupyColliders:
-  - {fileID: 4488789594492260397}
-  - {fileID: 8918926322349544066}
   maxPeices: 1
   checkForDoubleScore:
   - {fileID: 4714183312836909645}
@@ -585,8 +580,6 @@ MonoBehaviour:
   scoreToAdd: 2
   autoScoreToAdd: 3
   scorePieces: 00000000
-  occupyColliders:
-  - {fileID: 8971349277074507520}
   occupyColliders:
   - {fileID: 8971349277074507520}
   maxPeices: 1

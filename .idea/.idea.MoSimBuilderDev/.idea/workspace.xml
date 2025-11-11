@@ -6,11 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/FMS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/FMS.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Barge.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Barge.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Pole.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Pole.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/Reefscape.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/Reefscape.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreHolder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreHolder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreOnOccupy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreOnOccupy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreThenDelete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreThenDelete.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +204,7 @@
       <workItem from="1762378250130" duration="1737000" />
       <workItem from="1762639438371" duration="4083000" />
       <workItem from="1762789540727" duration="1652000" />
-      <workItem from="1762801017815" duration="9684000" />
+      <workItem from="1762801017815" duration="11765000" />
     </task>
     <servers />
   </component>

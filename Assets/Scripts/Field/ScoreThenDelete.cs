@@ -18,7 +18,7 @@ public class ScoreThenDelete : FieldScorer
 
         for (int i = 0; i < pieces; i++)
         {
-            Destroy(occupyColliders[i].gameObject);
+            Destroy(occupyObjects[i].gameObject);
         }
     }
 }

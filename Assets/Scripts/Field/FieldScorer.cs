@@ -12,7 +12,7 @@ public class FieldScorer : MonoBehaviour
     [SerializeField] private int autoScoreToAdd;
     [SerializeField] protected PieceNames[] scorePieces;
     private readonly HashSet<PieceNames> scorePiecesSet = new HashSet<PieceNames>();
-    [SerializeField] protected Collider[] occupyColliders;
+    [SerializeField] private Collider[] occupyColliders;
     private readonly HashSet<GamePiece> uniquePieces = new HashSet<GamePiece>();
     private Vector3[] halfExtents;
     protected List<GamePiece> occupyObjects = new List<GamePiece>();
@@ -84,12 +84,12 @@ public class FieldScorer : MonoBehaviour
         
         for (int i = 0; i < occupyColliders.Length; i++)
         {
-            var size = Physics.OverlapBox(occupyColliders[i].transform.position, halfExtents[i], occupyColliders[i].transform.rotation, peiceMask);
-            foreach (var collider in size)
+            var overlapBox = Physics.OverlapBox(occupyColliders[i].transform.position, halfExtents[i], occupyColliders[i].transform.rotation, peiceMask);
+            foreach (var collider in overlapBox)
             {
                 var objectThing = collider.gameObject;
                 var piece = Utils.FindParentObjectComponent<GamePiece>(objectThing);
-                if (!piece) continue;
+                //if (!piece) continue;
                 if (!scorePieces.Contains(piece.pieceType)) continue;
                 if (uniquePieces.Contains(piece)) continue;
                 if (piece.state != GamePieceState.World) continue;
