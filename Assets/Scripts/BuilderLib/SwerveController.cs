@@ -13,7 +13,7 @@ public class SwerveController : MonoBehaviour
     private int rightFront = 1;
     private int leftRear = 2;
     private int rightRear = 3;
-    
+
     //used by build frame
     [HideInInspector] private ModuleBehaviour[] _modules;
     [HideInInspector] public float gearRatio;
@@ -21,42 +21,44 @@ public class SwerveController : MonoBehaviour
 
     public float wheelDiameter;
     //-=-=-=-=-=
-    
+
     //begin visible section
     public bool fieldCentric = false;
     public bool reversed = false;
     public bool isRed = false;
     //end visible section
-    
+
     //Settings
     private float velocityMp = 1;
     private float steerMp = 1;
-    
+
     //control stuff
     private Vector2 _translateValue;
     private Vector2 _rotateValue;
-    
+
     private PlayerInput _playerInput;
     private InputActionMap _inputActionMap;
-    
+
     private InputAction _translateAction;
     private InputAction _rotateAction;
-    
+
     private string[] _moduleNames = new string[4];
 
     private bool inputsOveriden;
+
     private bool inputsOveridable;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
         _playerInput = gameObject.GetComponent<PlayerInput>();
-        
+
         _translateAction = _playerInput.actions.FindAction("LeftStick");
         _rotateAction = _playerInput.actions.FindAction("RightStick");
         _translateAction.Enable();
         _rotateAction.Enable();
-        
+
         _moduleNames[0] = "lf";
         _moduleNames[1] = "rf";
         _moduleNames[2] = "lr";
@@ -64,7 +66,7 @@ public class SwerveController : MonoBehaviour
         _modules = new ModuleBehaviour[4];
 
         var driveTrain = Utils.FindChild("driveTrain", gameObject);
-        
+
         for (int i = 0; i < _modules.Length; i++)
         {
             if (Utils.FindChild(_moduleNames[i], driveTrain).GetComponent<ModuleBehaviour>())
@@ -89,7 +91,7 @@ public class SwerveController : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    { 
+    {
         //update controls
         if (_translateAction.ReadValue<Vector2>().magnitude > 0.05f && inputsOveridable)
         {
@@ -115,23 +117,24 @@ public class SwerveController : MonoBehaviour
         {
             angle = transform.localRotation.eulerAngles.y + 90;
         }
-        
+
         Vector3 fieldRelativeAngle = Quaternion.AngleAxis(angle, Vector3.up) * driveInput;
 
         float fwd, str;
 
-        
-        if (fieldCentric ||  inputsOveriden)
+
+        if (fieldCentric || inputsOveriden)
         {
-            
+
             if (!reversed || inputsOveriden)
             {
                 inputsOveriden = false;
-                
+
                 fwd = fieldRelativeAngle.x * velocityMp;
 
                 str = fieldRelativeAngle.z * velocityMp;
-            } else
+            }
+            else
             {
                 fwd = -fieldRelativeAngle.x * velocityMp;
 
@@ -156,7 +159,7 @@ public class SwerveController : MonoBehaviour
 
         // Swerve Math
         var RCW = -_rotateValue.x * steerMp;
-    
+
         var L = _modules[leftFront].transform.localPosition.z - _modules[rightFront].transform.localPosition.z;
 
         var W = _modules[leftFront].transform.localPosition.x - _modules[rightFront].transform.localPosition.x;
@@ -185,7 +188,7 @@ public class SwerveController : MonoBehaviour
         _modules[leftRear].targetVelocity = ws3;
         _modules[rightFront].targetVelocity = ws1;
         _modules[rightRear].targetVelocity = ws4;
-        
+
         _modules[leftFront].targetModuleAngle = wa2;
         _modules[leftRear].targetModuleAngle = wa3;
         _modules[rightFront].targetModuleAngle = wa1;

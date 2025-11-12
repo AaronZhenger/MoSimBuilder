@@ -28,11 +28,20 @@ public class ModuleBehaviour : MonoBehaviour
     [HideInInspector] public Rigidbody _rb;
     private float _startingRotation;
     private GameObject _wheelModel;
+    private PIDController _pidController;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _pidController = new PIDController
+        {
+            proportionalGain = 1f,
+            integralGain = 0,
+            derivativeGain = 0.005f,
+            outputMax = 12,
+            outputMin = -12
+        };
+
         //add wheel behaviour to the correct object
         _wheelBehaviour = Utils.FindChild("Wheel", gameObject).AddComponent<WheelBehaviour>();
         
@@ -63,12 +72,12 @@ public class ModuleBehaviour : MonoBehaviour
         }
         
         float feedForward = targetVelocity * 18; //Kv * target = voltage
-        float pValue = ((targetVelocity * 6000) - _driveMotor.motorSpeed) * (80/6000); //error * target * p = Perror
+        float pValue = _pidController.UpdateLinear(Time.fixedDeltaTime, _driveMotor.motorSpeed, targetVelocity * 6000);
         float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
         float voltage = Mathf.Clamp(feedForward + pValue * ((90 - Mathf.Clamp(Mathf.Abs(angleError),0,90))/90), -12, 12);
         
         //f = m * a     a = Vtarget - Vreal
-        float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * _rb.mass;
+        float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * 125;
         
         float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -3f * _rb.mass;
         for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
