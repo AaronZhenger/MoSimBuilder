@@ -9,9 +9,8 @@
       <change beforePath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Barge.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Barge.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Pole.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/ReefScapeParts/Pole.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Fields/Reefscape.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/Reefscape.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/New Prefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreThenDelete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreThenDelete.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,6 +204,8 @@
       <workItem from="1762639438371" duration="4083000" />
       <workItem from="1762789540727" duration="1652000" />
       <workItem from="1762801017815" duration="11765000" />
+      <workItem from="1762878695290" duration="636000" />
+      <workItem from="1762967818522" duration="1367000" />
     </task>
     <servers />
   </component>

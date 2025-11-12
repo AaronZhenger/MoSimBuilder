@@ -577,8 +577,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlue: 0
-  scoreToAdd: 2
-  autoScoreToAdd: 3
+  scoreToAdd: 3
+  autoScoreToAdd: 4
   scorePieces: 00000000
   occupyColliders:
   - {fileID: 8971349277074507520}
