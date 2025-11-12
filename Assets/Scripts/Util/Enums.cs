@@ -36,7 +36,9 @@ namespace Util
     public enum Cameras
     {
         FirstPerson,
-        FirstPersonReversed
+        FirstPersonReversed,
+        ThirdPerson,
+        ReversedThirdPerson,
     }
 
     public enum BumperVariants

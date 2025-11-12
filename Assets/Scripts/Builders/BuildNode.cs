@@ -213,6 +213,8 @@ public class BuildNode: MonoBehaviour
                                     StartCoroutine(TransferPieceCo(buttonPressed, action));
                                     break;
                                 case NodeControlType.AlwaysPerform:
+                                    actionDone = true;
+                                    currentState = NodeState.Transfering;
                                     finished = TransferPiece(true,  false, ref action);
                                     break;
                             }
@@ -279,6 +281,7 @@ public class BuildNode: MonoBehaviour
         } else if (actionFinished)
         {
             currentGamePiece = null;
+            currentState = NodeState.Stowing;
         }
     }
 

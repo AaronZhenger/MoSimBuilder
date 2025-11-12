@@ -145,6 +145,14 @@ public class LoadMatch : MonoBehaviour
                         controller.reversed = true;
                         controller.fieldCentric = false;
                         break;
+                    case (Cameras.ThirdPerson) :
+                        controller.reversed = false;
+                        controller.fieldCentric = true;
+                        break;
+                    case (Cameras.ReversedThirdPerson) :
+                        controller.reversed = true;
+                        controller.fieldCentric = true;
+                        break;
                 }
             }
         }
