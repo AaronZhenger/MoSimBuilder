@@ -15,7 +15,8 @@ public class LoadMatch : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [Header("Robot Selection")]
     [SerializeField] private InspectorDropdown robotSelected;
-    
+
+    [SerializeField] private Cameras view;
      private int selectedRobotIndex; 
      private string selectedName;
      private List<GameObject> availableRobots = new List<GameObject>();
@@ -130,6 +131,22 @@ public class LoadMatch : MonoBehaviour
         {
             GameObject robotToSpawn = availableRobots[selectedRobotIndex];
             _activeRobot = Instantiate(robotToSpawn, spawnPoint.position, spawnPoint.rotation, _fieldHolder.transform);
+            var frame = _activeRobot.GetComponent<BuildFrame>();
+            var controller = frame.GetSwerveController();
+            if (controller)
+            {
+                switch (view)
+                {
+                    case (Cameras.FirstPerson) :
+                        controller.reversed = false;
+                        controller.fieldCentric = false;
+                        break;
+                    case (Cameras.FirstPersonReversed) :
+                        controller.reversed = true;
+                        controller.fieldCentric = false;
+                        break;
+                }
+            }
         }
     }
     
@@ -149,7 +166,8 @@ public class LoadMatch : MonoBehaviour
     
     private void addCamera()
     {
-        _1StCam = Resources.Load("Cameras/1stPerson") as GameObject;
+        string objectToLoad = "Cameras/" + view.ToString();
+        _1StCam = Resources.Load(objectToLoad) as GameObject;
         
         var cam = Instantiate(_1StCam, Vector3.zero, spawnPoint.rotation, _activeRobot.transform);;
         cam.transform.localPosition = Vector3.zero;

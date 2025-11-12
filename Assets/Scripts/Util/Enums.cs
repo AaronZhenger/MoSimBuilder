@@ -33,6 +33,12 @@ namespace Util
         Legacy
     }
 
+    public enum Cameras
+    {
+        FirstPerson,
+        FirstPersonReversed
+    }
+
     public enum BumperVariants
     {
         Side,

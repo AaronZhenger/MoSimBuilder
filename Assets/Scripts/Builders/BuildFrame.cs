@@ -103,24 +103,34 @@ public class BuildFrame : MonoBehaviour
         if (EditorApplication.isPlaying)
         {
             gameObject.AddComponent<RestartMatch>();
+            
+            Utils.TryGetAddComponent<CustomInterpolation>(gameObject);
+        }
+    }
+
+    public SwerveController GetSwerveController()
+    {
+        if (_swerve == null)
+        {
             _inputAsset = Resources.Load("Controls/Builder") as InputActionAsset;
-            var playerInput = gameObject.AddComponent<PlayerInput>();
+            var playerInput = Utils.TryGetAddComponent<PlayerInput>(gameObject);
             playerInput.actions = _inputAsset;
             playerInput.neverAutoSwitchControlSchemes = true;
             playerInput.defaultControlScheme = playerNumber;
             playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
-            var rb = gameObject.AddComponent<Rigidbody>();
-            Utils.TryGetAddComponent<CustomInterpolation>(gameObject);
+            _swerve = Utils.TryGetAddComponent<SwerveController>(gameObject);
+            var rb = Utils.TryGetAddComponent<Rigidbody>(gameObject);
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rb.interpolation = RigidbodyInterpolation.None;
             rb.mass = robotWeight;
             rb.drag = 0.5f;
             rb.angularDrag = 0.05f;
-            _swerve = gameObject.AddComponent<SwerveController>();
             _swerve.rb = rb;
             _swerve.gearRatio = gearRatio;
             _swerve.wheelDiameter = _moduleWheelDiameters[(int)moduleType];
         }
+        
+        return _swerve;
     }
 
     private void OnEnable()

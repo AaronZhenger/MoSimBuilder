@@ -23,9 +23,9 @@ public class SwerveController : MonoBehaviour
     //-=-=-=-=-=
     
     //begin visible section
-    [SerializeField] private bool fieldCentric = false;
-    [SerializeField] private bool reversed = false;
-    [SerializeField] private bool isRed = false;
+    public bool fieldCentric = false;
+    public bool reversed = false;
+    public bool isRed = false;
     //end visible section
     
     //Settings
@@ -49,6 +49,7 @@ public class SwerveController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         _playerInput = gameObject.GetComponent<PlayerInput>();
         
         _translateAction = _playerInput.actions.FindAction("LeftStick");
@@ -122,9 +123,11 @@ public class SwerveController : MonoBehaviour
         
         if (fieldCentric ||  inputsOveriden)
         {
-            inputsOveriden = false;
-            if (!reversed)
+            
+            if (!reversed || inputsOveriden)
             {
+                inputsOveriden = false;
+                
                 fwd = fieldRelativeAngle.x * velocityMp;
 
                 str = fieldRelativeAngle.z * velocityMp;
@@ -137,9 +140,18 @@ public class SwerveController : MonoBehaviour
         }
         else
         {
-            fwd = driveInput.x * velocityMp;
+            if (!reversed)
+            {
+                fwd = driveInput.x * velocityMp;
 
-            str = driveInput.z * velocityMp;
+                str = driveInput.z * velocityMp;
+            }
+            else
+            {
+                fwd = -driveInput.x * velocityMp;
+
+                str = -driveInput.z * velocityMp;
+            }
         }
 
         // Swerve Math
