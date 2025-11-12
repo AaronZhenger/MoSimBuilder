@@ -20,20 +20,15 @@ this is a good resource if you are having issues with a robot
   - Implement external cad models directly into the ecosystem
   - improve the sandbox tools available
   - Implement DT V4 :).
-
-## Beta 2 Plans
-  - Rewrite much of the rewrite with better base tooling
-  - implement a new game piece system
-  - Top Down Event based input for no Code Solution
-
-## Beta 3 Plans 
+  - New gamePiece System
   - scoring
   - field creation tools
 
+## Beta 2 Plans
+  - Rewrite much of the rewrite with better base tooling
+  - Top Down Event based input for no Code Solution
+    
 ## Pre Release 1 plans
 - Ship as an actual .exe game with the ability to share robots and fields
 ## Pre Release 2 Plans
 - Robot Rules
-- Game Piece Animations
-- custom parts
-- Motor Approximation
