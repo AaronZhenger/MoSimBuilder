@@ -19,6 +19,13 @@ namespace Util
         Dead
     }
 
+    public enum spacerType
+    {
+        Hex,
+        QuarterInch,
+        Spline
+    }
+
     public enum PlateType
     {
         Rectangle,
