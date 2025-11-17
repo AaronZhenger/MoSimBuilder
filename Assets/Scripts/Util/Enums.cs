@@ -48,6 +48,13 @@ namespace Util
         ReversedThirdPerson,
     }
 
+    public enum GearType
+    {
+        pinion,
+        hex,
+        spline
+    }
+
     public enum BumperVariants
     {
         Side,

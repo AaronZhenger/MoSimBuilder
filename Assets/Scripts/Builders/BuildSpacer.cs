@@ -24,6 +24,9 @@ namespace Generators
 
         private float _scaleFactor;
 
+        private Vector3 position;
+        private Vector3 rotation;
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -34,9 +37,44 @@ namespace Generators
         {
             Startup();
         }
+        
+        public void setUnits(Units units)
+        {
+            this.units = units;
+            buildObjects();
+        }
+
+        public void setLength(float length)
+        {
+            spacerLength = length;
+            buildObjects();
+        }
+
+        public void SetShaft(spacerType type)
+        {
+            spacerType = type;
+            buildObjects();
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            this.position = position;
+            buildObjects();
+        }
+
+        public void SetRotation(Vector3 rotation)
+        {
+            this.rotation = rotation;
+            buildObjects();
+        }
 
         // Update is called once per frame
         void Update()
+        {
+            buildObjects();
+        }
+
+        private void buildObjects()
         {
             switch (units)
             {
@@ -82,20 +120,21 @@ namespace Generators
 
                 PartName = "spacer";
 
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(rotation);
 
                 LoadedPartScale = partScale;
             }
             else if (Part)
             {
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
-                LoadedPartRotation = Quaternion.Euler(Vector3.zero);
+                LoadedPartRotation = Quaternion.Euler(rotation);
 
                 LoadedPartScale = partScale;
             }
         }
+        
     }
 }

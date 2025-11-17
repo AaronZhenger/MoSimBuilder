@@ -73,6 +73,12 @@ namespace Generators
             buildObjects();
         }
 
+        public void SetRotation(Vector3 rotation)
+        {
+            this.rotation = rotation;
+            buildObjects();
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -139,7 +145,7 @@ namespace Generators
             }
             else if (Part)
             {
-                LoadedPartLocation = Vector3.zero;
+                LoadedPartLocation = position;
 
                 LoadedPartLocation = position;
 
