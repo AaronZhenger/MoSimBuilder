@@ -326,6 +326,12 @@ public class BuildArm : MonoBehaviour
                         filtered[1] = t;
                     }
                     break;
+                case ArmModel.SingleTwoByTwo:
+                    if (t.PartName == "SingleTwo")
+                    {
+                        filtered[0] = t;
+                    }
+                    break;
                 case ArmModel.None:
                     break;
                 default:
