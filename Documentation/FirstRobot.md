@@ -3,33 +3,46 @@
 ## Adding a robot
 
 * In the `Resources -> Robots` folder, right-click the `Project View`.
-* Select `Create -> Prefab`. Prefabs are the game objects, which in this case means that it is a robot.
+* Select `Create -> Prefab`. Prefabs are seperate objects, which in this case, is the robot.
+  
+![image](Img/FirstRobot/519404483-e0cacc35-7939-4d43-b2c2-13fc9542bbb7.png)
 
-  <img width="811" height="940" alt="image" src="https://github.com/user-attachments/assets/ad6d0970-9907-4e5d-a1c2-2f8797ad8e89" />
 * Name the prefab however you'd like. This is your robot's name
 * This should create a new prefab object with a cube icon as shown below
-  ![image](https://github.com/user-attachments/assets/4868b1ca-64b9-44a3-899f-8e5b2914f200)
+  
+ ![image](Img/FirstRobot/519404717-6e6972f8-3d08-4433-ab4d-5f06a8c257e6.png)
 
 ## Setting up the DriveTrain
 
 * Double-click the prefab you just created to open it up the editor (NOTE: this will replace the field editor on the
   screen, but don't worry, you can click the back arrow on the top left of the `Hierarchy` to go back)
 * The editor is how robots are altered
-*
 * It is recommended to disable auto save which is found in the top right of the `Scene View` to avoid any major issues
   and reduce load time (Don't forget to save frequently though)
-* To start creating the actual robot, select the object at the top of the `Hierarchy` to open the `Inspector` window  
-  <img width="1920" height="528" alt="image" src="https://github.com/user-attachments/assets/0167693b-0091-4c66-b2bf-b6e5ee11b67c" />
+* To start creating the actual robot, select the object at the top of the `Hierarchy` to open the `Inspector` window
+  
+  ![image](Img/FirstRobot/519405017-8dd56a63-b91b-4052-ad88-4d93c9cad600.png)
+
 * Next click `Add Component` to open the component menu. Search for `Build` to find a plethora of build scripts. For
   now, you'll just need to select `BuildFrame`
-* You should now see your robot's basic framing!
-  ![image](https://github.com/user-attachments/assets/9eeae975-c456-4185-944e-90953338829f)
+  
+ ![image](Img/FirstRobot/519405412-80ff6728-3bc6-449f-8092-7eaab5d43e2a.png)
+  
+* You may be a ways away from the frame, simply double click the new entry in the `Heiarchy` driveTrain to zoom in.
+* Now you can see the frame you just made.
+  
+  ![image](Img/FirstRobot/519406139-bf805739-976c-4f96-8fc4-befc298a7c83.png)
+
 * The `Inspector` window will have now also changed featuring the `Build Frame` script and some parameters for
   customization
+* we are just going to use the default values for this. 
 * As the parameters are updated in the script, the frame model should update in accordance to the new parameters
-  ![image](https://github.com/user-attachments/assets/cf7a88cf-8ebf-4d59-9700-4a989ad61be1)
+* You can actually now return to the `Field Scene` (remembering to save) and select your robot from the `Game Manager` drop down
+* Once done you can click play and drive your robot around.
 
-## Game Piece Manipulation
+  ![image](Img/FirstRobot/519407877-41dab49e-0ea9-422f-8b8e-18bdc61662f6.png)
+
+## Basic Game Piece Manipulation
 
 * Right-click the base object in the `Hierarchy` (Named with your robot name), and select `Create Empty` to create a
   component
