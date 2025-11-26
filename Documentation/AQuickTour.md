@@ -1,6 +1,4 @@
-## Getting Started
-
-### Familiarizing
+## Familiarizing
 
 * Once the project is open, you will see something similar to the image below.
   <img width="1911" height="1014" alt="image" src="https://github.com/user-attachments/assets/21ef0829-ee9f-4389-bef0-9626776f66ae" />
