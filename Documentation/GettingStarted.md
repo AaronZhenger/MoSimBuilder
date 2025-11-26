@@ -42,6 +42,6 @@
 * If you used the advanced install simply fetch from , then pull the origin on the GitHub Desktop app
 * If you used the simple install you will need to start from scratch.
 
-# [First Robot](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/FirstRobot.md)
+# [A Quick Tour](Familiarizing.md)
 
 ## Blue text in large font indicates a link to the next step in the documentation. Click the blue words to continue learning about Builders inner workings
