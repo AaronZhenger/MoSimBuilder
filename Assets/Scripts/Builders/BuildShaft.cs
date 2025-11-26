@@ -46,46 +46,46 @@ namespace Generators
         public void setUnits(Units units)
         {
             this.units = units;
-            buildObjects();
+            BuildObjects();
         }
 
         public void setLength(float length)
         {
             shaftLength = length;
-            buildObjects();
+            BuildObjects();
         }
 
         public void setDiameter(float diameter)
         {
             this.shaftDiameter = diameter;
-            buildObjects();
+            BuildObjects();
         }
 
         public void SetShaft(ShaftType type)
         {
             shaftType = type;
-            buildObjects();
+            BuildObjects();
         }
 
         public void SetPosition(Vector3 position)
         {
             this.position = position;
-            buildObjects();
+            BuildObjects();
         }
 
         public void SetRotation(Vector3 rotation)
         {
             this.rotation = rotation;
-            buildObjects();
+            BuildObjects();
         }
 
         // Update is called once per frame
         void Update()
         {
-            buildObjects();
+            BuildObjects();
         }
 
-        private void buildObjects()
+        private void BuildObjects()
         {
             switch (units)
             {
@@ -147,9 +147,9 @@ namespace Generators
             {
                 LoadedPartLocation = position;
 
-                LoadedPartLocation = position;
-
                 LoadedPartRotation = Quaternion.Euler(rotation);
+                
+                LoadedPartScale = partScale;
             }
         }
     }

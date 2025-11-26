@@ -46,7 +46,7 @@ namespace Generators
 
         public void setLength(float length)
         {
-            length = length;
+            this.length = length;
             buildObjects();
         }
 
