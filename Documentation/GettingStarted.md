@@ -28,13 +28,13 @@
 ### The final Step is to let Unity Hub install the correct version of Unity for you
 
 * In the unity hub app click the `Add` button in the top right
-  <img width="772" height="582" alt="image" src="https://github.com/user-attachments/assets/770bfcd8-a7a9-49fd-877f-ed4e6ccb9a3e" />
+![image](Img/508752496-770bfcd8-a7a9-49fd-877f-ed4e6ccb9a3e.png)
 * Next select the project from your disk
 * Double click your project folder to open the outer layer, then select the folder with the name MoSimBuilder -
   V0.0.....
 * If you selected properly is will ask you if you want to install the correct version of Unity, click yes.
 * It will then ask you ask you about adding modules, the default is all that you need checked.
-  ![image](https://github.com/user-attachments/assets/cad4705a-0795-4613-ba4c-2c0d5f1c7224)
+  ![image](Img/402314762-cad4705a-0795-4613-ba4c-2c0d5f1c7224.png)
 * you can now open the project once the download is complete. NOTE: The editor takes a long time to download.
 
 ### Updating
