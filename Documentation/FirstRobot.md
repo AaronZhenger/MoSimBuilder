@@ -28,16 +28,16 @@
   
  ![image](Img/FirstRobot/519405412-80ff6728-3bc6-449f-8092-7eaab5d43e2a.png)
   
-* You may be a ways away from the frame, simply double click the new entry in the `Heiarchy` driveTrain to zoom in.
-* Now you can see the frame you just made.
+* You may be a ways away from the frame, simply double-click the new entry in the `Heiarchy` driveTrain to zoom in
+* Now you can see the frame you just made
   
   ![image](Img/FirstRobot/519406139-bf805739-976c-4f96-8fc4-befc298a7c83.png)
 
 * The `Inspector` window will have now also changed featuring the `Build Frame` script and some parameters for
   customization
-* we are just going to use the default values for this. 
+* For this tutorial robot, we'll just keep the default values
 * As the parameters are updated in the script, the frame model should update in accordance to the new parameters
-* You can actually now return to the `Field Scene` (remembering to save) and select your robot from the `Game Manager` drop down
+* You can already return to the `Field Scene` (remembering to save) and select your robot from the `GameManager` drop down
 * Once done you can click play and drive your robot around.
 
   ![image](Img/FirstRobot/519407877-41dab49e-0ea9-422f-8b8e-18bdc61662f6.png)

@@ -12,7 +12,7 @@
 
 * [Download Here](https://unity.com/download)
 * Once installed open the app.
-* Use a personal liscence
+* Use a personal licence
 * DO NOT install editor versions during setup
 
 ### The Second Step is to download the MoSimBuilder source. This can be done in a couple ways
