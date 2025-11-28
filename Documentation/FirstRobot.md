@@ -2,8 +2,8 @@
 
 ## Adding a robot
 
-* In the `Resources -> Robots` folder, right-click the `Project View`.
-* Select `Create -> Prefab`. Prefabs are seperate objects, which in this case, is the robot.
+* In the `Resources -> Robots` folder, right-click the `Project View`
+* Select `Create -> Prefab`. Prefabs are separate objects, which in this case, is the robot
   
 ![image](Img/FirstRobot/519404483-e0cacc35-7939-4d43-b2c2-13fc9542bbb7.png)
 
