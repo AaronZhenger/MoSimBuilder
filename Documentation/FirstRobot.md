@@ -21,7 +21,7 @@
   and reduce load time (Don't forget to save frequently though)
 * To start creating the actual robot, select the object at the top of the `Hierarchy` to open the `Inspector` window
   
-  ![image](Img/FirstRobot/519405017-8dd56a63-b91b-4052-ad88-4d93c9cad600.png)
+ ![image](Img/FirstRobot/519405017-8dd56a63-b91b-4052-ad88-4d93c9cad600.png)
 
 * Next click `Add Component` to open the component menu. Search for `Build` to find a plethora of build scripts. For
   now, you'll just need to select `BuildFrame`
@@ -38,7 +38,7 @@
 * For this tutorial robot, we'll just keep the default values
 * As the parameters are updated in the script, the frame model should update in accordance to the new parameters
 * You can already return to the `Field Scene` (remembering to save) and select your robot from the `GameManager` drop down
-* Once done you can click play and drive your robot around.
+* Once done you can click play and drive your robot around
 
   ![image](Img/FirstRobot/519407877-41dab49e-0ea9-422f-8b8e-18bdc61662f6.png)
 
@@ -71,7 +71,7 @@
   ![image](https://github.com/user-attachments/assets/9ffd63d8-25e5-468e-9c31-95fedd8617bd)
   ![image](https://github.com/user-attachments/assets/50a31568-5bfd-48a2-8d61-8292106d36b1)
 
-And now you're done! Click the back arrow on the top left of the `Hierarchy` (Save first!) to return to the `Field Scene` and start playing with your robot.
+And now you're done! Click the back arrow on the top left of the `Hierarchy` (Save first!) to return to the `Field Scene` and start playing with your robot
 
 ## Playing with the robot.
 
