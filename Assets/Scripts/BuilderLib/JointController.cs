@@ -155,57 +155,58 @@ public class JointController : MonoBehaviour
             switch (setPoint.controlType)
             {
                 case ControlType.Sequence:
-                if (_isSequenceUsingDelay ? _sequenceTime <= 0 : buttonPressed)
-                {
-                    if (_nextSequencePoint != null)
+                    if (_isSequenceUsingDelay ? _sequenceTime <= 0 : buttonPressed)
                     {
-                        if (setPoint.setpointName != _nextSequencePoint.setpointName) continue;
-                        if (!_nextSequencePoint.getPersist() || _nextSequencePoint.sequenceType != SequenceType.end)
+                        if (_nextSequencePoint != null)
                         {
-                            _targetPosition = _nextSequencePoint.getPoint();
-                        }
-                        
-                        if (_nextSequencePoint.sequenceType == SequenceType.end) 
-                        {
-                            originalPositions.Clear();
-                            originalPositions[_nextSequencePoint] = _nextSequencePoint.getPoint();
-                            _nextSequencePoint = null; 
-                            _isSequenceUsingDelay = false;
-                            _sequenceTime = 0;
-                            continue; 
-                        }
-                        
-                        switch (setPoint.sequenceType)
-                        {
-                            case SequenceType.delay:
-                                _sequenceTime = setPoint.delay;
-                                _isSequenceUsingDelay = true;
-                                break;
-                            case SequenceType.nextPress:
-                                _sequenceTime = 0;
+                            if (setPoint.setpointName != _nextSequencePoint.setpointName) continue;
+                            
+                            if (!_nextSequencePoint.getPersist() || _nextSequencePoint.sequenceType != SequenceType.end)
+                            {
+                                _targetPosition = _nextSequencePoint.getPoint();
+                            }
+                            
+                            if (_nextSequencePoint.sequenceType == SequenceType.end) 
+                            {
+                                originalPositions.Clear();
+                                originalPositions[_nextSequencePoint] = _nextSequencePoint.getPoint();
+                                _nextSequencePoint = null; 
                                 _isSequenceUsingDelay = false;
-                                break;
-                        }
+                                _sequenceTime = 0;
+                                continue; 
+                            }
+                            
+                            switch (setPoint.sequenceType)
+                            {
+                                case SequenceType.delay:
+                                    _sequenceTime = setPoint.delay;
+                                    _isSequenceUsingDelay = true;
+                                    break;
+                                case SequenceType.nextPress:
+                                    _sequenceTime = 0;
+                                    _isSequenceUsingDelay = false;
+                                    break;
+                            }
 
-                        foreach (var t in setPoints)
+                            foreach (var t in setPoints)
+                            {
+                                if (t.setpointName != _nextSequencePoint.sequenceTo) continue;
+                                _nextSequencePoint = t;
+                                return;
+                            }
+
+                            _nextSequencePoint = null;
+                        }
+                        else if (_activeSequenceName != null)
                         {
-                            if (t.setpointName != _nextSequencePoint.sequenceTo) continue;
-                            _nextSequencePoint = t;
+                            _targetPosition = home;
+                            _nextSequencePoint = null;
+                            _activeSequenceName = null;
                             return;
                         }
-
-                        _nextSequencePoint = null;
                     }
-                    else if (_activeSequenceName != null)
-                    {
-                        _targetPosition = home;
-                        _nextSequencePoint = null;
-                        _activeSequenceName = null;
-                        return;
-                    }
-                }
-                
-                break;
+                    
+                    break;
                 
                 case ControlType.Hold:
                     if (buttonPressed)
@@ -268,6 +269,11 @@ public class JointController : MonoBehaviour
 
                         if (_activeSequenceName == setPoint.setpointName)
                         {
+                            if (_nextSequencePoint != null &&
+                                (_nextSequencePoint.keyboardButton == setPoint.keyboardButton ||
+                                 _nextSequencePoint.controllerButton == setPoint.controllerButton)
+                               ) continue;
+                            
                             _targetPosition = home;
                             _nextSequencePoint = null;
                             _activeSequenceName = null;
