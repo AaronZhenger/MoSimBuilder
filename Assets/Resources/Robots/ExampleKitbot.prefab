@@ -247,6 +247,59 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1016, y: 0.0127, z: 0.1016}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &280036803235798021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3154174242645548267}
+  - component: {fileID: 647086299335297889}
+  m_Layer: 0
+  m_Name: IntakeBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3154174242645548267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280036803235798021}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 603576860580431113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &647086299335297889
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280036803235798021}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7112, y: 0.1524, z: 0.1524}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &300716493611814669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1277,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3976846010761174341}
   - component: {fileID: 5989607343214208717}
+  - component: {fileID: 1263716234212301194}
   m_Layer: 0
   m_Name: ExampleKitbot
   m_TagString: Untagged
@@ -1245,6 +1299,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6381262945715975620}
+  - {fileID: 603576860580431113}
+  - {fileID: 5564519676495500268}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5989607343214208717
@@ -1261,13 +1317,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units: 0
   frameSize: {x: 29.5, y: 29.5}
-  robotWeight: 40
+  robotWeight: 60
   gearRatio: 5.85
   moduleType: 0
   generateBumpers: 1
   bumperStyle: 0
   useFrameModel: 1
   playerNumber: Player1
+--- !u!114 &1263716234212301194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397938292708102048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c538719c9e29449458f651c65d2ac734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnType: 1
+  SpawnDistance: 1.43
+  Velocity: 5
 --- !u!1 &1419827224127661562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,6 +1429,70 @@ Transform:
   - {fileID: 6398601539555079057}
   m_Father: {fileID: 482157940484194971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1594311677569925229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5564519676495500268}
+  - component: {fileID: 8108921472951064585}
+  m_Layer: 0
+  m_Name: OutakeState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5564519676495500268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594311677569925229}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.608, z: 0.329}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3976846010761174341}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &8108921472951064585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594311677569925229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12daa6e10260acd4fb01be89d33a3178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentGamePiece: {fileID: 0}
+  Preload: 1
+  intakeSize: {x: 3, y: 3, z: 3}
+  pieceName: 0
+  currentState: 0
+  Actions:
+  - Name: Outake
+    Type: 2
+    Animate: 0
+    Speed: 80
+    AngularSpeed: 0
+    MoveTo: {fileID: 0}
+    Direction: 1
+    Spin: {x: 0, y: 0, z: 0}
+    DelayTimer: 0
+    PieceType: 0
+    ControlType: 1
+    performTimer: 0
+    ControllerButton: 9
+    KeyboardButton: 33
 --- !u!1 &1600677532071378883
 GameObject:
   m_ObjectHideFlags: 0
@@ -3010,6 +3145,85 @@ Transform:
   - {fileID: 1331754757801007850}
   m_Father: {fileID: 4443343197308750666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3656631291944527457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 603576860580431113}
+  - component: {fileID: 3767099799550548168}
+  m_Layer: 0
+  m_Name: PieceState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &603576860580431113
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3656631291944527457}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.907, z: -0.272}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3154174242645548267}
+  m_Father: {fileID: 3976846010761174341}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3767099799550548168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3656631291944527457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12daa6e10260acd4fb01be89d33a3178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentGamePiece: {fileID: 0}
+  Preload: 0
+  intakeSize: {x: 28, y: 6, z: 6}
+  pieceName: 0
+  currentState: 0
+  Actions:
+  - Name: Intake
+    Type: 0
+    Animate: 0
+    Speed: 0
+    AngularSpeed: 0
+    MoveTo: {fileID: 0}
+    Direction: 0
+    Spin: {x: 0, y: 0, z: 0}
+    DelayTimer: 0
+    PieceType: 0
+    ControlType: 0
+    performTimer: 0
+    ControllerButton: 8
+    KeyboardButton: 29
+  - Name: Transfer
+    Type: 1
+    Animate: 0
+    Speed: 0
+    AngularSpeed: 0
+    MoveTo: {fileID: 8108921472951064585}
+    Direction: 0
+    Spin: {x: 0, y: 0, z: 0}
+    DelayTimer: 0
+    PieceType: 0
+    ControlType: 2
+    performTimer: 0
+    ControllerButton: 8
+    KeyboardButton: 29
 --- !u!1 &3705701338037612636
 GameObject:
   m_ObjectHideFlags: 0
@@ -4642,7 +4856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectSpawned: 1
   PartName: lf
-  Part: {fileID: 6790180360318492087, guid: e900367d4e848834dbe6a895fc48e68f, type: 3}
+  Part: {fileID: 0}
   LoadedPartLocation: {x: -0.30734, y: 0, z: 0.30734}
   LoadedPartRotation: {x: 0, y: 0, z: 0, w: 1}
   LoadedPartScale: {x: 1, y: 1, z: 1}
@@ -4660,7 +4874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectSpawned: 1
   PartName: rf
-  Part: {fileID: 6790180360318492087, guid: e900367d4e848834dbe6a895fc48e68f, type: 3}
+  Part: {fileID: 0}
   LoadedPartLocation: {x: 0.30734, y: 0, z: 0.30734}
   LoadedPartRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   LoadedPartScale: {x: 1, y: 1, z: 1}
@@ -4678,7 +4892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectSpawned: 1
   PartName: lr
-  Part: {fileID: 6790180360318492087, guid: e900367d4e848834dbe6a895fc48e68f, type: 3}
+  Part: {fileID: 0}
   LoadedPartLocation: {x: -0.30734, y: 0, z: -0.30734}
   LoadedPartRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   LoadedPartScale: {x: 1, y: 1, z: 1}
@@ -4696,7 +4910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectSpawned: 1
   PartName: rr
-  Part: {fileID: 6790180360318492087, guid: e900367d4e848834dbe6a895fc48e68f, type: 3}
+  Part: {fileID: 0}
   LoadedPartLocation: {x: 0.30734, y: 0, z: -0.30734}
   LoadedPartRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   LoadedPartScale: {x: 1, y: 1, z: 1}
