@@ -74,9 +74,9 @@
 * angular speed 0,
 * set the control type to tap
 * controller button to right trigger, keyboard to space.
-![image](Img/FirstRobots/Screenshot2025-12-10124516.png)
+![image](Img/FirstRobot/Screenshot2025-12-10124516.png)
 * now return to piece state, and on the move To slot on Transfer, drag OutakeState on it.
-![image](Img/FirstRobots/Screenshot2025-12-10125315.png)
+![image](Img/FirstRobot/Screenshot2025-12-10125315.png)
 
 * Now select the Root of the prefab and add a spawn Piece Target, set the Type to distance
 * the set spawn distance to 1.43
