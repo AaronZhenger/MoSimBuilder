@@ -8,11 +8,6 @@ using Util;
 
 public class SwerveController : MonoBehaviour
 {
-    //constant settings
-    private int leftFront = 0;
-    private int rightFront = 1;
-    private int leftRear = 2;
-    private int rightRear = 3;
 
     //used by build frame
     [HideInInspector] private ModuleBehaviour[] _modules;
@@ -43,10 +38,25 @@ public class SwerveController : MonoBehaviour
     private InputAction _rotateAction;
 
     private string[] _moduleNames = new string[4];
+    
+    private readonly SwerveSetpoint[] _swerveSetpoints = new SwerveSetpoint[4];
+        
+    // Module indices
+    private const int FL_MODULE = 0;
+    private const int FR_MODULE = 1;
+    private const int BL_MODULE = 2;
+    private const int BR_MODULE = 3;
+    
+    private const float RAD_TO_DEG = 180f / Mathf.PI;
 
     private bool inputsOveriden;
 
     private bool inputsOveridable;
+
+    private float length;
+    private float width;
+    private float radius;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -59,10 +69,10 @@ public class SwerveController : MonoBehaviour
         _translateAction.Enable();
         _rotateAction.Enable();
 
-        _moduleNames[0] = "lf";
-        _moduleNames[1] = "rf";
-        _moduleNames[2] = "lr";
-        _moduleNames[3] = "rr";
+        _moduleNames[FL_MODULE] = "lf";
+        _moduleNames[FR_MODULE] = "rf";
+        _moduleNames[BL_MODULE] = "lr";
+        _moduleNames[BR_MODULE] = "rr";
         _modules = new ModuleBehaviour[4];
 
         var driveTrain = Utils.FindChild("driveTrain", gameObject);
@@ -79,6 +89,12 @@ public class SwerveController : MonoBehaviour
         }
 
         inputsOveriden = false;
+        
+        length = Mathf.Abs(_modules[FL_MODULE].transform.localPosition.z - 
+                           _modules[BL_MODULE].transform.localPosition.z);
+        width = Mathf.Abs(_modules[FL_MODULE].transform.localPosition.x - 
+                          _modules[FR_MODULE].transform.localPosition.x);
+        radius = Mathf.Sqrt(length * length + width * width);
     }
 
     public void overideInputs(float x, float y, float angle, bool disruptable = false)
@@ -160,38 +176,53 @@ public class SwerveController : MonoBehaviour
         // Swerve Math
         var RCW = -_rotateValue.x * steerMp;
 
-        var L = _modules[leftFront].transform.localPosition.z - _modules[rightFront].transform.localPosition.z;
-
-        var W = _modules[leftFront].transform.localPosition.x - _modules[rightFront].transform.localPosition.x;
-
-        var R = Mathf.Sqrt(MathF.Pow(L, 2) + Mathf.Pow(W, 2));
-
-        var A = str - RCW * (L / R);
-        var B = str + RCW * (L / R);
-        var C = fwd - RCW * (W / R);
-        var D = fwd + RCW * (W / R);
-
-        var ws1 = Mathf.Sqrt(Mathf.Pow(B, 2) + Mathf.Pow(C, 2));
-        var wa1 = Mathf.Atan2(B, C) * 180 / Mathf.PI;
-
-        var ws2 = Mathf.Sqrt(Mathf.Pow(B, 2) + Mathf.Pow(D, 2));
-        var wa2 = Mathf.Atan2(B, D) * 180 / Mathf.PI;
-
-        var ws3 = Mathf.Sqrt(Mathf.Pow(A, 2) + Mathf.Pow(D, 2));
-        var wa3 = Mathf.Atan2(A, D) * 180 / Mathf.PI;
-
-        var ws4 = Mathf.Sqrt(Mathf.Pow(A, 2) + Mathf.Pow(C, 2));
-        var wa4 = Mathf.Atan2(A, C) * 180 / Mathf.PI;
+        GenerateSwerveSetpoints(fwd, str, -RCW);
 
         //assign outputs
-        _modules[leftFront].targetVelocity = ws2;
-        _modules[leftRear].targetVelocity = ws3;
-        _modules[rightFront].targetVelocity = ws1;
-        _modules[rightRear].targetVelocity = ws4;
+        _modules[FL_MODULE].targetVelocity = _swerveSetpoints[FL_MODULE].Velocity;
+        _modules[BL_MODULE].targetVelocity = _swerveSetpoints[BL_MODULE].Velocity;
+        _modules[FR_MODULE].targetVelocity = _swerveSetpoints[FR_MODULE].Velocity;
+        _modules[BR_MODULE].targetVelocity = _swerveSetpoints[BR_MODULE].Velocity;
 
-        _modules[leftFront].targetModuleAngle = wa2;
-        _modules[leftRear].targetModuleAngle = wa3;
-        _modules[rightFront].targetModuleAngle = wa1;
-        _modules[rightRear].targetModuleAngle = wa4;
+        _modules[FL_MODULE].targetModuleAngle = _swerveSetpoints[FL_MODULE].Angle;
+        _modules[BL_MODULE].targetModuleAngle = _swerveSetpoints[BL_MODULE].Angle;
+        _modules[FR_MODULE].targetModuleAngle = _swerveSetpoints[FR_MODULE].Angle;
+        _modules[BR_MODULE].targetModuleAngle = _swerveSetpoints[BR_MODULE].Angle;
+    }
+    
+    private void GenerateSwerveSetpoints(float fwd, float str, float rotation)
+    {
+        // Calculate wheelbase dimensions
+            
+
+        // Calculate wheel vectors
+        var a = str - rotation * (length / radius);
+        var b = str + rotation * (length / radius);
+        var c = fwd - rotation * (width / radius);
+        var d = fwd + rotation * (width / radius);
+
+        // Calculate speeds and angles for each module
+        CalculateModuleSetpoint(FR_MODULE, b, c);
+        CalculateModuleSetpoint(FL_MODULE, b, d);
+        CalculateModuleSetpoint(BL_MODULE, a, d);
+        CalculateModuleSetpoint(BR_MODULE, a, c);
+    }
+    
+    private void CalculateModuleSetpoint(int moduleIndex, float x, float y)
+    {
+        var speed = Mathf.Sqrt(x * x + y * y);
+        _swerveSetpoints[moduleIndex].Velocity = speed;
+            
+        // Only update angle if there's movement
+        if (speed > 0f)
+        {
+            _swerveSetpoints[moduleIndex].Angle = Mathf.Atan2(x, y) * RAD_TO_DEG;
+        }
+    }
+    
+    private struct SwerveSetpoint
+    {
+        public float Angle;
+        public float Velocity;
     }
 }
