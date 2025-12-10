@@ -91,7 +91,7 @@ And now you're done! Click the back arrow on the top left of the `Hierarchy` (Sa
 * Optionally select the camera perspective as well
 * When you're ready, click the `Play` button on top of the `Scene View` to start playing!
 
-# [Next step](https://github.com/masonmm3/MoSimBuilder/blob/Stable/Documentation/SecondRobot.md)
+# [Next step](MakingItPretty.md)
 
 
 
