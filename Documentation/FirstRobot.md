@@ -47,9 +47,7 @@
 * Right-click the base object in the `Hierarchy` (Named with your robot name), and select `Create Empty` to create a
   component
 * Name the component whatever you'd like (`PieceState` in the example below)
-  <img width="1090" height="532" alt="image" src="https://github.com/user-attachments/assets/31f0eaa8-20d2-4bbc-925c-33f2636d0e28" />
-  ![fce78031-84c8-42a7-a3fd-ab431852a162](https://github.com/user-attachments/assets/d09fc19f-4a25-4554-a065-142572a70b4c)
-* 
+ ![image](Img/FirstRobot/Screenshot2025-12-10124354.png)
   <h3>Intake</h3>
 * To create the intake collider, you'll need to use the `BuildNode` script
 * Select the object in the `Hierarchy` and click `Add Component`, just like what was done in the Drive Train creation
@@ -57,7 +55,7 @@
 * This should add the `BuildNode` script to the `Inspector` window for that object
 * add an action to the actions state
 * Set the name to Intake, then in general settings change the control type to Hold, the controller button to left Trigger, and keyboard to left Shift.
-* image holder
+  ![image](Img/FirstRobot/Screenshot2025-12-10124516.png)
 * Finally set the intake size to 28, 6, 6
 * move it to position (0, 0.907, -0.272)
 
@@ -76,9 +74,9 @@
 * angular speed 0,
 * set the control type to tap
 * controller button to right trigger, keyboard to space.
-* Image Holder
+![image](Img/FirstRobots/Screenshot2025-12-10124516.png)
 * now return to piece state, and on the move To slot on Transfer, drag OutakeState on it.
-* Image Holder
+![image](Img/FirstRobots/Screenshot2025-12-10125315.png)
 
 * Now select the Root of the prefab and add a spawn Piece Target, set the Type to distance
 * the set spawn distance to 1.43
