@@ -21,3 +21,5 @@
 * It's that simple! Your robot is now uploaded. To start playing with it, select it in the `GameManager` like any other
   robot and start playing. Don't forget that any robots you upload can still be edited as normal, so don't be afraid to
   change settings such as keybinds to your liking
+
+# [Further Reading](FurtherReading.md)

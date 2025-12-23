@@ -18,4 +18,4 @@ Finally they feature the Advanced Settings toggle,
 
 This unlocks the mechanisms PID loop. allowing you to tune max speeds and tweak behaviour for specific mechs.
 
-[Further Reading](GamePieces.md)
+# [Further Reading](GamePieces.md)

@@ -29,4 +29,4 @@ Sequences are made up of Sequence Start, Sequence, and severeal sub Types of Seq
  * If you select persist, the setpoint will not move from the previous target, THis is helpful for keeping mutliple mechs in sync,
  * End also allows for moving between setpoints again as sequences lock into that sequence until done.
 
-[Further Reading](FurtherReading.md)
+# [Further Reading](FurtherReading.md)
