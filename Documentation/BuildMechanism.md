@@ -1,6 +1,13 @@
 # Build Mechanism
 
-Builder Currently has two mechanisms available,
+### Builder Dev currently has two available mechanisms
+* Arms
+* Elevators
+
+
+## Building Arms
+* To create an arm first create a new game object and then add a `BuildArm`
+Builder Dev currently has two mechanisms available,
 
 * Arms
 * Elevators
