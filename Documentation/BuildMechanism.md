@@ -1,6 +1,6 @@
 # Build Mechanism
 
-### Builder Dev currently has two available mechanisms
+### Builder Beta currently has two available mechanisms
 
 * Arms
 * Elevators

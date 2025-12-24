@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -161,16 +159,18 @@ public class JointController : MonoBehaviour
                         {
                             if (setPoint.setpointName != _nextSequencePoint.setpointName) continue;
                             
-                            if (!_nextSequencePoint.getPersist() || _nextSequencePoint.sequenceType != SequenceType.end)
+                            if (_nextSequencePoint.sequenceType != SequenceType.end)
                             {
                                 _targetPosition = _nextSequencePoint.getPoint();
                             }
-                            
-                            if (_nextSequencePoint.sequenceType == SequenceType.end) 
+                            else
                             {
+                                if (!_nextSequencePoint.getPersist())
+                                    _targetPosition = _nextSequencePoint.getPoint();
                                 originalPositions.Clear();
                                 originalPositions[_nextSequencePoint] = _nextSequencePoint.getPoint();
                                 _nextSequencePoint = null; 
+                                _activeSequenceName = null;
                                 _isSequenceUsingDelay = false;
                                 _sequenceTime = 0;
                                 continue; 
