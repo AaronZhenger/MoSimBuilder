@@ -23,7 +23,7 @@
 * There are 4 control types:
     * `Toggle`: Toggles the setpoint on/off
     * `Hold`: Moves to the setpoint when either button is pressed, and stops moving to it when the button is released
-    * `LastPressed`:
+    * `LastPressed`: Toggles the setpoint on, but not off. Useful for keeping multiple mechanisms in sync
     * `Sequences`: Moves through a list of setpoints as the conditions are met
     * There are two kinds of sequence control types:
         * `SequenceStart`: The Setpoint at which the sequence starts at. When either button is clicked, the mechanism
