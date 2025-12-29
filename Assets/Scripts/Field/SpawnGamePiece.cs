@@ -15,6 +15,8 @@ public class SpawnGamePiece : MonoBehaviour
     [SerializeField] private bool axisSlides;
     [ConditionalField(nameof(axisSlides))]
     [SerializeField] private Direction direction;
+    [ConditionalField(nameof(axisSlides))]
+    [SerializeField] private float maxSlideDistance;
 
     [Header("Spawn Control")]
     [SerializeField] private float delayTimer;
@@ -109,10 +111,10 @@ public class SpawnGamePiece : MonoBehaviour
         _pieceSpawned = true;
     }
 
-    private Vector3 GetClosestPointOnAxis(Vector3 targetPosition, Direction slideDirection)
+    private Vector3 GetClosestPointOnAxis(Vector3 targetPosition, Direction slideDirection, float maxSlideDistance)
     {
         Vector3 spawnerPos = transform.position;
-    
+
         // Get the spawner's local axis in world space
         Vector3 axisDirection = slideDirection switch
         {
@@ -121,13 +123,16 @@ public class SpawnGamePiece : MonoBehaviour
             Direction.up => transform.up,            // Local Y axis
             _ => transform.forward
         };
-    
+
         // Project the vector from spawner to target onto the axis
         Vector3 toTarget = targetPosition - spawnerPos;
         float projectionLength = Vector3.Dot(toTarget, axisDirection);
-    
-        // Return the point along the spawner's axis
-        return spawnerPos + axisDirection * projectionLength;
+
+        // Clamp the distance so it stays within [-maxSlideDistance, maxSlideDistance]
+        float clampedDistance = Mathf.Clamp(projectionLength, -maxSlideDistance, maxSlideDistance);
+
+        // Return the point along the spawner's axis within the bounds
+        return spawnerPos + axisDirection * clampedDistance;
     }
 
     private bool CheckInternalThreshold()
@@ -180,7 +185,7 @@ public class SpawnGamePiece : MonoBehaviour
             hasDistanceTargets = true;
             
             Vector3 effectiveSpawnPosition = axisSlides 
-                ? GetClosestPointOnAxis(target.transform.position, direction)
+                ? GetClosestPointOnAxis(target.transform.position, direction, maxSlideDistance)
                 : transform.position;
             
             float distanceSq = (effectiveSpawnPosition - target.transform.position).sqrMagnitude;
