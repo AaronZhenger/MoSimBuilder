@@ -189,22 +189,33 @@ public class AutoAlign : MonoBehaviour
 
     private float distanceToClosestNode()
     {
-        Vector2 localizedVector = closestNode().GetPosition() - (vec3ToVec2(transform.position) + (alignOffset.GetPosition() * 0.0254f));
+        Vector2 localizedVector = closestNode().GetPosition() - getRelativeAlignPosition();
         float distance = localizedVector.magnitude;
         return distance;
     }
     
     private float distanceToNode(Pose2d node)
     {
-        Vector2 localizedVector = node.GetPosition() - (vec3ToVec2(transform.position) + (alignOffset.GetPosition() * 0.0254f));
+        Vector2 localizedVector = node.GetPosition() - getRelativeAlignPosition();
         float distance = localizedVector.magnitude;
         return distance;
     }
 
     private Vector2 vectorToClosestNode()
     {
-        Vector2 localizedVector = (vec3ToVec2(transform.position) + (alignOffset.GetPosition() * 0.0254f)) - closestNode().GetPosition();
+        Vector2 localizedVector = getRelativeAlignPosition() - closestNode().GetPosition();
         return localizedVector;
+    }
+    
+    private Vector2 getRelativeAlignPosition()
+    {
+        // 1. Convert the local offset to world space based on the current rotation
+        // transform.TransformVector handles the rotation for us
+        Vector3 localOffset = new Vector3(alignOffset.GetPosition().x * 0.0254f, 0, alignOffset.GetPosition().y * 0.0254f);
+        Vector3 worldOffset = transform.TransformDirection(localOffset);
+
+        // 2. Add the rotated offset to the current position
+        return vec3ToVec2(transform.position + worldOffset);
     }
 
     private Pose2d closestNode()
