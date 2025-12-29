@@ -3777,7 +3777,7 @@ MonoBehaviour:
   velocity: 1
   axisSlides: 1
   direction: 1
-  maxSlideDistance: 0
+  maxSlideDistance: 0.8
   delayTimer: 3
   detectionVolume: {fileID: 2737993930359126596}
   thresholdCount: 3
@@ -4270,7 +4270,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3930762494873005552}
-  - {fileID: 4344375373687288281}
   - {fileID: 82713285225533644}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4508,59 +4507,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6717803625511601536
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4344375373687288281}
-  - component: {fileID: 709233356986103812}
-  m_Layer: 0
-  m_Name: Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4344375373687288281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6717803625511601536}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.9396927, y: 0, z: 0, w: 0.34202018}
-  m_LocalPosition: {x: 0, y: 1.2529, z: 0.3065}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5256255867519700018}
-  m_LocalEulerAnglesHint: {x: 140, y: 0, z: 0}
---- !u!114 &709233356986103812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6717803625511601536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6df16201ff22b224f98ef408d937e35b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  peiceType: 0
-  velocityDirection: 0
-  velocity: 1
-  axisSlides: 1
-  direction: 1
-  maxSlideDistance: 0.9
-  delayTimer: 3
-  detectionVolume: {fileID: 0}
-  thresholdCount: 3
 --- !u!1 &6826201249026763043
 GameObject:
   m_ObjectHideFlags: 0
