@@ -410,7 +410,7 @@ public class BuildFrame : MonoBehaviour
         {
             bumperParent = Utils.TryGetAddChild("bumpers", _driveTrain);
         }
-        else
+        else if (bumperParent)
         {
             if (bumpers == null)
             {
