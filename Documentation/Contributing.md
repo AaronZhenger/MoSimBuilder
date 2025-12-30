@@ -9,4 +9,4 @@ Builder is GPL V3.0 liscensed. This means any changes you share MUST have their 
 ## Builder Isn't meant to be Built
 The project in its current state SHOULD NEVER BE BUILT into a `.exe`. The purpose is to be an easy-to-use toolbox for tinkering and creating robots. Creating a build goes against this. Builder is also not set up to be used as a dedicated Game Source code and as such will be buggy and low quality.
 
-# [Further Reading](FurtherReading/md)
+# [Further Reading](FurtherReading.md)
