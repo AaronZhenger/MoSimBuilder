@@ -304,19 +304,11 @@ public class JointController : MonoBehaviour
                     if (buttonPressed)
                     {
                         _sequenceInterrupted = true;
+                    
+                        originalPositions.Clear();
 
-                        if (originalPositions.ContainsKey(setPoint))
-                        {
-                            _targetPosition = home;
-                            originalPositions.Remove(setPoint);
-                        }
-                        else
-                        {
-                            originalPositions.Clear();
-
-                            originalPositions[setPoint] = setPoint.getPoint();
-                            _targetPosition = setPoint.getPoint();
-                        }
+                        originalPositions[setPoint] = setPoint.getPoint();
+                        _targetPosition = setPoint.getPoint();
                     }
                     break;
             }
