@@ -17,16 +17,31 @@ public class ScoreHolder : MonoBehaviour
         BlueScore = 0;
         RedScore = 0;
 
-        blueScoreDisplay = GameObject.Find("BlueScoreDisplay").GetComponent<TextMeshProUGUI>();
-        
-        redScoreDisplay = GameObject.Find("RedScoreDisplay").GetComponent<TextMeshProUGUI>();
+        var dispB = GameObject.Find("BlueScoreDisplay");
+        if (dispB != null)
+        {
+            blueScoreDisplay = dispB.GetComponent<TextMeshProUGUI>();
+        }
+
+        var dispR = GameObject.Find("RedScoreDisplay");
+        if (dispR != null)
+        {
+            redScoreDisplay = dispR.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     void Update()
     {
         blueScore = BlueScore;
-        
-        blueScoreDisplay.text = BlueScore.ToString();
-        redScoreDisplay.text = RedScore.ToString();
+
+        if (blueScoreDisplay != null)
+        {
+            blueScoreDisplay.text = BlueScore.ToString();
+        }
+
+        if (redScoreDisplay != null)
+        {
+            redScoreDisplay.text = RedScore.ToString();
+        }
     }
 }

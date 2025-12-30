@@ -77,8 +77,11 @@ public class FMS : MonoBehaviour
         
         if (minutes < 0) minutes = 0;
         if (seconds < 0) seconds = 0;
-        
-        timer.text = $"{minutes:00}:{seconds:00}";
+
+        if (timer != null)
+        {
+            timer.text = $"{minutes:00}:{seconds:00}";
+        }
     }
 
     private IEnumerator wait(float time)
@@ -90,7 +93,12 @@ public class FMS : MonoBehaviour
 
     public void Restart()
     {
-        timer = GameObject.Find("TimerDisplay").GetComponent<TextMeshProUGUI>();
+        var dispT = GameObject.Find("TimerDisplay");
+        if (dispT != null)
+        {
+            timer = dispT.GetComponent<TextMeshProUGUI>();
+        }
+
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         matchLoader.setFMS(this);
         MatchTimer = matchTime;
