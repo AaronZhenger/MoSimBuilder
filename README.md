@@ -2,7 +2,7 @@ The purpose of Builder is to be a simple to use FRC robot creation toolset.
 
 The project is in Beta, as such there may be bugs or features that seem missing.
 
-## [Getting Started Documentation](Documentation/FurtherReading.md)
+## [Getting Started Documentation](Documentation/GettingStarted.md)
 The team behind Builder has put together an extremely useful set of documentation to teach users the basics of the system and how to use it to its fullest.
 
 ## [Further Reading](Documentation/FurtherReading.md)
