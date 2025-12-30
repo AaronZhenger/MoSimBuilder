@@ -255,8 +255,11 @@ public class JointController : MonoBehaviour
                                     break;
                             }
 
-                            _targetPosition = setPoint.getPoint();
-                        
+                            if (!setPoint.getPersist())
+                            {
+                                _targetPosition = setPoint.getPoint();
+                            }
+
                             foreach (var t in setPoints)
                             {
                                 if (t.setpointName != setPoint.sequenceTo) continue;
@@ -304,11 +307,15 @@ public class JointController : MonoBehaviour
                     if (buttonPressed)
                     {
                         _sequenceInterrupted = true;
-                    
+                                            
                         originalPositions.Clear();
 
                         originalPositions[setPoint] = setPoint.getPoint();
-                        _targetPosition = setPoint.getPoint();
+
+                        if (!setPoint.getPersist())
+                        {
+                            _targetPosition = setPoint.getPoint();
+                        }
                     }
                     break;
             }

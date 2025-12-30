@@ -30,10 +30,10 @@ namespace Util
         public float delay;
         private bool ShouldShowDelay() => sequenceType == SequenceType.delay;
         private bool IsSequence() => controlType is ControlType.Sequence or ControlType.SequenceStart;
-        private bool ShowPersist() => sequenceType == SequenceType.end && controlType is ControlType.Sequence;
+        private bool ShowPersist() => (controlType is ControlType.Sequence or ControlType.LastPressed or ControlType.SequenceStart);
         private bool ShowSequenceTo() => IsSequence() && sequenceType != SequenceType.end;
 
-        private bool HidePoint() => ShowPersist() && persist && controlType is ControlType.Sequence;
+        private bool HidePoint() => ShowPersist() && persist && controlType is ControlType.Sequence or ControlType.LastPressed or ControlType.SequenceStart;
 
 
         [Header("Generic")] 
