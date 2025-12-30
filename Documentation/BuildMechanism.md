@@ -55,4 +55,4 @@
         * `PID`: The custom PID gains for the mechanism to use
     * Once again to beautify it make sure that the parts are placed under the desired stage in the `Hierarchy`
 
-# [Further Reading](GamePieces.md)
+# [Further Reading](FurtherReading.md)
