@@ -6,8 +6,10 @@ The project is in Beta, as such there may be bugs or features that seem missing.
 The team behind Builder has put together an extremely useful set of documentation to teach users the basics of the system and how to use it to its fullest.
 
 ## [Further Reading](Documentation/FurtherReading.md)
+A quick link to the core documentation for those familiar with unity and project setup
 
 ## [Contributing](Documentation/Contributing.md)
+The expectations when contributing as well as the Spirit of builder
 
 ## Beta 2 Plans
   - Improve Base Tooling
