@@ -3778,7 +3778,7 @@ MonoBehaviour:
   axisSlides: 1
   direction: 1
   maxSlideDistance: 0.8
-  delayTimer: 3
+  delayTimer: 2
   detectionVolume: {fileID: 2737993930359126596}
   thresholdCount: 3
 --- !u!1 &5591420015267305057

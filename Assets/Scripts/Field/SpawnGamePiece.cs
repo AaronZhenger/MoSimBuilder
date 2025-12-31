@@ -28,8 +28,7 @@ public class SpawnGamePiece : MonoBehaviour
     private static Dictionary<PieceNames, GameObject> _piecesMap;
     public static readonly List<SpawnPieceTarget> Targets = new List<SpawnPieceTarget>();
     
-    private bool _pieceSpawned;
-    private float _timer;
+    private float _lastSpawnTime = -999f;  // Track last spawn time instead of boolean
     private int _pieceMask;
     
     private Collider[] _overlapResults;
@@ -64,20 +63,14 @@ public class SpawnGamePiece : MonoBehaviour
         _cachedUpVelocity = Vector3.up * velocity;
     }
 
-    private void Update()
+    private bool CanSpawn()
     {
-        _timer += Time.deltaTime;
-
-        if (_timer >= delayTimer)
-        {
-            _timer = 0f;
-            _pieceSpawned = false;
-        }
+        return Time.time >= _lastSpawnTime + delayTimer;
     }
 
     private void SpawnPiece(PieceNames pieceTypeEnum, float velocityValue, Vector3 spawnPosition)
     {
-        if (_pieceSpawned || !_piecesMap.TryGetValue(pieceTypeEnum, out GameObject piecePrefab)) 
+        if (!CanSpawn() || !_piecesMap.TryGetValue(pieceTypeEnum, out GameObject piecePrefab)) 
             return;
 
         var item = Instantiate(piecePrefab, spawnPosition, transform.rotation, transform)
@@ -108,7 +101,7 @@ public class SpawnGamePiece : MonoBehaviour
         }
     
         item.rb.velocity = finalVelocity;
-        _pieceSpawned = true;
+        _lastSpawnTime = Time.time;  // Record spawn time
     }
 
     private Vector3 GetClosestPointOnAxis(Vector3 targetPosition, Direction slideDirection, float maxSlideDistance)
@@ -166,80 +159,78 @@ public class SpawnGamePiece : MonoBehaviour
     }
 
     void FixedUpdate()
-{
-    if (_pieceSpawned) return;
-
-    bool shouldSpawn = false;
-    float targetVelocity = velocity;
-    Vector3 spawnPosition = transform.position;
-    bool hasDistanceTargets = false;
-
-    // Check distance-based targets first
-    for (int i = 0; i < Targets.Count; i++)
     {
-        var target = Targets[i];
-        if (!target) continue;
+        if (!CanSpawn()) return;  // Check timer at the start
 
-        if (target.spawnType == SpawnType.Distance)
+        bool shouldSpawn = false;
+        float targetVelocity = velocity;
+        Vector3 spawnPosition = transform.position;
+        bool hasDistanceTargets = false;
+
+        // Check distance-based targets first
+        for (int i = 0; i < Targets.Count; i++)
         {
-            hasDistanceTargets = true;
-            
-            Vector3 effectiveSpawnPosition = axisSlides 
-                ? GetClosestPointOnAxis(target.transform.position, direction, maxSlideDistance)
-                : transform.position;
-            
-            float distanceSq = (effectiveSpawnPosition - target.transform.position).sqrMagnitude;
-            
-            if (distanceSq <= target.SpawnDistance * target.SpawnDistance)
+            var target = Targets[i];
+            if (!target) continue;
+
+            if (target.spawnType == SpawnType.Distance)
             {
-                shouldSpawn = true;
-                targetVelocity = target.Velocity;
-                spawnPosition = effectiveSpawnPosition;
-                break;
+                hasDistanceTargets = true;
+                
+                Vector3 effectiveSpawnPosition = axisSlides 
+                    ? GetClosestPointOnAxis(target.transform.position, direction, maxSlideDistance)
+                    : transform.position;
+                
+                float distanceSq = (effectiveSpawnPosition - target.transform.position).sqrMagnitude;
+                
+                if (distanceSq <= target.SpawnDistance * target.SpawnDistance)
+                {
+                    shouldSpawn = true;
+                    targetVelocity = target.Velocity;
+                    spawnPosition = effectiveSpawnPosition;
+                    break;
+                }
             }
         }
-        else
+        
+        // If distance targets exist, only handle distance spawning
+        if (hasDistanceTargets)
         {
+            if (shouldSpawn)
+            {
+                SpawnPiece(peiceType, targetVelocity, spawnPosition);
+            }
+            return;  // Early return to prevent checking threshold logic
         }
-    }
-    
-    // If distance targets exist, only handle distance spawning
-    if (hasDistanceTargets)
-    {
+        
+        // No distance targets - check threshold-based targets
+        for (int i = 0; i < Targets.Count; i++)
+        {
+            var target = Targets[i];
+            if (!target) continue;
+
+            if (target.spawnType == SpawnType.Threshold)
+            {
+                if (!CheckInternalThreshold())
+                {
+                    shouldSpawn = true;
+                    targetVelocity = target.Velocity;
+                    spawnPosition = transform.position;
+                    break;
+                }
+            }
+        }
+        
         if (shouldSpawn)
         {
             SpawnPiece(peiceType, targetVelocity, spawnPosition);
+            return;
         }
-    }
-    
-    // No distance targets - check threshold-based targets
-    for (int i = 0; i < Targets.Count; i++)
-    {
-        var target = Targets[i];
-        if (!target) continue;
 
-        if (target.spawnType == SpawnType.Threshold)
+        // Final fallback threshold check (only if no targets at all)
+        if (!CheckInternalThreshold())
         {
-            if (!CheckInternalThreshold())
-            {
-                shouldSpawn = true;
-                targetVelocity = target.Velocity;
-                spawnPosition = transform.position;
-                break;
-            }
+            SpawnPiece(peiceType, velocity, transform.position);
         }
     }
-    
-    if (shouldSpawn)
-    {
-        SpawnPiece(peiceType, targetVelocity, spawnPosition);
-        return;
-    }
-
-    // Final fallback threshold check (only if no targets at all)
-    if (!CheckInternalThreshold() && !hasDistanceTargets)
-    {
-        SpawnPiece(peiceType, velocity, transform.position);
-    }
-}
 }

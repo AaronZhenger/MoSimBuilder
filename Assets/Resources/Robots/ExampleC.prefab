@@ -28209,7 +28209,7 @@ MonoBehaviour:
   drivePID:
     p: 4
     i: 0
-    d: 0.75
+    d: 0.65
     max: 0.75
   rotationPID:
     p: 0.05
