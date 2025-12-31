@@ -28,7 +28,7 @@ namespace BuilderLib
         public static bool AnimateTo(GamePiece piece, NodeAction action, Transform t = null)
         {
             var speed = action.Speed * 0.0254f;
-
+        
             var transform = piece.rb.transform;
             var target = t ? t : action.MoveTo.transform;
             
@@ -38,20 +38,23 @@ namespace BuilderLib
                 piece.startPosition = transform.localPosition;
                 disableColliders(piece);
             }
-
+        
             var distance = transform.parent.InverseTransformPoint(target.position) - piece.startPosition;
             var parentPosition = transform.parent.position;
-            var step = distance.normalized * ((speed) * Time.deltaTime);
+            
+            // Calculate the step, but clamp it to not overshoot
+            var distanceMagnitude = distance.magnitude;
+            var maxStep = speed * Time.deltaTime;
+            var stepMagnitude = Mathf.Min(maxStep, distanceMagnitude);
+            var step = distance.normalized * stepMagnitude;
+            
             var finalPosition = piece.startPosition + step;
-
+        
             piece.startPosition = finalPosition;
             transform.position = parentPosition + transform.parent.TransformDirection(finalPosition);
             piece.rb.position = parentPosition + transform.parent.TransformDirection(finalPosition);
             piece.rb.velocity = Vector3.zero;
-
-            var distanceMagnitude = distance.magnitude;
-
-
+        
             // Calculate target rotation based on movement direction
             Quaternion targetRotation = target.rotation;
             Quaternion shortestTargetRotation;
@@ -66,19 +69,19 @@ namespace BuilderLib
             {
                 shortestTargetRotation = targetRotation;
             }
-
+        
             // Smoothly rotate towards target rotation
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
                 shortestTargetRotation,
-                action.AngularSpeed * Time.fixedDeltaTime
+                action.AngularSpeed * Time.deltaTime  // Changed from Time.fixedDeltaTime to Time.deltaTime
             );
-
+        
             if (action.AngularSpeed == 0)
             {
                 transform.localRotation = Quaternion.identity;
             }
-
+        
             if (distanceMagnitude <= 0.75f * 0.0254f)
             {
                 changeParent(piece, action, t);
@@ -172,25 +175,29 @@ namespace BuilderLib
     
         private static Quaternion FindShortestSymmetricRotation(Quaternion current, Quaternion target)
         {
-            // For objects with symmetry on X and Y axes, we need to check multiple equivalent rotations
+            // For objects with symmetry on X, Y, and Z axes, we need to check multiple equivalent rotations
             List<Quaternion> symmetricRotations = new List<Quaternion>();
-    
+
             // Original target
             symmetricRotations.Add(target);
-    
-            // X-axis symmetry (180° rotation around X)
-            symmetricRotations.Add(target * Quaternion.Euler(180f, 0f, 0f));
-    
-            // Y-axis symmetry (180° rotation around Y)
-            symmetricRotations.Add(target * Quaternion.Euler(0f, 180f, 0f));
-    
-            // Both X and Y symmetry
-            symmetricRotations.Add(target * Quaternion.Euler(180f, 180f, 0f));
-    
+
+            // Single axis symmetries (180° rotation around each axis)
+            symmetricRotations.Add(target * Quaternion.Euler(180f, 0f, 0f));   // X-axis symmetry
+            symmetricRotations.Add(target * Quaternion.Euler(0f, 180f, 0f));   // Y-axis symmetry
+            symmetricRotations.Add(target * Quaternion.Euler(0f, 0f, 180f));   // Z-axis symmetry
+
+            // Double axis symmetries
+            symmetricRotations.Add(target * Quaternion.Euler(180f, 180f, 0f)); // X and Y
+            symmetricRotations.Add(target * Quaternion.Euler(180f, 0f, 180f)); // X and Z
+            symmetricRotations.Add(target * Quaternion.Euler(0f, 180f, 180f)); // Y and Z
+
+            // Triple axis symmetry
+            symmetricRotations.Add(target * Quaternion.Euler(180f, 180f, 180f)); // X, Y, and Z
+
             // Find the rotation with the smallest angular distance
             Quaternion bestRotation = target;
             float smallestAngle = float.MaxValue;
-    
+
             foreach (Quaternion symRotation in symmetricRotations)
             {
                 float angle = Quaternion.Angle(current, symRotation);
@@ -200,7 +207,7 @@ namespace BuilderLib
                     bestRotation = symRotation;
                 }
             }
-    
+
             return bestRotation;
         }
     }
