@@ -16,7 +16,7 @@ public class BuildFrame : MonoBehaviour
     [SerializeField] private Units units = Units.Inch;
     [SerializeField] private Vector2 frameSize = new Vector2(29.5f, 29.5f);
         
-    [SerializeField] private float robotWeight = 40f;
+    [SerializeField] private float robotWeight = 50f;
 
     [Header("Drive Train Settings")]
     [Tooltip("The simulation is currently hardcoded to Kraken X60s")]
