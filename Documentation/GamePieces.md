@@ -60,7 +60,7 @@ This is completely optional however it does make organization of the dropdown si
 
 ### Piece Type
   * This controls what piece that action interacts with
-  * NOTE that a single node can have actions interacting with any game piece type. NODES do not possess a piece type, only a single spot for a piece REGARDLESS its type.
+  * NOTE that a single node can have actions interacting with any game piece type. `NODES` do not possess a piece type, only a single spot for a piece REGARDLESS its type.
 
 ### Controls
   * There are three `Control Types`
