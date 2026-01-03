@@ -464,7 +464,7 @@ public struct NodeAction
     public bool Animate;
     [ConditionalField(true, nameof(SpeedVisible))]
     public float Speed;
-    [ConditionalField(true, nameof(SpeedVisible))]
+    [ConditionalField(true, nameof(AngularVisible))]
     public float AngularSpeed;
     [ConditionalField(true, nameof(IsTransfer))]
     public BuildNode MoveTo;
@@ -488,6 +488,7 @@ public struct NodeAction
     private bool IsNotOuttake() => Type is not NodeType.Outake;
     private bool IsNotIntake() => Type is not NodeType.Intake;
     private bool SpeedVisible() => (IsNotOuttake() && Animate) || IsOuttake();
+    private bool AngularVisible() => (IsNotOuttake() && Animate);
 }
 
 
