@@ -1,16 +1,23 @@
-# Custom Files
+# Custom Models
 
-Builder Beta features a special kind of part Builder known as Build Assembly.
+Additional to the Part Library, Builder Beta features a dedicated system for external Models.
 
-Build Assembly allows us to create and use custom models.
+### Build Assembly
+* `Build Assembly` is a *dynamic* part library.
+* To add your part to the `dropdown` place the model in `Resouces/Parts/Assembly`
+* The model can be .dae (collada in onshape), .fbx, or a .prefab
 
-Simply drop your model file into Resouces/Parts/Assembly, and it will show up as an option in the inspector.
+![image](Img/CustomModels/BuildAssembly.png)
 
-These models can be direct from cad, or assemblies.
+### Usage
+* Parts will autopopulate the `dropdown` and simply selecting them will spawn them
+* `Scale Fix` sometimes models direct from cad are scaled down, enabling this setting will upscale the model to accurate sizing.
 
-NOTE: Direct from cad should be Collada, or Gltf.
+### prefab support
+* `Build Assembly` can spawn prefab files as well.
+* This allows a model to not only have a model, but `colliders` and `mechanisms` inside it
 
-This is also an excelent way to make a parts library you want to share with the community,
-Simply export the parts in the assembly folder and any relavent models and others will be able to use it on their robot.
+### Sharing
+* you can follow the steps in [SharingRobots](SharingRobots.md) except only select your models and the parts in `Resouces/Parts/Assembly`
 
 # [Further Reading](FurtherReading.md)
