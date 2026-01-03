@@ -17,22 +17,22 @@ public class Buildelevator : MonoBehaviour
     [Header("ModelSettings")] [SerializeField]
     private bool model = true;
 
-    [ConditionalField(nameof(model), false)] [SerializeField]
+    [SerializeField]
     private Units units = Units.Inch;
 
-    [ConditionalField(nameof(model), false)] [SerializeField]
+    [SerializeField]
     private float width = 10;
 
-    [ConditionalField(nameof(model), false)] [SerializeField]
+    [SerializeField]
     private float height = 20;
 
-    [ConditionalField(nameof(model), false)] [SerializeField]
+    [SerializeField]
     private int stages = 2;
 
     [ConditionalField(nameof(model), false)] [SerializeField]
     private bool carriage = true;
 
-    [ConditionalField(true, nameof(Predicate))] [SerializeField]
+    [SerializeField]
     private float carriageHeight = 3;
 
     private bool Predicate() => model && carriage;
