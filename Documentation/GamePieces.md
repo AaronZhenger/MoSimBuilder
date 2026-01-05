@@ -1,80 +1,95 @@
 # Game Pieces
 
-## Builder Beta uses a setpoint esq system for game piece interactions
+## Builder Beta uses a setpoint-esque system for game piece interactions
 
-* `Build Node` is the home for all of builders functionality
-  
-  ![image](Img/GamePieces/BuildNode.png)
+<h5>`Build Node` is the home for all of builder's game piece functionality</h5>
 
-Build Node operates on a similar system to the [Setpoint System](Setpoints.md) used by mechanisms.
+![image](Img/GamePieces/BuildNode.png)
+
+Build Node operates on a system similar to the [Setpoint System](Setpoints.md) used by mechanisms.
 
 ### Basic Settings
 
-The system makes heavy usage of `hidden settings` which are new to the beta. This allows the information you need and only the information needed to be displayed.
-By default there will be a `CurrentPiece` `preload` and `currentState`. `CurrentPiece` and `CurrentState` are both debug and should be left as is. When Preload is checked a new line for what piece to spawn is added
+The system makes heavy usage of `hidden settings` which are new to the beta. This allows the information you need and
+only the information needed to be displayed.
+By default there will be a `CurrentGamePiece` `Preload` and `CurrentState`. `CurrentGamePiece` and `CurrentState` are
+both debug and should be left as is. When Preload is checked a new line for what piece to spawn is added
 
 ### Actions
 
-`Actions` are the core of the game piece system. These can be added by opening the dropdown and selecting the + at the bottom
+`Actions` are the core of the game piece system. These can be added by opening the dropdown and selecting the `+` at the
+bottom
 
-  ![image](Img/GamePieces/Actions.png)
-  
-`Actions` are made up of several sub peices
+![image](Img/GamePieces/Actions.png)
+
+`Actions` have several configurations:
+
 * `Name`
 * `Type`
 * `Animate`
 * `PieceType`
+* `ControlType`
 * `ControllerButton`
 * `KeyboardButton`
 
-Other things will apear and disapear based on these core settings
+##### Other options will appear and disappear depending on which core settings are selected
 
 ### Name
-This is completely optional however it does make organization of the dropdown significantly easier as it will display when closed instead of Element x
+
+Has no effect on the action itself, but helps with organization and cleanliness
 
 ### Type
-`Type` determines the actual behaviour that `Action` caries out. There are currently three `Types`. `Intake` `Transfer` and `Outake`
-* `Intake`
-    * `Animate` allows you to animate the motion from the point of contact to the `BuildNodes` center. The specifics are explained in a later section
-    * Enables several new options, `Animate` and `Size` as well as spawning a new box collider child. You can use the `Size` box to resize the collider and manualy move the child.
-    * Intake is what allows indexing a piece into a robot.
- 
-        ![image](Img/GamePieces/IntakeType.png)
-      
-* `Transfer`
-    * Enables several new options, `Animate` `MoveTo` and `Delay`
-    * `Animate` allows you to animate the motion between two `nodes`. The specifics are explained in a later section
-    * `MoveTo` is for transfering the current piece to another `Build Node`. you assign this by dragging the object with the destination `node` into this slot
-    * `DelayTimer` this allows a delay period be met before initiating the transfer
+
+`Type` determines the actual behaviour that `Action` carries out. There are currently three action types: `Intake`
+`Transfer` and `Outake`
+
+* `Intake` - Allows indexing a piece into the robot. Also adds the following settings:
+    * `Animate` - Allows you to animate the motion from the point of contact to the `BuildNodes` center. The specifics
+      are
+      explained in a later section
+    * `Size` - The range that the intake should function in. Spawns a new box collider child. You can use the `Size` box
+      to resize the collider and manually move the child to change the position.
+      ![image](Img/GamePieces/IntakeType.png)
+
+* `Transfer` - Allows transferring game pieces between nodes on the robot. Also adds the following settings:
+    * `Animate` - Allows you to animate the motion between two `Nodes`. The specifics are explained in a later section
+    * `MoveTo` - Decides which `Node` to transfer the game piece to. Drag the object with the desired `Node` from the
+      `Heirarchy` into this slot to assign it
+    * `Delay Timer` - Sets a delay period before the transfer occurs
 
 ![image](Img/GamePieces/TransferType.png)
 
-*`Outake`
-  * Enables several new options, `Speed`, `Direction`, `spin`, and `DelayTimer`
-  * `speed` is the velocity of the release
-  * `direction` is the direction, it can be Up, Left, and Forward, the opposites are achieved with `negative` speed.
-  * `spin` is the amount of angular velocity on each axis you want to use.
-  * `Delay Timer` requires a certian period be met before outaking
+* `Outake` - Releases the game piece from the robot. Also adds the following settings:
+    * `Speed` - Velocity of the release
+    * `Direction` - The direction to apply velocity in when the game piece is released. Can be Up, Left, and Forward, with the opposites just being negative values
+    * `Spin` - Angular velocity of each axis applied on release
+    * `Delay Timer` - Sets a delay period before the game piece is released
 
-    ![image](Img/GamePieces/OutakeType.png)
+![image](Img/GamePieces/OutakeType.png)
+
+### Animations
+
+* Some settings have a checkbox for enabling animations. Selecting it add two new fields: `Speed` and `Angular Speed`
+* `Speed` is the linear velocity of the game piece throughout the animation
+* `Angular Speed` is the angular velocity
+* Animations are intended as an extra setting, and thus not completely stable in all situations
+* Enabling Animations on an intake makes it `breakable` so if the distance increases instead of decreases between two
+  ticks it is returned to the world
 
 ### Piece Type
-  * This controls what piece that action interacts with
-  * NOTE that a single node can have actions interacting with any game piece type. `NODES` do not possess a piece type, only a single spot for a piece REGARDLESS its type.
+
+* Controls the game piece type that the `Node` should interact with
+* **NOTE**: a single `Node` can interact with multiple game piece types. The `Node` itself doesn't possess a piece type, but rather the `Action` inside the `Node` does
 
 ### Controls
-  * There are three `Control Types`
-      * `tap` which attempts to perform the action the frame it is pressed and only that frame
-      * `hold` which attempts to perform the action the entire time it is held
-      * `alwaysPeform` will always attempt to perform that action
-  * Controls are `per input device` which means you have access to all NON HARDCODED buttons for each input style.
-      * NOTE: Controller is Xbox layout
-   
-### Animations
-  * enabling animations for any setting it is supported, adds two new fields, `speed` and `angular speed`
-  * `speed` is how fast the piece moves linearly
-  * `angular speed` is the angular velocity for that animation
-  * animations are intended as an extra setting and thus not completely stable in all situations
-  * Enabling Animations on an intake makes it `breakable` so if the distance increases instead of decreases between two ticks it is returned to the world
+
+* There are three `Control Types`
+    * `Tap` - attempts to perform the action the frame it is pressed and only that frame
+    * `Hold` - attempts to perform the action the entire time it is held
+    * `Always Perform` - always attempts to perform the action
+* Each action can only be bound to one of each, controller and keyboard button
+* Controls are `per input device` which means you have access to all NON HARDCODED buttons for each input style.
+    * **NOTE**: Controller is Xbox layout
+
 
 # [Further Reading](FurtherReading.md)
