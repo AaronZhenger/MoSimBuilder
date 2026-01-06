@@ -49,6 +49,7 @@ Has no effect on the action itself, but helps with organization and cleanliness
       explained in a later section
     * `Size` - The range that the intake should function in. Spawns a new box collider child. You can use the `Size` box
       to resize the collider and manually move the child to change the position.
+      
       ![image](Img/GamePieces/IntakeType.png)
 
 * `Transfer` - Allows transferring game pieces between nodes on the robot. Also adds the following settings:
@@ -73,8 +74,7 @@ Has no effect on the action itself, but helps with organization and cleanliness
 * `Speed` is the linear velocity of the game piece throughout the animation
 * `Angular Speed` is the angular velocity
 * Animations are intended as an extra setting, and thus not completely stable in all situations
-* Enabling Animations on an intake makes it `breakable` so if the distance increases instead of decreases between two
-  ticks it is returned to the world
+* Enabling Animations on an intake makes it `breakable` so if the distance increases instead of decreases the animation `breaks` and retruns the piece to the world
 
 ### Piece Type
 
