@@ -6,7 +6,7 @@
 * MoSimBuilder is roughly 1.65 GB
 * These are estimates and untested
 
-### The first step is to download Unity Hub
+### The first step is to download Unity Hub and Git
 
 <h5>(Unity Hub is the application that is used to edit Unity applications, such as MoSimBuilder)</h5>
 
@@ -14,6 +14,7 @@
 * Once installed open the app.
 * Use a personal licence
 * DO NOT install editor versions during setup
+* [Download Git Here](https://git-scm.com/install/windows)
 
 ### The Second Step is to download the MoSimBuilder source. This can be done in a couple ways
 
