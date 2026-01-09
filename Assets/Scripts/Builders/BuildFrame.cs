@@ -163,22 +163,22 @@ public class BuildFrame : MonoBehaviour
 
         foreach (var loadedModule in loadedModules)
         {
-            if (loadedModule.name ==  ModuleType.invertedCorner.ToString())
+            if (string.Equals(loadedModule.name, ModuleType.invertedCorner.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[0] = loadedModule;
-            } else if (loadedModule.name == ModuleType.standardCorner.ToString())
+            } else if (string.Equals(loadedModule.name, ModuleType.standardCorner.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[1] = loadedModule;
-            } else if (loadedModule.name == ModuleType.inverted.ToString())
+            } else if (string.Equals(loadedModule.name, ModuleType.inverted.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[2] = loadedModule;
-            } else if (loadedModule.name == ModuleType.standard.ToString())
+            } else if (string.Equals(loadedModule.name, ModuleType.standard.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[3] = loadedModule;
-            } else if (loadedModule.name == ModuleType.inverted.ToString())
+            } else if (string.Equals(loadedModule.name, ModuleType.inverted.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[4] = loadedModule;
-            } else if (loadedModule.name == ModuleType.lowProfile.ToString())
+            } else if (string.Equals(loadedModule.name, ModuleType.lowProfile.ToString(), StringComparison.CurrentCultureIgnoreCase))
             {
                 _modules[5] = loadedModule;
             }
@@ -432,10 +432,10 @@ public class BuildFrame : MonoBehaviour
                 height = 2 * 0.0254f;
             }
             
-            setBumper(bumpers[0], BumperVariants.Side, new Vector3(0,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,-90,0), frameSize.y);
-            setBumper(bumpers[1], BumperVariants.Side, new Vector3(0,height,-frameSize.y * _unitValue * 0.5f), new Vector3(0,90,0), frameSize.y);
-            setBumper(bumpers[2], BumperVariants.Side, new Vector3(frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,0,0), frameSize.x);
-            setBumper(bumpers[3], BumperVariants.Side, new Vector3(-frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,180,0), frameSize.x);
+            setBumper(bumpers[0], BumperVariants.Side, new Vector3(0,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,-90,0), frameSize.x);
+            setBumper(bumpers[1], BumperVariants.Side, new Vector3(0,height,-frameSize.y * _unitValue * 0.5f), new Vector3(0,90,0), frameSize.x);
+            setBumper(bumpers[2], BumperVariants.Side, new Vector3(frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,0,0), frameSize.y);
+            setBumper(bumpers[3], BumperVariants.Side, new Vector3(-frameSize.x * _unitValue * 0.5f,height,0), new Vector3(0,180,0), frameSize.y);
             
             setBumper(bumpers[4], BumperVariants.Corner, new Vector3(-frameSize.x * _unitValue * 0.5f,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,-90,0), 1);
             setBumper(bumpers[5], BumperVariants.Corner, new Vector3(frameSize.x * _unitValue * 0.5f,height,frameSize.y * _unitValue * 0.5f), new Vector3(0,0,0), 1);
