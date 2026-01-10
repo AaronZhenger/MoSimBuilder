@@ -166,7 +166,7 @@ namespace Util
     {
         Coral,
         Algae,
-        RebuiltPiece
+        Fuel
     }
 
     public enum GamePieceState
