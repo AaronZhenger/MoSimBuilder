@@ -264,6 +264,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5569869264335038870}
+  - {fileID: 35996654150969786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &229929285351728017
@@ -852,7 +853,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 1222452666128029246, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
-  - {fileID: -5263930924417392521, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: c7e5e81bc0453c544bdcb6e386d46159, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1022,7 +1023,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1417,6 +1418,7 @@ GameObject:
   - component: {fileID: 5387261036584185602}
   - component: {fileID: 2380428643470745758}
   - component: {fileID: 7675641414500152927}
+  - component: {fileID: 8406745195141606349}
   m_Layer: 0
   m_Name: 'GE-26503: Tower Rung.002'
   m_TagString: Untagged
@@ -1469,7 +1471,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1491,6 +1493,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &8406745195141606349
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815700660527325298}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.00022
+  m_Height: 0.0124
+  m_Direction: 2
+  m_Center: {x: 0.072085515, y: -0.016002, z: -0.00288925}
 --- !u!1 &1827883551114161097
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,6 +2114,37 @@ Transform:
   - {fileID: 3233882149209117395}
   m_Father: {fileID: 6272375176892341053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2539089941552085060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 35996654150969786}
+  m_Layer: 0
+  m_Name: Back Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &35996654150969786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2539089941552085060}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4654520621792059138}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2550055652077323711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2351,6 +2407,7 @@ GameObject:
   - component: {fileID: 9123900555060338595}
   - component: {fileID: 3246287417475955372}
   - component: {fileID: 8049069559378469132}
+  - component: {fileID: 3015745720444613146}
   m_Layer: 0
   m_Name: 'GE-26501-02: Tower Base Angle.003'
   m_TagString: Untagged
@@ -2425,6 +2482,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3015745720444613146
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871782651678566987}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2395388593800454526, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &2872402756435410764
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,6 +2781,7 @@ GameObject:
   - component: {fileID: 4249936389944236034}
   - component: {fileID: 6492406227153978397}
   - component: {fileID: 6336382276798572844}
+  - component: {fileID: 5811099809986152679}
   m_Layer: 0
   m_Name: 'GE-26507: Tower Brace.001'
   m_TagString: Untagged
@@ -2754,7 +2834,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2776,6 +2856,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5811099809986152679
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295507070507328140}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6676997992092744073, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &3316555204880016441
 GameObject:
   m_ObjectHideFlags: 0
@@ -2839,7 +2941,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2957,6 +3059,7 @@ GameObject:
   - component: {fileID: 3205479309485305026}
   - component: {fileID: 384080745017995918}
   - component: {fileID: 6836333604616676436}
+  - component: {fileID: 7817464129692984101}
   m_Layer: 0
   m_Name: 'GE-26503: Tower Rung'
   m_TagString: Untagged
@@ -3009,7 +3112,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3031,6 +3134,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &7817464129692984101
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377274722366399017}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.00022
+  m_Height: 0.0124
+  m_Direction: 2
+  m_Center: {x: 0.072085515, y: -0.016002, z: -0.00288925}
 --- !u!1 &3388342350491003614
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,7 +3454,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3509,7 +3635,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3594,7 +3720,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7450652970672164634, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: c7e5e81bc0453c544bdcb6e386d46159, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3691,6 +3817,7 @@ GameObject:
   - component: {fileID: 910492695370164957}
   - component: {fileID: 3962880493597340390}
   - component: {fileID: 1569552646131666230}
+  - component: {fileID: 4373678810831296087}
   m_Layer: 0
   m_Name: 'GE-26508: Tower Upright Gusset'
   m_TagString: Untagged
@@ -3743,7 +3870,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3765,6 +3892,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4373678810831296087
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3808233247778745170}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1767322141749393360, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &3862563633338229924
 GameObject:
   m_ObjectHideFlags: 0
@@ -4180,6 +4329,7 @@ GameObject:
   - component: {fileID: 4502492579242726158}
   - component: {fileID: 2291701978862148449}
   - component: {fileID: 1407531946548903813}
+  - component: {fileID: 7933465919507906449}
   m_Layer: 0
   m_Name: 'GE-26501-02: Tower Base Angle'
   m_TagString: Untagged
@@ -4254,6 +4404,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7933465919507906449
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286369549584905824}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2395388593800454526, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &4330984495285085042
 GameObject:
   m_ObjectHideFlags: 0
@@ -4466,7 +4638,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4616,6 +4788,7 @@ GameObject:
   - component: {fileID: 3233882149209117395}
   - component: {fileID: 9170729800123456386}
   - component: {fileID: 559138208512704413}
+  - component: {fileID: 4337907898116566142}
   m_Layer: 0
   m_Name: 'GE-26502-01: Tower Upright Outer'
   m_TagString: Untagged
@@ -4668,7 +4841,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4690,6 +4863,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4337907898116566142
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4678767060120511556}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0008890033, y: 0.018269027, z: 0.00031750044}
+  m_Center: {x: 0.072085515, y: -0.009185237, z: -0.00714375}
 --- !u!1 &4697097330981892005
 GameObject:
   m_ObjectHideFlags: 0
@@ -4785,7 +4979,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4154249109739032482, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: d4b0c32f61cc43b4e9e4540385483f4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4870,7 +5064,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4154249109739032482, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: d4b0c32f61cc43b4e9e4540385483f4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5086,6 +5280,7 @@ GameObject:
   - component: {fileID: 190339924242532997}
   - component: {fileID: 5934945976780210587}
   - component: {fileID: 8093029959346573939}
+  - component: {fileID: 5800497535906016414}
   m_Layer: 0
   m_Name: 'GE-26508: Tower Upright Gusset.001'
   m_TagString: Untagged
@@ -5138,7 +5333,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5160,6 +5355,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5800497535906016414
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5138827350724999323}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1767322141749393360, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &5184811389968984190
 GameObject:
   m_ObjectHideFlags: 0
@@ -5171,6 +5388,7 @@ GameObject:
   - component: {fileID: 6751383765222006886}
   - component: {fileID: 8810371664029200055}
   - component: {fileID: 981619120871611942}
+  - component: {fileID: 6255898641618741569}
   m_Layer: 0
   m_Name: 'GE-26501-02: Tower Base Angle.001'
   m_TagString: Untagged
@@ -5245,6 +5463,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6255898641618741569
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5184811389968984190}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2395388593800454526, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &5296721025060163754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5308,7 +5548,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5341,6 +5581,7 @@ GameObject:
   - component: {fileID: 5708531908861165494}
   - component: {fileID: 1737016792442104288}
   - component: {fileID: 6623529366946029401}
+  - component: {fileID: 8608397228083748529}
   m_Layer: 0
   m_Name: 'GE-26503: Tower Rung.001'
   m_TagString: Untagged
@@ -5393,7 +5634,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5415,6 +5656,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &8608397228083748529
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5300490794957165088}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.00022
+  m_Height: 0.0124
+  m_Direction: 2
+  m_Center: {x: 0.072085515, y: -0.016002, z: -0.00288925}
 --- !u!1 &5325730796800013640
 GameObject:
   m_ObjectHideFlags: 0
@@ -5677,6 +5941,7 @@ GameObject:
   - component: {fileID: 1094329361980394343}
   - component: {fileID: 184681441125602514}
   - component: {fileID: 4543650515217164964}
+  - component: {fileID: 8844589151752653565}
   m_Layer: 0
   m_Name: 'GE-26510: Tower Support Tube'
   m_TagString: Untagged
@@ -5729,7 +5994,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5751,6 +6016,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8844589151752653565
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5858478437906870378}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.010143995, y: 0.00044449978, z: 0.00044449978}
+  m_Center: {x: 0.077649765, y: -0.009144, z: -0.0071755}
 --- !u!1 &5859770020937677756
 GameObject:
   m_ObjectHideFlags: 0
@@ -5964,6 +6250,7 @@ GameObject:
   - component: {fileID: 8503736261306133757}
   - component: {fileID: 951079280247365292}
   - component: {fileID: 1204631522152891987}
+  - component: {fileID: 3270990226403120188}
   m_Layer: 0
   m_Name: 'GE-26505: Tower Lower Plastic'
   m_TagString: Untagged
@@ -6016,7 +6303,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7450652970672164634, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: c7e5e81bc0453c544bdcb6e386d46159, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6038,6 +6325,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3270990226403120188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5930716955413577119}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0000635013, y: 0.019144, z: 0.012382499}
+  m_Center: {x: 0.08272177, y: -0.009572, z: -0.00288925}
 --- !u!1 &6019294723699049512
 GameObject:
   m_ObjectHideFlags: 0
@@ -6101,7 +6409,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6504,6 +6812,7 @@ GameObject:
   - component: {fileID: 6613966576883308228}
   - component: {fileID: 150911968500696899}
   - component: {fileID: 6175795636418556077}
+  - component: {fileID: 2289913430548478846}
   m_Layer: 0
   m_Name: 'GE-26507: Tower Brace'
   m_TagString: Untagged
@@ -6556,7 +6865,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6578,6 +6887,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2289913430548478846
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655673152383257822}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6676997992092744073, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &6690848726013834042
 GameObject:
   m_ObjectHideFlags: 0
@@ -6706,6 +7037,7 @@ GameObject:
   - component: {fileID: 4483378502370518644}
   - component: {fileID: 8884214097425417997}
   - component: {fileID: 6237473505025388793}
+  - component: {fileID: 8654941556786310360}
   m_Layer: 0
   m_Name: 'GE-26501-02: Tower Base Angle.002'
   m_TagString: Untagged
@@ -6780,6 +7112,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8654941556786310360
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731377789954041741}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2395388593800454526, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
 --- !u!1 &6753826812725268909
 GameObject:
   m_ObjectHideFlags: 0
@@ -6843,7 +7197,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6876,6 +7230,7 @@ GameObject:
   - component: {fileID: 4140926963360189789}
   - component: {fileID: 4805713919574099870}
   - component: {fileID: 1843834412076772074}
+  - component: {fileID: 3222954491711463467}
   m_Layer: 0
   m_Name: 'GE-26502-01: Tower Upright Outer.001'
   m_TagString: Untagged
@@ -6928,7 +7283,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5109424970147356552, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: afb9ea6ec2ada3449abd5df300373afe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6950,6 +7305,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3222954491711463467
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6788582471194859071}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0008890033, y: 0.018269027, z: 0.00031750044}
+  m_Center: {x: 0.072085515, y: -0.009185237, z: -0.00714375}
 --- !u!1 &7000145643949269060
 GameObject:
   m_ObjectHideFlags: 0
@@ -7344,6 +7720,7 @@ GameObject:
   - component: {fileID: 4545350002002618076}
   - component: {fileID: 4953439000280259828}
   - component: {fileID: 2436835943818095233}
+  - component: {fileID: 2894163276002513357}
   m_Layer: 0
   m_Name: 'GE-26510: Tower Support Tube.001'
   m_TagString: Untagged
@@ -7396,7 +7773,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7418,6 +7795,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2894163276002513357
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293332619373822212}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.010143995, y: 0.00044449978, z: 0.00044449978}
+  m_Center: {x: 0.077649765, y: -0.009144, z: -0.0071755}
 --- !u!1 &7375679775165653143
 GameObject:
   m_ObjectHideFlags: 0
@@ -8491,10 +8889,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8275574001006110655}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: -0.07114, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5780777354455085864}
   - {fileID: 5893301297067659055}
@@ -8533,7 +8931,7 @@ Transform:
   - {fileID: 7291352376818960122}
   - {fileID: 5534677511238861542}
   m_Father: {fileID: 4654520621792059138}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!1 &8311697957751966417
 GameObject:
   m_ObjectHideFlags: 0
@@ -8693,7 +9091,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8700421715103192860, guid: cfe469ba3b2474525ad40c6dfbb5e13b, type: 3}
+  - {fileID: 2100000, guid: 568eac04a4f10e247b136f5d38fd28c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
