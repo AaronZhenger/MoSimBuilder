@@ -165,7 +165,8 @@ namespace Util
     public enum PieceNames
     {
         Coral,
-        Algae
+        Algae,
+        RebuiltPiece
     }
 
     public enum GamePieceState
