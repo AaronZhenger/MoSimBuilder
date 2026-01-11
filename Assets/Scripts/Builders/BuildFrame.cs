@@ -406,6 +406,7 @@ public class BuildFrame : MonoBehaviour
 
     private void BuildBumpers()
     {
+        if (!generateBumpers) return; 
         if (!bumperParent && _driveTrain)
         {
             bumperParent = Utils.TryGetAddChild("bumpers", _driveTrain);

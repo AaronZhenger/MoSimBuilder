@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Blue Hub.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Blue Hub.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Hub.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Hub.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/Rebuilt.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/Rebuilt.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Blue Bump.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Blue Bump.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Bump.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Bump.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/RebuiltKitbot.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/RebuiltKitbot.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FieldScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildFrame.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,7 +218,7 @@
       <workItem from="1767116252903" duration="1256000" />
       <workItem from="1767152919739" duration="2990000" />
       <workItem from="1767477825817" duration="2581000" />
-      <workItem from="1768104581450" duration="941000" />
+      <workItem from="1768104581450" duration="2651000" />
     </task>
     <servers />
   </component>

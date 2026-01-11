@@ -227,10 +227,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a3b7e1833c24634fbe69b545f615622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchTime: 150
-  autoTime: 15
+  matchTime: 160
+  autoTime: 20
   autoDisableTime: 0.5
-  endgameTime: 20
+  endgameTime: 30
   matchDisabledTime: 3
   state: 0
   robotState: 0
