@@ -2281,7 +2281,7 @@ MonoBehaviour:
   units: 0
   frameSize: {x: 26.5, y: 26.31}
   robotWeight: 55
-  gearRatio: 5
+  gearRatio: 4.71
   moduleType: 4
   generateBumpers: 0
   bumperStyle: 0
@@ -2301,7 +2301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnType: 1
   SpawnDistance: 1.43
-  Velocity: 5
+  Velocity: 3.75
 --- !u!1 &1465186127427937012
 GameObject:
   m_ObjectHideFlags: 0
