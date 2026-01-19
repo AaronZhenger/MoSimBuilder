@@ -48,6 +48,8 @@ public class JointController : MonoBehaviour
     private bool _delayType;
     private string _activeSequenceName;
     private SetPoint _nextSequencePoint;
+    private bool OverideActive;
+    private string _activeSetpointName;
 
     [HideInInspector] public float p;
     [HideInInspector] public float i;
@@ -74,6 +76,7 @@ public class JointController : MonoBehaviour
         _inputMap = _playerInput.actions.FindActionMap("Robot");
         
         _inputMap.Enable();
+        OverideActive = false;
 
         _pidController = new PIDController
         {
@@ -86,6 +89,11 @@ public class JointController : MonoBehaviour
         };
     }
 
+    public string getActiveSetpoint()
+    {
+        return _activeSetpointName;
+    }
+
     /// <summary>
     /// the overide function for running a joint PID directly instead of through the setpoint object
     /// </summary>
@@ -93,6 +101,12 @@ public class JointController : MonoBehaviour
     public void FollowPosition(float position)
     {  
        this._targetPosition = position; 
+    }
+
+    public void OveridePosition(float position)
+    {
+        this._targetPosition = position;
+        OverideActive = true;
     }
 
     // Update is called once per frame
@@ -117,6 +131,12 @@ public class JointController : MonoBehaviour
         }
         
         if (follower) return;
+
+        if (OverideActive)
+        {
+            OverideActive = false;
+            return;
+        }
 
         bool buttonPushed = false;
         for (int i = 0; i < setPoints.Length; i++)
@@ -159,6 +179,8 @@ public class JointController : MonoBehaviour
                         {
                             if (setPoint.setpointName != _nextSequencePoint.setpointName) continue;
                             
+                            _activeSetpointName = setPoint.setpointName;
+                                
                             if (_nextSequencePoint.sequenceType != SequenceType.end)
                             {
                                 _targetPosition = _nextSequencePoint.getPoint();
@@ -200,6 +222,7 @@ public class JointController : MonoBehaviour
                         else if (_activeSequenceName != null)
                         {
                             _targetPosition = home;
+                            _activeSetpointName = null;
                             _nextSequencePoint = null;
                             _activeSequenceName = null;
                             return;
@@ -219,6 +242,7 @@ public class JointController : MonoBehaviour
                             originalPositions[setPoint] = home;
                             // Apply new position
                             _targetPosition = setPoint.getPoint();
+                            _activeSetpointName = setPoint.setpointName;
                         }
                     }
                     else if (originalPositions.ContainsKey(setPoint) && !buttonHeld)
@@ -226,6 +250,7 @@ public class JointController : MonoBehaviour
                         // Restore original position
                         _targetPosition = originalPositions[setPoint];
                         originalPositions.Remove(setPoint);
+                        _activeSetpointName = null;
                     }
 
                     break;
@@ -243,6 +268,7 @@ public class JointController : MonoBehaviour
                         {
                             _sequenceInterrupted = false;
                             _activeSequenceName = setPoint.setpointName;
+                            _activeSetpointName = setPoint.setpointName;
                             switch (setPoint.sequenceType)
                             {
                                 case SequenceType.delay:
@@ -295,11 +321,13 @@ public class JointController : MonoBehaviour
                         {
                             _targetPosition = home;
                             originalPositions.Remove(setPoint);
+                            _activeSetpointName = null;
                         }
                         else
                         {
                             originalPositions[setPoint] = setPoint.getPoint();
                             _targetPosition = setPoint.getPoint();
+                            _activeSetpointName = setPoint.setpointName;
                         }
                     }
                     break;
@@ -311,6 +339,8 @@ public class JointController : MonoBehaviour
                         originalPositions.Clear();
 
                         originalPositions[setPoint] = setPoint.getPoint();
+                        
+                        _activeSetpointName = setPoint.setpointName;
 
                         if (!setPoint.getPersist())
                         {

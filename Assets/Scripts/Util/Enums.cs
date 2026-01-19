@@ -55,6 +55,25 @@ namespace Util
         spline
     }
 
+    public enum TargetType
+    {
+        Closest,
+        Furthest,
+        Preset,
+    }
+
+    public enum TargetWhen
+    {
+        Always,
+        AtSetpoint,
+    }
+
+    public enum TargetingMethod
+    {
+        PointAtOffset,
+        Interpolation
+    }
+
     public enum BumperVariants
     {
         Side,
