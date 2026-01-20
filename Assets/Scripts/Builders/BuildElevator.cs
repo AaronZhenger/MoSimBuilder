@@ -7,7 +7,7 @@ using Util;
 using Random = Unity.Mathematics.Random;
 
 [ExecuteAlways]
-public class Buildelevator : MonoBehaviour
+public class Buildelevator : BuildMechanism
 {
     [Header("General Settings")] [SerializeField]
     private SetPoint[] setPoints;
@@ -163,6 +163,11 @@ public class Buildelevator : MonoBehaviour
         generateControllers();
 
         _audioSource = gameObject.AddComponent<AudioSource>();
+    }
+    
+    public override JointController GetController()
+    {
+        return _controllers[^1];
     }
 
     // Update is called once per frame

@@ -5,7 +5,7 @@ using UnityEngine;
 using Util;
 
 [ExecuteAlways]
-public class BuildArm : MonoBehaviour
+public class BuildArm : BuildMechanism
 {
     [SerializeField] private SetPoint[] setPoints;
     
@@ -76,6 +76,11 @@ public class BuildArm : MonoBehaviour
     private void OnEnable()
     {
         Startup();
+    }
+    
+    public override JointController GetController()
+    {
+        return _controller;
     }
 
     // Update is called once per frame

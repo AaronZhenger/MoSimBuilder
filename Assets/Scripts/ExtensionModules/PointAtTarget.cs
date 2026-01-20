@@ -42,6 +42,10 @@ public class PointAtTarget : MonoBehaviour
     private List<Vector3> _allTargets;
     
     private DistanceValue[] _sortedCache;
+    
+    private JointController _controller;
+
+    private bool _lateStartup;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,12 +63,18 @@ public class PointAtTarget : MonoBehaviour
         {
             _allTargets.Add(target);
         }
+        
+        _lateStartup = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_lateStartup)
+        {
+            _controller = GetComponent<BuildMechanism>().GetController();
+            _lateStartup = false;
+        }
     }
     
     //runs on editor change
