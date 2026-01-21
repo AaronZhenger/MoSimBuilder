@@ -25,14 +25,16 @@ public class WheelBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         //create wheel check raycasts
-        _wheelHits[0] = Physics.Raycast(transform.position, -transform.up.normalized, out RaycastHit hit, wheelDiameter/2); 
-        _wheelHits[1] = Physics.Raycast(transform.position, transform.up.normalized, out hit, wheelDiameter/2);
-        _wheelHits[2] = Physics.Raycast(transform.position, transform.forward.normalized, out hit, wheelDiameter/2);
-        _wheelHits[3] = Physics.Raycast(transform.position, -transform.forward.normalized, out hit, wheelDiameter/2);
-        _wheelHits[4] = Physics.Raycast(transform.position, (transform.up.normalized+transform.forward.normalized)/2, out hit, wheelDiameter/2);
-        _wheelHits[5] = Physics.Raycast(transform.position, (-transform.up.normalized+transform.forward.normalized)/2, out hit, wheelDiameter/2);
-        _wheelHits[6] = Physics.Raycast(transform.position, (transform.up.normalized-transform.forward.normalized)/2, out hit, wheelDiameter/6);
-        _wheelHits[7] = Physics.Raycast(transform.position, (-transform.up.normalized-transform.forward.normalized)/2, out hit, wheelDiameter/6);
+        float radius = wheelDiameter / 2f;
+        
+        _wheelHits[0] = Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, radius);
+        _wheelHits[1] = Physics.Raycast(transform.position, (-transform.up * 2 + transform.forward).normalized, out hit, radius);
+        _wheelHits[2] = Physics.Raycast(transform.position, (-transform.up * 2 - transform.forward).normalized, out hit, radius);
+        _wheelHits[3] = Physics.Raycast(transform.position, (-transform.up + transform.forward).normalized, out hit, radius);
+        _wheelHits[4] = Physics.Raycast(transform.position, (-transform.up - transform.forward).normalized, out hit, radius);
+        _wheelHits[5] = Physics.Raycast(transform.position, (-transform.up + transform.forward * 2).normalized, out hit, radius);
+        _wheelHits[6] = Physics.Raycast(transform.position, (-transform.up - transform.forward * 2).normalized, out hit, radius);
+        _wheelHits[7] = Physics.Raycast(transform.position, transform.forward, out hit, radius);
         
         //reset lists 
         collisionPoints.Clear();
