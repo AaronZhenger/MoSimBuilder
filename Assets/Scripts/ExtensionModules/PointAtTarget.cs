@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MyBox;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Util;
@@ -20,7 +21,7 @@ public class PointAtTarget : MonoBehaviour
     [SerializeField] private Vector3 targetPosition;
 
     [ConditionalField(true, nameof(WhenAtSetpoint))] [SerializeField]
-    private float SetpointName;
+    private string SetpointName;
     
     [ConditionalField(true, nameof(IsPreset), true)]
     [SerializeField] private Vector3[] extraTargets;
@@ -30,8 +31,6 @@ public class PointAtTarget : MonoBehaviour
     [SerializeField] private float heightOffset;
     [ConditionalField(true, nameof(IsInterpolating), true)] 
     [SerializeField] private float angleOffset;
-    [ConditionalField(true, nameof(IsInterpolating), true)] 
-    [SerializeField] private Transform originOveride;
 
     [ConditionalField(true, nameof(IsInterpolating))] 
     [SerializeField] private DistanceValue[] interpolationTable;
@@ -50,7 +49,7 @@ public class PointAtTarget : MonoBehaviour
     void Start()
     {
         InitializeCache();
-        var foundTargets = Utils.FindGameObjectsOnLayer("AutoAlignNodes");
+        var foundTargets = Utils.FindGameObjectsOnLayer("AutoAngleNodes");
 
         _allTargets = new List<Vector3>();
         
@@ -75,12 +74,47 @@ public class PointAtTarget : MonoBehaviour
             _controller = GetComponent<BuildMechanism>().GetController();
             _lateStartup = false;
         }
+
+        bool shouldTarget = targetWhen == TargetWhen.Always || 
+                            (targetWhen == TargetWhen.AtSetpoint && 
+                             String.Equals(
+                                 _controller.getActiveSetpoint()?.ToLower().Trim(), 
+                                 SetpointName.ToLower().Trim(), 
+                                 StringComparison.OrdinalIgnoreCase));
+    
+        if (!shouldTarget) return;
+
+        Vector3 target = GetTargetValue();
+    
+        float setpointValue;
+    
+        switch (targetingMethod)
+        {
+            case TargetingMethod.PointAtOffset:
+                setpointValue = CalculateTargetAngle(target) + angleOffset;
+                break;
+            
+            case TargetingMethod.Interpolation:
+                Vector3 originPos = transform.position;
+                float currentDistance = Vector3.Distance(originPos, target);
+                setpointValue = Interpolate(currentDistance) + angleOffset;
+                break;
+            
+            default:
+                setpointValue = 0f;
+                break;
+        }
+    
+        _controller.OveridePosition(setpointValue);
     }
     
     //runs on editor change
     private void OnValidate()
     {
-        UpdateTable(interpolationTable);
+        if (EditorApplication.isPlaying)
+        {
+            UpdateTable(interpolationTable);
+        }
     }
     
     //Get target
@@ -103,50 +137,54 @@ public class PointAtTarget : MonoBehaviour
     {
         float closestDistance = float.MaxValue;
         Vector3 closestTarget = Vector3.zero;
+        Vector3 originPos = transform.position;
+    
         foreach (var target in _allTargets)
         {
-            var distance = Vector3.Distance(originOveride.position, transform.position);
+            var distance = Vector3.Distance(originPos, target); 
             if (distance < closestDistance)
             {
                 closestDistance = distance;
                 closestTarget = target;
             }
         }
-        
+    
         return closestTarget;
     }
-    
+
     private Vector3 getFurthestTarget()
     {
         float furthestDistance = float.MinValue;
         Vector3 furthestTarget = Vector3.zero;
+        Vector3 originPos = transform.position;
+    
         foreach (var target in _allTargets)
         {
-            var distance = Vector3.Distance(originOveride.position, transform.position);
+            var distance = Vector3.Distance(originPos, target);
             if (distance > furthestDistance)
             {
                 furthestDistance = distance;
                 furthestTarget = target;
             }
         }
-        
+    
         return furthestTarget;
     }
 
     //direct calculation stuff
-    private float calculateTargetAngle(Transform target)
+    private float CalculateTargetAngle(Vector3 targetPos)
     {
-        Vector3 targetPos = target.position + (Vector3.up * heightOffset);
-        Vector3 originPos = originOveride ? originOveride.position : transform.position;
+        Transform refPoint = transform;
+        
+        targetPos -= heightOffset * Vector3.up;
 
-        Vector3 dirToTarget = targetPos - originPos;
+        Vector3 localTarget = refPoint.parent.InverseTransformPoint(targetPos);
+          
 
-        Vector3 localDir = transform.InverseTransformDirection(dirToTarget);
-
-        float angleRad = Mathf.Atan2(localDir.y, localDir.z);
+        float angleRad = Mathf.Atan2(localTarget.y, localTarget.z);
         float angleDeg = angleRad * Mathf.Rad2Deg;
 
-        return angleDeg;
+        return Mathf.Repeat(angleDeg + angleOffset, 360);
     }
     
     //Interpolation stuff

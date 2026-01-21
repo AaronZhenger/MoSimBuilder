@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 196543244707531364}
   - component: {fileID: 8891049026095184441}
   m_Layer: 0
-  m_Name: . (7)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -684,7 +684,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5092667887439732008}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &8891049026095184441
 MonoBehaviour:
@@ -1046,7 +1046,7 @@ GameObject:
   - component: {fileID: 8496304000170425544}
   - component: {fileID: 8664174122770899243}
   m_Layer: 0
-  m_Name: . (3)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1066,7 +1066,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 675218021595827791}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &8664174122770899243
 MonoBehaviour:
@@ -1895,7 +1895,7 @@ GameObject:
   - component: {fileID: 4972993125300402683}
   - component: {fileID: 4791714850818918250}
   m_Layer: 0
-  m_Name: . (8)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1915,7 +1915,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6860736602202950348}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4791714850818918250
 MonoBehaviour:
@@ -2247,23 +2247,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4694219930399876216}
   - {fileID: 4623815537808041874}
   - {fileID: 366692669529081371}
   - {fileID: 5737538157676828484}
   - {fileID: 2300734334481201583}
   - {fileID: 2690630686894764701}
-  - {fileID: 3472152389750687364}
-  - {fileID: 4189405713655118487}
-  - {fileID: 580259061915747363}
-  - {fileID: 8496304000170425544}
-  - {fileID: 8760877426530782864}
-  - {fileID: 1946499628358528044}
-  - {fileID: 1036932799152247560}
-  - {fileID: 196543244707531364}
-  - {fileID: 4972993125300402683}
-  - {fileID: 5564437127345457655}
-  - {fileID: 471654252926189620}
+  - {fileID: 5172668261365500585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8864266421860800222
@@ -3492,7 +3481,7 @@ GameObject:
   - component: {fileID: 4189405713655118487}
   - component: {fileID: 4276136099529375752}
   m_Layer: 0
-  m_Name: . (1)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3506,13 +3495,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084663485290585041}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.337, y: 0.0788, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3218910650671720371}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4276136099529375752
 MonoBehaviour:
@@ -3757,7 +3746,9 @@ Transform:
   - {fileID: 1405842907326787739}
   - {fileID: 2293191287516541252}
   - {fileID: 8180237312552423172}
-  m_Father: {fileID: 3976846010761174341}
+  - {fileID: 5564437127345457655}
+  - {fileID: 471654252926189620}
+  m_Father: {fileID: 5172668261365500585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6767360070512588339
 MonoBehaviour:
@@ -5994,7 +5985,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8306155508314179745}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 4694219930399876216}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &3435655938838935042
 MonoBehaviour:
@@ -6192,7 +6183,7 @@ GameObject:
   - component: {fileID: 580259061915747363}
   - component: {fileID: 7716109130005765984}
   m_Layer: 0
-  m_Name: . (2)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6212,7 +6203,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4909423123643916010}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &7716109130005765984
 MonoBehaviour:
@@ -7093,7 +7084,7 @@ GameObject:
   - component: {fileID: 3472152389750687364}
   - component: {fileID: 6574997731478825106}
   m_Layer: 0
-  m_Name: .
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7107,13 +7098,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4126703576263892578}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.4199, y: 0.0788, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1521530675853714911}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6574997731478825106
 MonoBehaviour:
@@ -7492,8 +7483,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4289023093055871262}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08715578, y: 0, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: -0.76, y: 0.244, z: 0.435}
+  m_LocalRotation: {x: -0.08715578, y: -0, z: -0, w: 0.9961947}
+  m_LocalPosition: {x: -0.76, y: 0.38600928, z: 0.4099599}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7627,7 +7618,7 @@ GameObject:
   - component: {fileID: 1036932799152247560}
   - component: {fileID: 9140585769885730764}
   m_Layer: 0
-  m_Name: . (6)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7647,7 +7638,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6793840026751878240}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &9140585769885730764
 MonoBehaviour:
@@ -7671,6 +7662,46 @@ MonoBehaviour:
   bumperVariant: 1
   units: 0
   bumperLength: 5
+--- !u!1 &4359288198094654796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 552205737102259183}
+  m_Layer: 0
+  m_Name: Bumper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &552205737102259183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4359288198094654796}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3472152389750687364}
+  - {fileID: 4189405713655118487}
+  - {fileID: 580259061915747363}
+  - {fileID: 8496304000170425544}
+  - {fileID: 8760877426530782864}
+  - {fileID: 1946499628358528044}
+  - {fileID: 1036932799152247560}
+  - {fileID: 196543244707531364}
+  - {fileID: 4972993125300402683}
+  m_Father: {fileID: 5172668261365500585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4364676865495008626
 GameObject:
   m_ObjectHideFlags: 0
@@ -11966,7 +11997,7 @@ GameObject:
   - component: {fileID: 1946499628358528044}
   - component: {fileID: 6400293852870277582}
   m_Layer: 0
-  m_Name: . (5)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11986,7 +12017,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2313519655004038298}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!114 &6400293852870277582
 MonoBehaviour:
@@ -13063,7 +13094,7 @@ GameObject:
   - component: {fileID: 8760877426530782864}
   - component: {fileID: 5349624229161008524}
   m_Layer: 0
-  m_Name: . (4)
+  m_Name: Bumpa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13083,7 +13114,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 345489639566666615}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 552205737102259183}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &5349624229161008524
 MonoBehaviour:
@@ -16399,6 +16430,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colliders:
   - {fileID: 1335701557250172240}
+--- !u!1 &8006284793089245366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5172668261365500585}
+  m_Layer: 0
+  m_Name: CustomDrivetrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5172668261365500585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8006284793089245366}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 552205737102259183}
+  - {fileID: 4694219930399876216}
+  m_Father: {fileID: 3976846010761174341}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8019702227065038009
 GameObject:
   m_ObjectHideFlags: 0
@@ -18371,7 +18435,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6862418011072299359}
-  m_Father: {fileID: 3976846010761174341}
+  m_Father: {fileID: 4694219930399876216}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &7063573490075218456
 MonoBehaviour:
@@ -19220,7 +19284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5737538157676828484}
   m_Layer: 0
-  m_Name: GPS
+  m_Name: Nodes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
