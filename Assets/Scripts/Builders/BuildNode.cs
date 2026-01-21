@@ -214,8 +214,8 @@ public class BuildNode: MonoBehaviour
                                     break;
                                 case NodeControlType.AlwaysPerform:
                                     actionDone = true;
+                                    finished = TransferPiece(true,  currentState != NodeState.Transfering, ref action);
                                     currentState = NodeState.Transfering;
-                                    finished = TransferPiece(true,  false, ref action);
                                     break;
                             }
 
@@ -234,12 +234,12 @@ public class BuildNode: MonoBehaviour
                     if (currentGamePiece)
                     {
                         var finished = false;
-                        if (!PerformTimerCheck(ref action, buttonPressed)) continue;
                         switch (action.ControlType)
                         {
                             case NodeControlType.Hold:
                                 if (buttonHeld && action.PieceType == currentGamePiece.pieceType)
                                 {
+                                    if (!PerformTimerCheck(ref action, buttonPressed)) break;
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
                                     StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
@@ -248,6 +248,7 @@ public class BuildNode: MonoBehaviour
                             case NodeControlType.Tap:
                                 if (buttonPressed && action.PieceType == currentGamePiece.pieceType)
                                 {
+                                    if (!PerformTimerCheck(ref action, buttonPressed)) break;
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
                                     StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
@@ -256,6 +257,8 @@ public class BuildNode: MonoBehaviour
                             case NodeControlType.AlwaysPerform:
                                 if (action.PieceType == currentGamePiece.pieceType)
                                 {
+                                    if (!PerformTimerCheck(ref action)) break;
+                                    actionDone = true;
                                     currentState = NodeState.Outaking;
                                     finished = GamePieceManager.ReleaseToWorld(currentGamePiece, action);
                                     StartCoroutine(GamePieceManager.enableColliders(currentGamePiece));
