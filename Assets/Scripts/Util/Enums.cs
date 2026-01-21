@@ -46,6 +46,7 @@ namespace Util
         FirstPersonReversed,
         ThirdPerson,
         ReversedThirdPerson,
+        DriverStation
     }
 
     public enum GearType
@@ -53,6 +54,19 @@ namespace Util
         pinion,
         hex,
         spline
+    }
+
+    public enum StationNum
+    {
+        One,
+        Two,
+        Three
+    }
+
+    public enum TrackingType
+    {
+        TrackRobot,
+        PointForward
     }
 
     public enum TargetType

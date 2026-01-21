@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyBox;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Util;
 
@@ -17,14 +19,21 @@ public class LoadMatch : MonoBehaviour
     [SerializeField] private InspectorDropdown robotSelected;
 
     [SerializeField] private Cameras view;
+
+    [ConditionalField(true, nameof(isDriverStation))] [SerializeField]
+    private StationNum stationNumber;
+   [ConditionalField(true, nameof(isDriverStation))] [SerializeField]
+    private TrackingType trackingType;
      private int selectedRobotIndex; 
      private string selectedName;
      private List<GameObject> availableRobots = new List<GameObject>();
-    
+
+     private bool isDriverStation() => view == Cameras.DriverStation;
     
     private GameObject _fieldHolder;
     private GameObject _activeRobot;
-    private GameObject _1StCam;
+    private GameObject _activeCam;
+    private GameObject _spawnedCamera;
 
     private FMS fms;
 
@@ -101,6 +110,11 @@ public class LoadMatch : MonoBehaviour
             DestroyImmediate(_fieldHolder);
         }
     }
+
+    public TrackingType GetTrackingType()
+    {
+        return trackingType;
+    }
     
     public void ResetField()
     {
@@ -153,6 +167,10 @@ public class LoadMatch : MonoBehaviour
                         controller.reversed = true;
                         controller.fieldCentric = true;
                         break;
+                    case Cameras.DriverStation :
+                        controller.reversed = false;
+                        controller.fieldCentric = true;
+                        break;
                 }
             }
         }
@@ -169,16 +187,25 @@ public class LoadMatch : MonoBehaviour
     }
     private void DeleteRobot()
     {
+        DestroyImmediate(_spawnedCamera);
         DestroyImmediate(_activeRobot);
     }
     
     private void addCamera()
     {
         string objectToLoad = "Cameras/" + view.ToString();
-        _1StCam = Resources.Load(objectToLoad) as GameObject;
-        
-        var cam = Instantiate(_1StCam, Vector3.zero, spawnPoint.rotation, _activeRobot.transform);;
-        cam.transform.localPosition = Vector3.zero;
+        _activeCam = Resources.Load(objectToLoad) as GameObject;
+
+        var parent = _activeRobot;
+        var spawnRotation = spawnPoint.gameObject;
+        if (fms)
+        {
+            parent = view == Cameras.DriverStation ? fms.blueStationCams[(int)stationNumber] : _activeRobot;
+            spawnRotation = view == Cameras.DriverStation ? fms.redStationCams[(int)stationNumber] : spawnPoint.gameObject;
+        }
+
+        _spawnedCamera = Instantiate(_activeCam, Vector3.zero, spawnRotation.transform.rotation, parent.transform);;
+        _spawnedCamera.transform.localPosition = Vector3.zero;
     }
 
     

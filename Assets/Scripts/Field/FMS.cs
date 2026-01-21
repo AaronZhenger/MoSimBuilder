@@ -12,6 +12,8 @@ public class FMS : MonoBehaviour
     public float autoDisableTime = 0.5f;
     public int endgameTime = 20;
     public float matchDisabledTime = 3;
+    public GameObject[] blueStationCams;
+    public GameObject[] redStationCams;
     public static float MatchTimer;
     public static RobotState RobotState;
     public static MatchState MatchState;
