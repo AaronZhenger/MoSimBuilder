@@ -191,10 +191,9 @@ public class Buildelevator : BuildMechanism
 
         if (!EditorApplication.isPlaying)
         {
-            if (model)
-            {
-                BuildModel();
-            }
+            
+            BuildModel();
+            
 
             if (setPoints == null) return;
             foreach (var point in setPoints)
@@ -368,10 +367,10 @@ public class Buildelevator : BuildMechanism
     /// </summary>
     private void generateControllers()
     {
-        _controllers = new JointController[_modelObjects.Length - 1];
-        for (int i = 0; i < _modelObjects.Length - 1; i++)
+        _controllers = new JointController[_stageModels.Length - 1];
+        for (int i = 0; i < _stageModels.Length - 1; i++)
         {
-            _controllers[i] = _modelObjects[i + 1].AddComponent<JointController>();
+            _controllers[i] = _stageModels[i + 1].AddComponent<JointController>();
 
             if (useAdvancedSettings)
             {
@@ -394,7 +393,7 @@ public class Buildelevator : BuildMechanism
             _controllers[i].driveAxis = new Vector3(0, 1, 0);
             _controllers[i].joint = _joints[i];
 
-            if (i < _modelObjects.Length - 2)
+            if (i < _stageModels.Length - 2)
             {
                 _controllers[i].p = 50;
                 _controllers[i].i = 0;
@@ -632,6 +631,8 @@ public class Buildelevator : BuildMechanism
                 }
             }
         } //end ai warning
+        
+        if (!model) return;
 
         int nonCrossBraceStages = 1;
         if (carriage)

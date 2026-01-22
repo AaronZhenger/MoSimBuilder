@@ -78,7 +78,7 @@ public class PointAtTarget : MonoBehaviour
         bool shouldTarget = targetWhen == TargetWhen.Always || 
                             (targetWhen == TargetWhen.AtSetpoint && 
                              String.Equals(
-                                 _controller.getActiveSetpoint()?.ToLower().Trim(), 
+                                 (_controller.getActiveSetpoint() ?? "").ToLower().Trim(), 
                                  SetpointName.ToLower().Trim(), 
                                  StringComparison.OrdinalIgnoreCase));
 
