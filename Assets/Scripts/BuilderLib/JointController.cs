@@ -61,6 +61,8 @@ public class JointController : MonoBehaviour
     /// The setpoint struct to base the logic around.
     /// </summary>
     [HideInInspector] public SetPoint[] setPoints;
+
+    private float overidePosition;
     
     // Start is called before the first frame update
     void Start()
@@ -107,6 +109,7 @@ public class JointController : MonoBehaviour
     {
         this._targetPosition = position;
         OverideActive = true;
+        overidePosition = position;
     }
 
     // Update is called once per frame
@@ -131,12 +134,6 @@ public class JointController : MonoBehaviour
         }
         
         if (follower) return;
-
-        if (OverideActive)
-        {
-            OverideActive = false;
-            return;
-        }
 
         bool buttonPushed = false;
         for (int i = 0; i < setPoints.Length; i++)
@@ -173,6 +170,13 @@ public class JointController : MonoBehaviour
             switch (setPoint.controlType)
             {
                 case ControlType.Sequence:
+                    if (_sequenceInterrupted)
+                    {
+                        _sequenceInterrupted = false;
+                        _nextSequencePoint = null;
+                        _activeSequenceName = null;
+                        _activeSequenceName = null;
+                    }
                     if (_isSequenceUsingDelay ? _sequenceTime <= 0 : buttonPressed)
                     {
                         if (_nextSequencePoint != null)
@@ -349,6 +353,12 @@ public class JointController : MonoBehaviour
                     }
                     break;
             }
+        }
+        
+        if (OverideActive)
+        {
+            _targetPosition = overidePosition;
+            OverideActive = false;
         }
     }
 

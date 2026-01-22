@@ -81,7 +81,7 @@ public class PointAtTarget : MonoBehaviour
                                  _controller.getActiveSetpoint()?.ToLower().Trim(), 
                                  SetpointName.ToLower().Trim(), 
                                  StringComparison.OrdinalIgnoreCase));
-    
+
         if (!shouldTarget) return;
 
         Vector3 target = GetTargetValue();
