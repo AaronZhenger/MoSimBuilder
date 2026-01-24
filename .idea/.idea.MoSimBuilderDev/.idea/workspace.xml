@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleE.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleE.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ExtensionModules/PointAtTarget.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ExtensionModules/PointAtTarget.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleF.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleF.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +222,7 @@
       <workItem from="1768950293011" duration="14977000" />
       <workItem from="1769031706572" duration="2319000" />
       <workItem from="1769039929930" duration="6372000" />
-      <workItem from="1769116590602" duration="2218000" />
+      <workItem from="1769116590602" duration="4031000" />
     </task>
     <servers />
   </component>
