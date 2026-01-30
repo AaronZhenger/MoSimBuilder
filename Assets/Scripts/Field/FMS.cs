@@ -36,7 +36,7 @@ public class FMS : MonoBehaviour
     {
         state = MatchState;
         robotState = RobotState;
-        MatchTimer -= Time.deltaTime;
+        if (robotState == RobotState.enabled) MatchTimer -= Time.deltaTime;
 
         if (MatchTimer >= matchTime - autoTime)
         {

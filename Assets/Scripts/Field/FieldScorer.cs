@@ -130,6 +130,11 @@ public class FieldScorer : MonoBehaviour
         return pieces;
     }
 
+    public bool GetIsBlue()
+    {
+        return isBlue;
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (!displayDebugBox) return;
