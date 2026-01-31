@@ -57,8 +57,8 @@ public class RebuiltShifts : ScoreOnlyOnce
 
             if (shiftTimer <= 0)
             {
-                currentShift += 1;
                 shiftTimer = currentShift == CurrentShift.Auto ? 10 : 25;
+                currentShift += 1;
             }
         }
 
