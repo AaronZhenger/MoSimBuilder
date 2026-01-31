@@ -32238,7 +32238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units: 0
   frameSize: {x: 29, y: 26}
-  robotWeight: 50
+  robotWeight: 90
   gearRatio: 5.85
   moduleType: 2
   generateBumpers: 0
@@ -33694,6 +33694,7 @@ MonoBehaviour:
   gearRatio: 0
   targetVelocity: 0
   targetModuleAngle: 0
+  lateralFrictionMultiplier: 1
   _rb: {fileID: 0}
 --- !u!1 &7061297026087788319
 GameObject:
@@ -35162,6 +35163,7 @@ MonoBehaviour:
   gearRatio: 0
   targetVelocity: 0
   targetModuleAngle: 0
+  lateralFrictionMultiplier: 1
   _rb: {fileID: 0}
 --- !u!1 &7277118107516053277
 GameObject:
@@ -37025,6 +37027,7 @@ MonoBehaviour:
   gearRatio: 0
   targetVelocity: 0
   targetModuleAngle: 0
+  lateralFrictionMultiplier: 1
   _rb: {fileID: 0}
 --- !u!1 &7645093477374099477
 GameObject:
@@ -41239,6 +41242,7 @@ MonoBehaviour:
   gearRatio: 0
   targetVelocity: 0
   targetModuleAngle: 0
+  lateralFrictionMultiplier: 1
   _rb: {fileID: 0}
 --- !u!1 &8639209086537601985
 GameObject:

@@ -5,92 +5,47 @@ using UnityEngine;
 
 public class WheelBehaviour : MonoBehaviour
 {
-    //settings
     [HideInInspector] public float wheelDiameter;
     
-    //outputs
     [HideInInspector] public List<Vector3> collisionPoints = new List<Vector3>();
     [HideInInspector] public List<Vector3> collisionNormals = new List<Vector3>();
     
-    //internal
-    private bool[] _wheelHits;
+    private List<Vector3> directions = new List<Vector3>();
+    
 
     // Start is called before the first frame update
     private void Start()
     {
-        _wheelHits = new bool[8];
+        directions.Add(-transform.up);                                          
+        directions.Add((-transform.up * 2 + transform.forward).normalized);     
+        directions.Add((-transform.up * 2 - transform.forward).normalized);     
+        directions.Add((-transform.up + transform.forward).normalized);         
+        directions.Add((-transform.up - transform.forward).normalized);         
+        directions.Add((-transform.up + transform.forward * 2).normalized);    
+        directions.Add((-transform.up - transform.forward * 2).normalized);     
+        directions.Add(transform.forward);
+        directions.Add(-transform.forward);
     }
 
     // Fixed Update is called every Physics Tick
     private void FixedUpdate()
     {
-        //create wheel check raycasts
-        float radius = wheelDiameter / 2f;
-        
-        _wheelHits[0] = Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, radius);
-        _wheelHits[1] = Physics.Raycast(transform.position, (-transform.up * 2 + transform.forward).normalized, out hit, radius);
-        _wheelHits[2] = Physics.Raycast(transform.position, (-transform.up * 2 - transform.forward).normalized, out hit, radius);
-        _wheelHits[3] = Physics.Raycast(transform.position, (-transform.up + transform.forward).normalized, out hit, radius);
-        _wheelHits[4] = Physics.Raycast(transform.position, (-transform.up - transform.forward).normalized, out hit, radius);
-        _wheelHits[5] = Physics.Raycast(transform.position, (-transform.up + transform.forward * 2).normalized, out hit, radius);
-        _wheelHits[6] = Physics.Raycast(transform.position, (-transform.up - transform.forward * 2).normalized, out hit, radius);
-        _wheelHits[7] = Physics.Raycast(transform.position, transform.forward, out hit, radius);
-        
-        //reset lists 
         collisionPoints.Clear();
         collisionNormals.Clear();
-        //Proceeds to lose sanity
-        
-        //check and add colision points and normals
-        if (_wheelHits[0])
-        {
-            collisionPoints.Add(transform.position-transform.up.normalized*wheelDiameter/2);
-            collisionNormals.Add(transform.forward.normalized);
-        }
 
-        if (_wheelHits[1])
-        {
-            collisionPoints.Add(transform.position+transform.up.normalized*wheelDiameter/2);
-            collisionNormals.Add(-transform.forward.normalized);
-        }
+        Vector3 axle = transform.right;
 
-        if (_wheelHits[2])
+        for (int i = 0; i < directions.Count; i++)
         {
-            collisionPoints.Add(transform.position+transform.forward.normalized*wheelDiameter/2);
-            collisionNormals.Add(transform.up.normalized);
-        }
+            Vector3 worldDir = transform.TransformDirection(directions[i]);
 
-        if (_wheelHits[3])
-        {
-            collisionPoints.Add(transform.position-transform.forward.normalized*wheelDiameter/2);
-            collisionNormals.Add(-transform.up.normalized);
+            if (Physics.Raycast(transform.position, worldDir, out RaycastHit hit, wheelDiameter/2))
+            {
+                collisionPoints.Add(hit.point);
+                Vector3 tangentNormal = Vector3.Cross(axle, -worldDir);
+                
+                collisionNormals.Add(tangentNormal.normalized);
+            }
         }
-
-        if (_wheelHits[4])
-        {
-            collisionPoints.Add(transform.position+((transform.up.normalized+transform.forward.normalized)/2)*wheelDiameter/2);
-            collisionNormals.Add(-transform.forward.normalized+transform.up.normalized/2);
-        }
-
-        if (_wheelHits[5])
-        {
-            collisionPoints.Add(transform.position+((-transform.up.normalized+transform.forward.normalized)/2)*wheelDiameter/2);
-            collisionNormals.Add(transform.forward.normalized+transform.up.normalized/2);
-        }
-
-        if (_wheelHits[6])
-        {
-            collisionPoints.Add(transform.position+((transform.up.normalized-transform.forward.normalized)/2)*wheelDiameter/2);
-            collisionNormals.Add(-transform.forward.normalized-transform.up.normalized/2);
-        }
-
-        if (_wheelHits[7])
-        {
-            collisionPoints.Add(transform.position+((-transform.up.normalized-transform.forward.normalized)/2)*wheelDiameter/2);
-            collisionNormals.Add(transform.forward.normalized-transform.up.normalized/2);
-        }
-        
-        
-        
     }
 }

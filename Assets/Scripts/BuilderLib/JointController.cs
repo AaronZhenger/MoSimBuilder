@@ -63,6 +63,8 @@ public class JointController : MonoBehaviour
     [HideInInspector] public SetPoint[] setPoints;
 
     private float overidePosition;
+
+    private float lastTime;
     
     // Start is called before the first frame update
     void Start()
@@ -89,6 +91,8 @@ public class JointController : MonoBehaviour
             outputMin = -max,
             integralSaturation = iSat
         };
+
+        lastTime = Time.time;
     }
 
     public string getActiveSetpoint()
@@ -399,14 +403,16 @@ public class JointController : MonoBehaviour
                     targetForPid = -_targetPosition;
                 }
             }
-            rawPID = _pidController.UpdateAngle(Time.fixedDeltaTime,currentPosition, targetForPid);
+            rawPID = _pidController.UpdateAngle(Time.time - lastTime,currentPosition, targetForPid);
             joint.targetAngularVelocity = rawPID * driveAxis;
         }
         else
         {
-            rawPID = _pidController.UpdateLinear(Time.fixedDeltaTime,currentPosition, _targetPosition);
+            rawPID = _pidController.UpdateLinear(Time.time - lastTime,currentPosition, _targetPosition);
             joint.targetVelocity = -rawPID * driveAxis;
         }
+        
+        lastTime = Time.time;
     }
     
     bool PassesThroughWrapAngle(float currentAngle, float targetAngle, float wrapAngle)

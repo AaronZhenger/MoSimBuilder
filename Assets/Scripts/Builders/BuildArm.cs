@@ -388,9 +388,9 @@ public class BuildArm : BuildMechanism
         }
         else
         {
-            _controller.p = 0.5f;
+            _controller.p = 0.25f;
             _controller.i = 0;
-            _controller.d = 0.0005f;
+            _controller.d = 0.005f;
             _controller.max = 10;
         }
         

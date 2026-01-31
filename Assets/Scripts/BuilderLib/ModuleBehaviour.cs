@@ -23,6 +23,8 @@ public class ModuleBehaviour : MonoBehaviour
     /// </summary>
     [HideInInspector] public float targetModuleAngle = 0;
     
+    [HideInInspector] public float lateralFrictionMultiplier = 1;
+    
     private WheelBehaviour _wheelBehaviour;
     private DriveMotor _driveMotor;
     [HideInInspector] public Rigidbody _rb;
@@ -76,20 +78,37 @@ public class ModuleBehaviour : MonoBehaviour
         float angleError = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
         float voltage = Mathf.Clamp(feedForward + pValue * ((90 - Mathf.Clamp(Mathf.Abs(angleError),0,90))/90), -12, 12);
         
-        //f = m * a     a = Vtarget - Vreal
-        float force = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed*gearRatio)/gearRatio)/60) - _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).z) * 125;
+        float maxGrip = _rb.mass * 9.81f * 1.1f; 
+        Vector3 localVel = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position));
         
-        float friction = _wheelBehaviour.transform.InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position)).x * -3f * _rb.mass;
-        for (int i = 0; i < _wheelBehaviour.collisionPoints.Count; i++)
-        {
-            //drive wheel force
-                _rb.AddForceAtPosition(
-                    (_wheelBehaviour.collisionNormals[i] * force) / _wheelBehaviour.collisionPoints.Count,
-                    _wheelBehaviour.collisionPoints[i]);
-            
+        float motorTorqueForce = ((Mathf.PI * wheelDiameter * (_driveMotor.DriveSimUpdate(voltage, realSpeed * gearRatio) / gearRatio) / 60));
+        float slipZ = motorTorqueForce - localVel.z;
 
-            //friction force
-            _rb.AddForceAtPosition((_wheelBehaviour.transform.right.normalized*friction)/_wheelBehaviour.collisionPoints.Count, _wheelBehaviour.collisionPoints[i]);
+        float forceZ = (slipZ * 125);
+
+        float forceX = localVel.x * -4f * _rb.mass * lateralFrictionMultiplier;
+
+        Vector3 totalForce = new Vector3(forceX, 0, forceZ);
+        if (totalForce.magnitude > maxGrip)
+        {
+            totalForce = totalForce.normalized * maxGrip;
+        }
+
+        int contactCount = _wheelBehaviour.collisionPoints.Count;
+        if (contactCount > 0)
+        {
+            for (int i = 0; i < contactCount; i++)
+            {
+                // Drive Force
+                _rb.AddForceAtPosition(
+                    (_wheelBehaviour.transform.forward * totalForce.z) / contactCount,
+                    _wheelBehaviour.collisionPoints[i]);
+
+                // Side Friction Force
+                _rb.AddForceAtPosition(
+                    (_wheelBehaviour.transform.right * totalForce.x) / contactCount, 
+                    _wheelBehaviour.collisionPoints[i]);
+            }
         }
 
 

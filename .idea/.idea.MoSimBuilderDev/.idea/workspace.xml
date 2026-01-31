@@ -6,12 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7ed063f2-9ff3-4272-a8d5-8a38bf162393" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoSimBuilderDev/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fields/Rebuilt.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/Rebuilt.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Hub.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fields/RebuiltParts/Hub.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleF.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleF.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/FMS.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/FMS.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/FieldScorer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreOnlyOnce.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Field/ScoreOnlyOnce.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleE.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Robots/ExampleE.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/JointController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/JointController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/ModuleBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/ModuleBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/WheelBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BuilderLib/WheelBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Builders/BuildArm.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +33,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildAssembly.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildBumper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildCollider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildElevator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildTubing.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Builders/BuildWheel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ExtensionModules/AutoAlign.cs" root0="FORCE_HIGHLIGHTING" />
@@ -50,7 +50,6 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.7.0/InputSystem/Plugins/PlayerInput/PlayerNotifications.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.8.0/Runtime/VisualScripting.Core/Pooling/ArrayPool.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e509afeff7384f24a8f0ac30527ff01c1cbe00/8c/6193f8f1/Transform.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/Downloads/MoSimBuilder-0.0.0.2.1/MoSimBuilder-0.0.0.2.1/Assets/Scripts/RobotScripts/Generators/GenerateArm.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -229,7 +228,10 @@
       <workItem from="1769031706572" duration="2319000" />
       <workItem from="1769039929930" duration="6372000" />
       <workItem from="1769116590602" duration="2218000" />
-      <workItem from="1769795199084" duration="3288000" />
+      <workItem from="1769795199084" duration="4055000" />
+      <workItem from="1769805081382" duration="70000" />
+      <workItem from="1769834687192" duration="797000" />
+      <workItem from="1769835518663" duration="2217000" />
     </task>
     <servers />
   </component>
