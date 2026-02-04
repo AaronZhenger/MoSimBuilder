@@ -1,20 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using MyBox;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Util;
 
-public class PointAtTarget : MonoBehaviour
+[ExecuteAlways]
+public class InterpolateNode: MonoBehaviour
 {
     [SerializeField] private TargetType targetType;
-    
+
     [SerializeField] private TargetWhen targetWhen;
-    
-    [SerializeField] private TargetingMethod targetingMethod;
+
+    [SerializeField] private InspectorDropdown targetOuttake;
     
     [Header("Targeting Settings")]
     [ConditionalField(true, nameof(IsPreset))]
@@ -22,93 +20,77 @@ public class PointAtTarget : MonoBehaviour
 
     [ConditionalField(true, nameof(WhenAtSetpoint))] [SerializeField]
     private string SetpointName;
-    
+    [ConditionalField(true, nameof(WhenAtSetpoint))]
+    [SerializeField] private string connectedTo = "none";
+
     [ConditionalField(true, nameof(IsPreset), true)]
     [SerializeField] private Vector3[] extraTargets;
 
     [Header("Tuning Settings")]
-    [ConditionalField(true, nameof(IsInterpolating), true)] 
-    [SerializeField] private float heightOffset;
-    [ConditionalField(true, nameof(IsInterpolating), true)] 
-    [SerializeField] private float angleOffset;
-
-    [ConditionalField(true, nameof(IsInterpolating))] 
-    [SerializeField] private DistanceValue[] interpolationTable;
+    [SerializeField] private PointAtTarget.DistanceValue[] interpolationTable;
     private bool IsPreset() => targetType == TargetType.Preset;
     private bool WhenAtSetpoint() => targetWhen == TargetWhen.AtSetpoint;
-    private bool IsInterpolating() => targetingMethod == TargetingMethod.Interpolation;
-    
+
+    private BuildMechanism targetMechanism;
+    private BuildNode targetNode;
     private List<Vector3> _allTargets;
-    
-    private DistanceValue[] _sortedCache;
-    
-    private JointController _controller;
+    private PointAtTarget.DistanceValue[] _sortedCache;
 
-    private bool _lateStartup;
-    // Start is called before the first frame update
-    void Start()
+    private Dictionary<string, NodeAction> actionLookup;
+    private void Start()
     {
-        InitializeCache();
-        var foundTargets = Utils.FindGameObjectsOnLayer("AutoAngleNodes");
-
-        _allTargets = new List<Vector3>();
-        
-        foreach (var target in foundTargets)
+        if (!EditorApplication.isPlaying) return;
+        actionLookup = new Dictionary<string, NodeAction>();
+        if (!targetNode) return;
+        foreach (var action in targetNode.Actions)
         {
-            _allTargets.Add(target.transform.position); 
+            actionLookup.Add(action.Name, action);
         }
-
-        foreach (var target in extraTargets)
-        {
-            _allTargets.Add(target);
-        }
-        
-        _lateStartup = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (_lateStartup)
+        if (!EditorApplication.isPlaying)
         {
-            _controller = GetComponent<BuildMechanism>().GetController();
-            _lateStartup = false;
-        }
+            targetMechanism = Utils.FindParentObjectComponent<BuildMechanism>(gameObject);
+            targetNode = GetComponent<BuildNode>();
 
+            if (!targetNode) return;
+            foreach (var action in targetNode.Actions)
+            {
+                if (action.Type != NodeType.Outake) continue;
+                if (!targetOuttake.canBeSelected.Contains(action.Name))
+                {
+                    targetOuttake.canBeSelected.Add(action.Name);
+                }
+            }
+        }
+        
+        connectedTo = targetMechanism ? targetMechanism.name : "none";
+        
+        if (!targetMechanism) return;
+        var currentSetpoint = targetMechanism.GetController().getActiveSetpoint();
+        
         bool shouldTarget = targetWhen == TargetWhen.Always || 
                             (targetWhen == TargetWhen.AtSetpoint && 
                              String.Equals(
-                                 (_controller.getActiveSetpoint() ?? "").ToLower().Trim(), 
+                                 (currentSetpoint ?? "").ToLower().Trim(), 
                                  SetpointName.ToLower().Trim(), 
                                  StringComparison.OrdinalIgnoreCase));
-
+        
         if (!shouldTarget) return;
-
+        
         Vector3 target = GetTargetValue();
     
-        float setpointValue;
+        float speed;
     
-        switch (targetingMethod)
-        {
-            case TargetingMethod.PointAtOffset:
-                setpointValue = CalculateTargetAngle(target) + angleOffset;
-                break;
-            
-            case TargetingMethod.Interpolation:
-                Vector3 originPos = transform.position;
-                float currentDistance = Vector3.Distance(originPos, target);
-                setpointValue = Interpolate(currentDistance) + angleOffset;
-                break;
-            
-            default:
-                setpointValue = 0f;
-                break;
-        }
+        Vector3 originPos = transform.position;
+        float currentDistance = Vector3.Distance(originPos, target);
+        speed = Interpolate(currentDistance);
     
-        _controller.OveridePosition(setpointValue);
+        actionLookup[targetOuttake.selectedName].SetSpeedOveride(speed);
     }
     
-    //runs on editor change
     private void OnValidate()
     {
         if (EditorApplication.isPlaying)
@@ -170,49 +152,33 @@ public class PointAtTarget : MonoBehaviour
     
         return furthestTarget;
     }
-
-    //direct calculation stuff
-    private float CalculateTargetAngle(Vector3 targetPos)
-    {
-        Transform refPoint = transform;
-        
-        targetPos -= heightOffset * Vector3.up;
-
-        Vector3 localTarget = refPoint.parent.InverseTransformPoint(targetPos);
-          
-
-        float angleRad = Mathf.Atan2(localTarget.y, localTarget.z);
-        float angleDeg = angleRad * Mathf.Rad2Deg;
-
-        return Mathf.Repeat(angleDeg + angleOffset, 360);
-    }
     
     //Interpolation stuff
     private void InitializeCache()
     {
         if (interpolationTable == null || interpolationTable.Length == 0)
         {
-            _sortedCache = Array.Empty<DistanceValue>();
+            _sortedCache = Array.Empty<PointAtTarget.DistanceValue>();
             return;
         }
 
         // Allocate the cache array exactly once
-        _sortedCache = new DistanceValue[interpolationTable.Length];
+        _sortedCache = new PointAtTarget.DistanceValue[interpolationTable.Length];
     
         // Copy the serialized data to our working cache
         Array.Copy(interpolationTable, _sortedCache, interpolationTable.Length);
 
         // Sort the cache immediately to enable Binary Search
         // Using the struct comparer prevents boxing allocations
-        Array.Sort(_sortedCache, new DistanceComparer());
+        Array.Sort(_sortedCache, new PointAtTarget.DistanceComparer());
     }
     
-    private void UpdateTable(DistanceValue[] newData)
+    private void UpdateTable(PointAtTarget.DistanceValue[] newData)
     {
         // Avoid re-allocating if the size hasn't changed
         if (_sortedCache == null || _sortedCache.Length != newData.Length)
         {
-            _sortedCache = new DistanceValue[newData.Length];
+            _sortedCache = new PointAtTarget.DistanceValue[newData.Length];
         }
         
         Array.Copy(newData, _sortedCache, newData.Length);
@@ -224,7 +190,7 @@ public class PointAtTarget : MonoBehaviour
         if (_sortedCache == null || _sortedCache.Length == 0) return 0f;
 
         // BinarySearch on a struct array is O(log n) and zero GC
-        int index = Array.BinarySearch(_sortedCache, new DistanceValue { distance = currentDistance }, new DistanceComparer());
+        int index = Array.BinarySearch(_sortedCache, new PointAtTarget.DistanceValue { distance = currentDistance }, new PointAtTarget.DistanceComparer());
 
         if (index >= 0) return _sortedCache[index].value;
 
@@ -238,17 +204,5 @@ public class PointAtTarget : MonoBehaviour
         var upper = _sortedCache[nextIndex];
         float t = (currentDistance - lower.distance) / (upper.distance - lower.distance);
         return Mathf.Lerp(lower.value, upper.value, t);
-    }
-
-    [Serializable]
-    public struct DistanceValue
-    {
-        public float distance;
-        public float value;
-    }
-    
-    public struct DistanceComparer : System.Collections.Generic.IComparer<DistanceValue>
-    {
-        public int Compare(DistanceValue x, DistanceValue y) => x.distance.CompareTo(y.distance);
     }
 }

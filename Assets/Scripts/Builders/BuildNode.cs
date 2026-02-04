@@ -454,37 +454,50 @@ public class BuildNode: MonoBehaviour
         var pose = transform.InverseTransformPoint(piece.transform.position);
         return pose.magnitude;
     }
+    
+    public void OverideActionSpeed(float speed, NodeAction action)
+    {
+        action.Speed = speed;
+    }
 }
 
 [Serializable]
 public struct NodeAction
 {
     public string Name;
-    [Header("Node Behaviour on Action")]
-    public NodeType Type;
+
+    [Header("Node Behaviour on Action")] public NodeType Type;
+
     //interface stuff
     [ConditionalField(true, nameof(IsNotOuttake))]
     public bool Animate;
+
     [ConditionalField(true, nameof(SpeedVisible))]
     public float Speed;
+    
+    [HideInInspector] public float? overideSpeed;
+
     [ConditionalField(true, nameof(AngularVisible))]
     public float AngularSpeed;
+
     [ConditionalField(true, nameof(IsTransfer))]
     public BuildNode MoveTo;
+
     [ConditionalField(true, nameof(IsOuttake))]
     public Direction Direction;
+
     [ConditionalField(true, nameof(IsOuttake))]
     public Vector3 Spin;
+
     [ConditionalField(true, nameof(IsNotIntake))]
     public float DelayTimer;
-    [Header("General Settings")]
-    public PieceNames PieceType;
+
+    [Header("General Settings")] public PieceNames PieceType;
     public NodeControlType ControlType;
-    [HideInInspector]
-    public float performTimer;
+    [HideInInspector] public float performTimer;
     public ControllerInputs ControllerButton;
     public KeyboardInputs KeyboardButton;
-    
+
     //Conditional values
     private bool IsTransfer() => Type is NodeType.Transfer;
     private bool IsOuttake() => Type is NodeType.Outake;
@@ -492,6 +505,8 @@ public struct NodeAction
     private bool IsNotIntake() => Type is not NodeType.Intake;
     private bool SpeedVisible() => (IsNotOuttake() && Animate) || IsOuttake();
     private bool AngularVisible() => (IsNotOuttake() && Animate);
+    
+    public void SetSpeedOveride(float speed) => overideSpeed = speed;
 }
 
 
