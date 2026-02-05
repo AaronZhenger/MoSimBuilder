@@ -50,6 +50,7 @@ public class SwerveController : MonoBehaviour
     private const float RAD_TO_DEG = 180f / Mathf.PI;
 
     private bool inputsOveriden;
+    private bool steerOveriden;
 
     private bool inputsOveridable;
 
@@ -107,9 +108,8 @@ public class SwerveController : MonoBehaviour
 
     public void OverideSteer(float angle, bool disruptable = false)
     {
-        _translateValue = _translateAction.ReadValue<Vector2>();
         _rotateValue = new Vector2(angle, 0);
-        inputsOveriden = true;
+        steerOveriden = true;
         inputsOveridable = disruptable;
     }
 
@@ -117,13 +117,21 @@ public class SwerveController : MonoBehaviour
     void FixedUpdate()
     {
         //update controls
-        if (_translateAction.ReadValue<Vector2>().magnitude > 0.05f && inputsOveridable)
+        if (_translateAction.ReadValue<Vector2>().magnitude > 0.05f && inputsOveridable && !steerOveriden)
         {
             _translateValue = _translateAction.ReadValue<Vector2>();
             _rotateValue = _rotateAction.ReadValue<Vector2>();
             inputsOveriden = false;
+        } else if (_rotateAction.ReadValue<Vector2>().magnitude > 0.05f && inputsOveridable && steerOveriden)
+        {
+            _translateValue = _translateAction.ReadValue<Vector2>();
+            _rotateValue = _rotateAction.ReadValue<Vector2>();
+            steerOveriden = false;
+        }else if (steerOveriden)
+        {
+            _translateValue = _translateAction.ReadValue<Vector2>();
         }
-        else if (!inputsOveriden)
+        else if (!inputsOveriden || !steerOveriden)
         {
             _translateValue = _translateAction.ReadValue<Vector2>();
             _rotateValue = _rotateAction.ReadValue<Vector2>();
@@ -183,6 +191,7 @@ public class SwerveController : MonoBehaviour
 
         // Swerve Math
         var RCW = -_rotateValue.x * steerMp;
+        steerOveriden = false;
 
         GenerateSwerveSetpoints(fwd, str, -RCW);
 

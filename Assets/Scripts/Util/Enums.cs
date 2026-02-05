@@ -81,6 +81,7 @@ namespace Util
         Always,
         AtSetpoint,
         WhenPressing,
+        WithinRange,
     }
 
     public enum TargetWhen
