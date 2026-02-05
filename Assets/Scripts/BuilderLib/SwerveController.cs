@@ -105,6 +105,14 @@ public class SwerveController : MonoBehaviour
         inputsOveridable = disruptable;
     }
 
+    public void OverideSteer(float angle, bool disruptable = false)
+    {
+        _translateValue = _translateAction.ReadValue<Vector2>();
+        _rotateValue = new Vector2(angle, 0);
+        inputsOveriden = true;
+        inputsOveridable = disruptable;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {

@@ -76,6 +76,13 @@ namespace Util
         Preset,
     }
 
+    public enum AimAtWhen
+    {
+        Always,
+        AtSetpoint,
+        WhenPressing,
+    }
+
     public enum TargetWhen
     {
         Always,

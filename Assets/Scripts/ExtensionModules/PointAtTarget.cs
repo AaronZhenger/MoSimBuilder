@@ -195,20 +195,15 @@ public class PointAtTarget : MonoBehaviour
             return;
         }
 
-        // Allocate the cache array exactly once
         _sortedCache = new DistanceValue[interpolationTable.Length];
     
-        // Copy the serialized data to our working cache
         Array.Copy(interpolationTable, _sortedCache, interpolationTable.Length);
 
-        // Sort the cache immediately to enable Binary Search
-        // Using the struct comparer prevents boxing allocations
         Array.Sort(_sortedCache, new DistanceComparer());
     }
     
     private void UpdateTable(DistanceValue[] newData)
     {
-        // Avoid re-allocating if the size hasn't changed
         if (_sortedCache == null || _sortedCache.Length != newData.Length)
         {
             _sortedCache = new DistanceValue[newData.Length];
@@ -222,14 +217,12 @@ public class PointAtTarget : MonoBehaviour
     {
         if (_sortedCache == null || _sortedCache.Length == 0) return 0f;
 
-        // BinarySearch on a struct array is O(log n) and zero GC
         int index = Array.BinarySearch(_sortedCache, new DistanceValue { distance = currentDistance }, new DistanceComparer());
 
         if (index >= 0) return _sortedCache[index].value;
 
         int nextIndex = ~index;
 
-        // Handle bounds
         if (nextIndex == 0) return _sortedCache[0].value;
         if (nextIndex >= _sortedCache.Length) return _sortedCache[_sortedCache.Length - 1].value;
         
