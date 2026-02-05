@@ -117,7 +117,8 @@ namespace BuilderLib
             if (!piece) return false;
             if (!piece.owner) return false;
             if (piece.pieceType != action.PieceType) return false;
-            var speed = action.overideSpeed ?? action.Speed * 0.0254f;
+            var speed = action.overideSpeed * 0.0254f ?? action.Speed * 0.0254f;
+            action.overideSpeed = null;
             var rb = piece.rb;
             var transform = rb.transform;
 

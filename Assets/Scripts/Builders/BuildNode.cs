@@ -462,7 +462,7 @@ public class BuildNode: MonoBehaviour
 }
 
 [Serializable]
-public struct NodeAction
+public class NodeAction
 {
     public string Name;
 
@@ -474,8 +474,8 @@ public struct NodeAction
 
     [ConditionalField(true, nameof(SpeedVisible))]
     public float Speed;
-    
-    [HideInInspector] public float? overideSpeed;
+
+    [HideInInspector] public float? overideSpeed {get; set;}
 
     [ConditionalField(true, nameof(AngularVisible))]
     public float AngularSpeed;
@@ -505,8 +505,6 @@ public struct NodeAction
     private bool IsNotIntake() => Type is not NodeType.Intake;
     private bool SpeedVisible() => (IsNotOuttake() && Animate) || IsOuttake();
     private bool AngularVisible() => (IsNotOuttake() && Animate);
-    
-    public void SetSpeedOveride(float speed) => overideSpeed = speed;
 }
 
 

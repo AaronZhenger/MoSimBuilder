@@ -175,16 +175,15 @@ public class PointAtTarget : MonoBehaviour
     private float CalculateTargetAngle(Vector3 targetPos)
     {
         Transform refPoint = transform;
-        
+    
         targetPos -= heightOffset * Vector3.up;
 
         Vector3 localTarget = refPoint.parent.InverseTransformPoint(targetPos);
-          
-
+      
         float angleRad = Mathf.Atan2(localTarget.y, localTarget.z);
         float angleDeg = angleRad * Mathf.Rad2Deg;
 
-        return Mathf.Repeat(angleDeg + angleOffset, 360);
+        return angleDeg + angleOffset;
     }
     
     //Interpolation stuff

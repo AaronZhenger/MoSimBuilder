@@ -28,24 +28,43 @@ public class InterpolateNode: MonoBehaviour
 
     [Header("Tuning Settings")]
     [SerializeField] private PointAtTarget.DistanceValue[] interpolationTable;
+
+    [ConditionalField(true, nameof(IsPlaying))]
+    [SerializeField] private float Distance;
+    [ConditionalField(true, nameof(IsPlaying))]
+    [SerializeField] private float Output;
     private bool IsPreset() => targetType == TargetType.Preset;
     private bool WhenAtSetpoint() => targetWhen == TargetWhen.AtSetpoint;
+    
+    private bool IsPlaying() => EditorApplication.isPlaying;
 
     private BuildMechanism targetMechanism;
     private BuildNode targetNode;
-    private List<Vector3> _allTargets;
+    private List<Vector3> _allTargets = new List<Vector3>();
     private PointAtTarget.DistanceValue[] _sortedCache;
 
-    private Dictionary<string, NodeAction> actionLookup;
+    private Dictionary<string, NodeAction> actionLookup = new Dictionary<string, NodeAction>();
     private void Start()
     {
+        InitializeCache();
         if (!EditorApplication.isPlaying) return;
-        actionLookup = new Dictionary<string, NodeAction>();
-        if (!targetNode) return;
+        targetNode = GetComponent<BuildNode>();
         foreach (var action in targetNode.Actions)
         {
             actionLookup.Add(action.Name, action);
         }
+        
+        var foundTargets = Utils.FindGameObjectsOnLayer("AutoAngleNodes");
+        
+        foreach (var target in foundTargets)
+        {
+            _allTargets.Add(target.transform.position); 
+        }
+
+        
+        _allTargets.AddRange(extraTargets);
+        targetMechanism = Utils.FindParentObjectComponent<BuildMechanism>(gameObject);
+        
     }
 
     private void Update()
@@ -67,10 +86,18 @@ public class InterpolateNode: MonoBehaviour
         }
         
         connectedTo = targetMechanism ? targetMechanism.name : "none";
-        
-        if (!targetMechanism) return;
-        var currentSetpoint = targetMechanism.GetController().getActiveSetpoint();
-        
+
+        if (!EditorApplication.isPlaying) return;
+        var currentSetpoint = "";
+        if (targetMechanism && targetMechanism.GetController())
+        {
+            currentSetpoint = targetMechanism.GetController().getActiveSetpoint();
+        }
+        else if (targetWhen == TargetWhen.AtSetpoint)
+        {
+            return;
+        }
+
         bool shouldTarget = targetWhen == TargetWhen.Always || 
                             (targetWhen == TargetWhen.AtSetpoint && 
                              String.Equals(
@@ -87,8 +114,9 @@ public class InterpolateNode: MonoBehaviour
         Vector3 originPos = transform.position;
         float currentDistance = Vector3.Distance(originPos, target);
         speed = Interpolate(currentDistance);
-    
-        actionLookup[targetOuttake.selectedName].SetSpeedOveride(speed);
+
+        actionLookup.TryGetValue(targetOuttake.selectedName, out var nodeAction);
+         nodeAction.overideSpeed = (speed);
     }
     
     private void OnValidate()
@@ -187,6 +215,7 @@ public class InterpolateNode: MonoBehaviour
 
     private float Interpolate(float currentDistance)
     {
+        Distance = currentDistance;
         if (_sortedCache == null || _sortedCache.Length == 0) return 0f;
 
         // BinarySearch on a struct array is O(log n) and zero GC
@@ -198,11 +227,13 @@ public class InterpolateNode: MonoBehaviour
 
         // Handle bounds
         if (nextIndex == 0) return _sortedCache[0].value;
-        if (nextIndex >= _sortedCache.Length) return _sortedCache[_sortedCache.Length - 1].value;
+        if (nextIndex >= _sortedCache.Length) return _sortedCache[^1].value;
         
         var lower = _sortedCache[nextIndex - 1];
         var upper = _sortedCache[nextIndex];
         float t = (currentDistance - lower.distance) / (upper.distance - lower.distance);
-        return Mathf.Lerp(lower.value, upper.value, t);
+        var output = Mathf.Lerp(lower.value, upper.value, t);
+        Output = output;
+        return output;
     }
 }
