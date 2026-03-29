@@ -28,7 +28,11 @@ Currently, the Extensions System contains the following:
     * `Furtherst` which points at the furthest available target
     * `Preset` which always points at the same fixed point
     * `Custom` which points at the closest target in the `extra targets` field
-* Buttons are all `ON HOLD` behaviour based
+* There are 4 target condition modes:
+     * `always` which always points at the target
+     * `at setpoint` which allows you to specify a subsystem and setpoint name to activate the action
+     * `when pressing` which aims when a button is held
+     * `within range` which aims when within a certain distance of the target
 * Similar to mechanisms it supports custom PID values
 * NOTE: it always uses the `forward` or z axis as its target for pointing
 
