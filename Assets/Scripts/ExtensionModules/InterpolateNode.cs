@@ -138,9 +138,32 @@ public class InterpolateNode: MonoBehaviour
                 return getClosestTarget();
             case TargetType.Furthest:
                 return getFurthestTarget();
+            case TargetType.Custom:
+                return GetClosestCustomTarget();
         }
         
         return Vector3.zero;
+    }
+    
+    private Vector3 GetClosestCustomTarget()
+    {
+        if (extraTargets.Length == 0) return Vector3.zero;
+
+        float closestDistance = float.MaxValue;
+        Vector3 closestTarget = Vector3.zero;
+        Vector3 originPos = transform.position;
+    
+        foreach (var target in extraTargets)
+        {
+            var distance = Vector3.Distance(originPos, target); 
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestTarget = target;
+            }
+        }
+    
+        return closestTarget;
     }
 
     private Vector3 getClosestTarget()
