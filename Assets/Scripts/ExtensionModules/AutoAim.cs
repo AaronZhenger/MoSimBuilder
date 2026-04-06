@@ -181,7 +181,7 @@ public class AutoAim : MonoBehaviour
         if (!drivingMechanism || !drivingMechanism.GetController())
             return false;
 
-        var currentSetpoint = drivingMechanism.GetController().getActiveSetpoint();
+        var currentSetpoint = drivingMechanism.GetController().GetActiveSetpoint();
         
         return String.Equals(
             (currentSetpoint ?? "").ToLower().Trim(), 
