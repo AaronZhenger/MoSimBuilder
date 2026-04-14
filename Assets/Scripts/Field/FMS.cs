@@ -110,6 +110,12 @@ public class FMS : MonoBehaviour
             timer = dispT.GetComponent<TextMeshProUGUI>();
         }
 
+        var dispL = GameObject.Find("MatchStateLabel");
+        if (dispL != null)
+        {
+            _matchStateLabel = dispL.GetComponent<TextMeshProUGUI>();
+        }
+
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         matchLoader.setFMS(this);
         MatchTimer = matchTime;
@@ -123,20 +129,7 @@ public class FMS : MonoBehaviour
 
     private void UpdateOverlay()
     {
-        if (_matchStateLabel == null)
-        {
-            var gameUi = GameObject.Find("GameUi");
-            if (gameUi == null) return;
-            foreach (var t in gameUi.GetComponentsInChildren<Transform>(true))
-            {
-                if (t.name == "MatchStateLabel")
-                {
-                    _matchStateLabel = t.GetComponent<TextMeshProUGUI>();
-                    break;
-                }
-            }
-            if (_matchStateLabel == null) return;
-        }
+        if (_matchStateLabel == null) return;
 
         string stateText;
         switch (MatchState)
