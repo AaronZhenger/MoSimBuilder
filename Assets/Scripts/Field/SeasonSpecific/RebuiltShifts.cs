@@ -63,11 +63,11 @@ public class RebuiltShifts : ScoreOnlyOnce
             currentShift = CurrentShift.Auto;
         }
 
-        if (FMS.MatchState is not MatchState.auto)
+        if (FMS.MatchState is not MatchState.auto && currentShift != CurrentShift.EndGame)
         {
             shiftTimer -= Time.deltaTime;
 
-            if (shiftTimer <= 0 && currentShift != CurrentShift.EndGame)
+            if (shiftTimer <= 0)
             {
                 if (currentShift == CurrentShift.Auto)
                     shiftTimer = 10;
