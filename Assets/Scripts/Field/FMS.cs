@@ -18,13 +18,20 @@ public class FMS : MonoBehaviour
     public static RobotState RobotState;
     public static MatchState MatchState;
     public MatchState state;
-    
+
     private MatchState previousMatchState;
 
     private LoadMatch matchLoader;
     private TextMeshProUGUI timer;
 
     public RobotState robotState;
+
+    public static float ShiftTimer;
+    public static string ShiftName = "";
+
+    private TextMeshProUGUI _matchStateLabel;
+    private float _autoEndTime;
+
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -52,7 +59,7 @@ public class FMS : MonoBehaviour
         {
             MatchState = MatchState.endgame;
         }
-        
+
         if (MatchState != previousMatchState && MatchState != MatchState.endgame)
         {
             switch (MatchState)
@@ -69,14 +76,14 @@ public class FMS : MonoBehaviour
                     break;
             }
         }
-        
+
         previousMatchState = MatchState;
-        
-        float minutes = Mathf.FloorToInt(MatchTimer / 60); 
-        
+
+        float minutes = Mathf.FloorToInt(MatchTimer / 60);
+
         // The remainder after dividing by 60 gives the remaining seconds
         float seconds = Mathf.FloorToInt(MatchTimer % 60);
-        
+
         if (minutes < 0) minutes = 0;
         if (seconds < 0) seconds = 0;
 
@@ -84,6 +91,8 @@ public class FMS : MonoBehaviour
         {
             timer.text = $"{minutes:00}:{seconds:00}";
         }
+
+        UpdateOverlay();
     }
 
     private IEnumerator wait(float time)
@@ -104,9 +113,59 @@ public class FMS : MonoBehaviour
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         matchLoader.setFMS(this);
         MatchTimer = matchTime;
+        _autoEndTime = matchTime - autoTime;
         previousMatchState = MatchState.auto;
         MatchState = MatchState.auto;
         RobotState = RobotState.enabled;
+        ShiftTimer = 0;
+        ShiftName = "";
+    }
+
+    private void UpdateOverlay()
+    {
+        if (_matchStateLabel == null)
+        {
+            var gameUi = GameObject.Find("GameUi");
+            if (gameUi == null) return;
+            foreach (var t in gameUi.GetComponentsInChildren<Transform>(true))
+            {
+                if (t.name == "MatchStateLabel")
+                {
+                    _matchStateLabel = t.GetComponent<TextMeshProUGUI>();
+                    break;
+                }
+            }
+            if (_matchStateLabel == null) return;
+        }
+
+        string stateText;
+        switch (MatchState)
+        {
+            case MatchState.auto:
+                float autoRemaining = MatchTimer - _autoEndTime;
+                int autoSec = Mathf.CeilToInt(Mathf.Max(autoRemaining, 0f));
+                stateText = $"Auto :{autoSec:D2}";
+                break;
+            case MatchState.teleop:
+            case MatchState.endgame:
+                if (ShiftTimer > 0 && ShiftName.Length > 0)
+                {
+                    int shiftSec = Mathf.CeilToInt(ShiftTimer);
+                    stateText = $"{ShiftName} :{shiftSec:D2}";
+                }
+                else
+                {
+                    stateText = "";
+                }
+                break;
+            case MatchState.finished:
+                stateText = "Match Over";
+                break;
+            default:
+                stateText = "";
+                break;
+        }
+        _matchStateLabel.text = stateText;
     }
 }
 
