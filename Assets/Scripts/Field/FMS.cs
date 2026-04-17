@@ -7,6 +7,7 @@ using Util;
 
 public class FMS : MonoBehaviour
 {
+    //THIS SCRIPT SHOULD BE SEASON GENERIC AND FEATURE NO SEASON SPECIFIC CODE
     public int matchTime = 150;
     public int autoTime = 15;
     public float autoDisableTime = 0.5f;
@@ -26,11 +27,6 @@ public class FMS : MonoBehaviour
 
     public RobotState robotState;
 
-    public static float ShiftTimer;
-    public static string ShiftName = "";
-
-    private TextMeshProUGUI _matchStateLabel;
-    private float _autoEndTime;
 
     // Start is called before the first frame update
     void OnEnable()
@@ -81,7 +77,6 @@ public class FMS : MonoBehaviour
 
         float minutes = Mathf.FloorToInt(MatchTimer / 60);
 
-        // The remainder after dividing by 60 gives the remaining seconds
         float seconds = Mathf.FloorToInt(MatchTimer % 60);
 
         if (minutes < 0) minutes = 0;
@@ -91,8 +86,6 @@ public class FMS : MonoBehaviour
         {
             timer.text = $"{minutes:00}:{seconds:00}";
         }
-
-        UpdateOverlay();
     }
 
     private IEnumerator wait(float time)
@@ -109,56 +102,14 @@ public class FMS : MonoBehaviour
         {
             timer = dispT.GetComponent<TextMeshProUGUI>();
         }
-
-        var dispL = GameObject.Find("MatchStateLabel");
-        if (dispL != null)
-        {
-            _matchStateLabel = dispL.GetComponent<TextMeshProUGUI>();
-        }
-
+        
         matchLoader = Utils.FindParentObjectComponent<LoadMatch>(gameObject);
         matchLoader.setFMS(this);
         MatchTimer = matchTime;
-        _autoEndTime = matchTime - autoTime;
         previousMatchState = MatchState.auto;
         MatchState = MatchState.auto;
         RobotState = RobotState.enabled;
-        ShiftTimer = 0;
-        ShiftName = "";
-    }
-
-    private void UpdateOverlay()
-    {
-        if (_matchStateLabel == null) return;
-
-        string stateText;
-        switch (MatchState)
-        {
-            case MatchState.auto:
-                float autoRemaining = MatchTimer - _autoEndTime;
-                int autoSec = Mathf.CeilToInt(Mathf.Max(autoRemaining, 0f));
-                stateText = $"Auto :{autoSec:D2}";
-                break;
-            case MatchState.teleop:
-            case MatchState.endgame:
-                if (ShiftTimer > 0 && ShiftName.Length > 0)
-                {
-                    int shiftSec = Mathf.CeilToInt(ShiftTimer);
-                    stateText = $"{ShiftName} :{shiftSec:D2}";
-                }
-                else
-                {
-                    stateText = "";
-                }
-                break;
-            case MatchState.finished:
-                stateText = "Match Over";
-                break;
-            default:
-                stateText = "";
-                break;
-        }
-        _matchStateLabel.text = stateText;
+       
     }
 }
 

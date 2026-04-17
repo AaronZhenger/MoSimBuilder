@@ -7,7 +7,7 @@ using Random = System.Random;
 
 public class RebuiltShifts : ScoreOnlyOnce
 {
-    [SerializeField] private CurrentShift currentShift;
+    public static CurrentShift currentShift;
     private bool blueWonAuto;
     private float shiftTimer;
     private MatchState previousMatchState;
@@ -33,17 +33,17 @@ public class RebuiltShifts : ScoreOnlyOnce
 
         ScorePoints(totalScore); // Pass the total accumulated score
 
-        FMS.ShiftTimer = shiftTimer;
+        ShiftOverlay.ShiftTimer = shiftTimer;
         switch (currentShift)
         {
-            case CurrentShift.Auto:       FMS.ShiftName = "Auto"; break;
-            case CurrentShift.Transition:  FMS.ShiftName = "1/6"; break;
-            case CurrentShift.Shift1:      FMS.ShiftName = "2/6"; break;
-            case CurrentShift.Shift2:      FMS.ShiftName = "3/6"; break;
-            case CurrentShift.Shift3:      FMS.ShiftName = "4/6"; break;
-            case CurrentShift.Shift4:      FMS.ShiftName = "5/6"; break;
-            case CurrentShift.EndGame:     FMS.ShiftName = "6/6"; break;
-            default:                       FMS.ShiftName = ""; break;
+            case CurrentShift.Auto:       ShiftOverlay.ShiftName = "Auto"; break;
+            case CurrentShift.Transition:  ShiftOverlay.ShiftName = "1/6"; break;
+            case CurrentShift.Shift1:      ShiftOverlay.ShiftName = "2/6"; break;
+            case CurrentShift.Shift2:      ShiftOverlay.ShiftName = "3/6"; break;
+            case CurrentShift.Shift3:      ShiftOverlay.ShiftName = "4/6"; break;
+            case CurrentShift.Shift4:      ShiftOverlay.ShiftName = "5/6"; break;
+            case CurrentShift.EndGame:     ShiftOverlay.ShiftName = "6/6"; break;
+            default:                       ShiftOverlay.ShiftName = ""; break;
         }
     }
 
