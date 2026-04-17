@@ -7,7 +7,7 @@ using Random = System.Random;
 
 public class RebuiltShifts : ScoreOnlyOnce
 {
-    [SerializeField] private CurrentShift currentShift;
+    public static CurrentShift currentShift;
     private bool blueWonAuto;
     private float shiftTimer;
     private MatchState previousMatchState;
@@ -24,15 +24,27 @@ public class RebuiltShifts : ScoreOnlyOnce
     private new void FixedUpdate()
     {
         shiftOnLight.SetActive(isOnShift());
-        
+
         poolOccupyObjects();
-    
+
         handleShiftState();
         // Create a set of current objects for comparison
         compareObjects(isOnShift());
-    
+
         ScorePoints(totalScore); // Pass the total accumulated score
-        
+
+        ShiftOverlay.ShiftTimer = shiftTimer;
+        switch (currentShift)
+        {
+            case CurrentShift.Auto:       ShiftOverlay.ShiftName = "Auto"; break;
+            case CurrentShift.Transition:  ShiftOverlay.ShiftName = "1/6"; break;
+            case CurrentShift.Shift1:      ShiftOverlay.ShiftName = "2/6"; break;
+            case CurrentShift.Shift2:      ShiftOverlay.ShiftName = "3/6"; break;
+            case CurrentShift.Shift3:      ShiftOverlay.ShiftName = "4/6"; break;
+            case CurrentShift.Shift4:      ShiftOverlay.ShiftName = "5/6"; break;
+            case CurrentShift.EndGame:     ShiftOverlay.ShiftName = "6/6"; break;
+            default:                       ShiftOverlay.ShiftName = ""; break;
+        }
     }
 
     private void handleShiftState()
@@ -51,22 +63,22 @@ public class RebuiltShifts : ScoreOnlyOnce
             currentShift = CurrentShift.Auto;
         }
 
-        if (FMS.MatchState is not MatchState.auto and not MatchState.endgame)
+        if (FMS.MatchState is not MatchState.auto)
         {
             shiftTimer -= Time.deltaTime;
 
-            if (shiftTimer <= 0)
+            if (shiftTimer <= 0 && currentShift != CurrentShift.EndGame)
             {
-                shiftTimer = currentShift == CurrentShift.Auto ? 10 : 25;
+                if (currentShift == CurrentShift.Auto)
+                    shiftTimer = 10;
+                else if (currentShift == CurrentShift.Shift4)
+                    shiftTimer = 30;
+                else
+                    shiftTimer = 25;
                 currentShift += 1;
             }
         }
 
-        if (FMS.MatchState == MatchState.endgame)
-        {
-            currentShift = CurrentShift.EndGame;
-        }
-        
         previousMatchState = FMS.MatchState;
     }
 
@@ -84,7 +96,7 @@ public class RebuiltShifts : ScoreOnlyOnce
             {
                 return currentShift is CurrentShift.Auto or CurrentShift.Transition or CurrentShift.Shift1 or CurrentShift.Shift3 or CurrentShift.EndGame;
             }
-            
+
         }
         else
         {
