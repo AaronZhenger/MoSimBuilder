@@ -108,16 +108,32 @@ public class BuildFrame : MonoBehaviour
         }
     }
 
-    public SwerveController GetSwerveController()
+    /// <summary>
+    /// Creates the swerve controller and PlayerInput. Optionally pairs to a specific input device
+    /// for split-screen multiplayer (e.g. a specific Gamepad).
+    /// </summary>
+    public SwerveController GetSwerveController(InputDevice pairedDevice = null)
     {
         if (_swerve == null)
         {
-            _inputAsset = Resources.Load("Controls/Builder") as InputActionAsset;
+            // Each player gets their own copy of the InputActionAsset so
+            // two PlayerInput components don't share actions and bleed input.
+            var sourceAsset = Resources.Load("Controls/Builder") as InputActionAsset;
+            _inputAsset = GameObject.Instantiate(sourceAsset);
+
             var playerInput = Utils.TryGetAddComponent<PlayerInput>(gameObject);
             playerInput.actions = _inputAsset;
             playerInput.neverAutoSwitchControlSchemes = true;
             playerInput.defaultControlScheme = playerNumber;
             playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
+
+            // If a specific device is provided, pair this PlayerInput to only that device.
+            // This allows two robots to each respond to a different gamepad.
+            if (pairedDevice != null)
+            {
+                playerInput.SwitchCurrentControlScheme(playerNumber, pairedDevice);
+            }
+
             _swerve = Utils.TryGetAddComponent<SwerveController>(gameObject);
             var rb = Utils.TryGetAddComponent<Rigidbody>(gameObject);
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
@@ -129,7 +145,7 @@ public class BuildFrame : MonoBehaviour
             _swerve.gearRatio = gearRatio;
             _swerve.wheelDiameter = _moduleWheelDiameters[(int)moduleType];
         }
-        
+
         return _swerve;
     }
 
