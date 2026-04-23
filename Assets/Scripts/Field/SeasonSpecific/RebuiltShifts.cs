@@ -14,6 +14,25 @@ public class RebuiltShifts : ScoreOnlyOnce
     private MatchState previousMatchState;
 
     [SerializeField] private GameObject shiftOnLight;
+
+    // Season-specific match timing
+    [Header("Season Match Timing")]
+    [SerializeField] private int seasonMatchTime = 160;
+    [SerializeField] private int seasonAutoTime = 20;
+    [SerializeField] private int seasonEndgameTime = 30;
+
+    private void Awake()
+    {
+        // Push this season's timing into the (season-generic) FMS before it initializes
+        var fms = FindObjectOfType<FMS>();
+        if (fms != null)
+        {
+            fms.matchTime = seasonMatchTime;
+            fms.autoTime = seasonAutoTime;
+            fms.endgameTime = seasonEndgameTime;
+        }
+    }
+
     // Update is called once per frame
     private void Start()
     {
@@ -22,20 +41,17 @@ public class RebuiltShifts : ScoreOnlyOnce
         teleopStartMatchTimer = 0f;
         currentShift = CurrentShift.Auto;
         previousMatchState = MatchState.auto;
+        FMS.MatchTimer = seasonMatchTime;
     }
 
     private new void FixedUpdate()
     {
         shiftOnLight.SetActive(isOnShift());
-
         poolOccupyObjects();
-
         handleShiftState();
         // Create a set of current objects for comparison
         compareObjects(isOnShift());
-
         ScorePoints(totalScore); // Pass the total accumulated score
-
         ShiftOverlay.ShiftTimer = shiftTimer;
         switch (currentShift)
         {
@@ -67,9 +83,10 @@ public class RebuiltShifts : ScoreOnlyOnce
 
         if (FMS.MatchState is not MatchState.auto)
         {
+            // Teleop elapsed == how far FMS.MatchTimer has moved since teleop started. This pauses automatically whenever FMS.MatchTimer is paused
             float teleopElapsed = teleopStartMatchTimer - FMS.MatchTimer;
             if (teleopElapsed < 0f) teleopElapsed = 0f;
-
+            
             CurrentShift resolved;
             float remaining;
             if (teleopElapsed < TransitionEnd)
@@ -100,11 +117,14 @@ public class RebuiltShifts : ScoreOnlyOnce
             else
             {
                 resolved = CurrentShift.EndGame;
+                // End game runs until the match ends
                 remaining = Mathf.Max(FMS.MatchTimer, 0f);
             }
+
             currentShift = resolved;
             shiftTimer = remaining;
         }
+
         previousMatchState = FMS.MatchState;
     }
 
@@ -134,7 +154,7 @@ public class RebuiltShifts : ScoreOnlyOnce
             }
         }
     }
-    
+
     [Serializable]
     public enum CurrentShift
     {
