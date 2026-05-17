@@ -41,46 +41,43 @@ public class FMS : MonoBehaviour
         robotState = RobotState;
         if (robotState == RobotState.enabled) MatchTimer -= Time.deltaTime;
 
-        if (MatchTimer >= matchTime - autoTime)
+        MatchState newState;
+        if (MatchTimer < 0)
         {
-            MatchState = MatchState.auto;
-        }  else if (MatchTimer >= endgameTime)
-        {
-            MatchState = MatchState.teleop;
+            newState = MatchState.finished;
         }
-        else if (MatchTimer < 0)
+        else if (MatchTimer <= endgameTime)
         {
-            MatchState = MatchState.finished;
-        } else if (MatchTimer <= endgameTime)
+            newState = MatchState.endgame;
+        }
+        else if (MatchTimer >= matchTime - autoTime)
         {
-            MatchState = MatchState.endgame;
+            newState = MatchState.auto;
+        }
+        else
+        {
+            newState = MatchState.teleop;
         }
 
-        if (MatchState != previousMatchState && MatchState != MatchState.endgame)
+        if (newState != previousMatchState)
         {
-            switch (MatchState)
+            switch (newState)
             {
                 case MatchState.teleop:
-                    MatchState = MatchState.auto;
                     StartCoroutine(wait(autoDisableTime));
-                    MatchState = MatchState.teleop;
                     break;
                 case MatchState.finished:
-                    MatchState = MatchState.endgame;
                     StartCoroutine(wait(matchDisabledTime));
-                    MatchState = MatchState.finished;
                     break;
             }
         }
 
-        previousMatchState = MatchState;
+        MatchState = newState;
+        previousMatchState = newState;
 
-        float minutes = Mathf.FloorToInt(MatchTimer / 60);
-
-        float seconds = Mathf.FloorToInt(MatchTimer % 60);
-
-        if (minutes < 0) minutes = 0;
-        if (seconds < 0) seconds = 0;
+        int totalSeconds = Mathf.CeilToInt(Mathf.Max(MatchTimer, 0f));
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
 
         if (timer != null)
         {
