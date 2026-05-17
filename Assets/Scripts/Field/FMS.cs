@@ -41,7 +41,6 @@ public class FMS : MonoBehaviour
         robotState = RobotState;
         if (robotState == RobotState.enabled) MatchTimer -= Time.deltaTime;
 
-        // Determine the current state strictly from MatchTimer, in order.
         MatchState newState;
         if (MatchTimer < 0)
         {
@@ -60,17 +59,14 @@ public class FMS : MonoBehaviour
             newState = MatchState.teleop;
         }
 
-        // Only react on an actual transition — no self-retriggering.
         if (newState != previousMatchState)
         {
             switch (newState)
             {
                 case MatchState.teleop:
-                    // Brief disable between auto and teleop.
                     StartCoroutine(wait(autoDisableTime));
                     break;
                 case MatchState.finished:
-                    // Brief disable at match end.
                     StartCoroutine(wait(matchDisabledTime));
                     break;
             }
@@ -79,7 +75,6 @@ public class FMS : MonoBehaviour
         MatchState = newState;
         previousMatchState = newState;
 
-        // Use CeilToInt so the displayed value equals the time REMAINING
         int totalSeconds = Mathf.CeilToInt(Mathf.Max(MatchTimer, 0f));
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;

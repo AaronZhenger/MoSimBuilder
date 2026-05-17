@@ -23,7 +23,6 @@ public class RebuiltShifts : ScoreOnlyOnce
 
     private void Awake()
     {
-        // Push this season's timing into the (season-generic) FMS before it initializes
         var fms = FindObjectOfType<FMS>();
         if (fms != null)
         {
@@ -49,9 +48,8 @@ public class RebuiltShifts : ScoreOnlyOnce
         shiftOnLight.SetActive(isOnShift());
         poolOccupyObjects();
         handleShiftState();
-        // Create a set of current objects for comparison
         compareObjects(isOnShift());
-        ScorePoints(totalScore); // Pass the total accumulated score
+        ScorePoints(totalScore);
         ShiftOverlay.ShiftTimer = shiftTimer;
         switch (currentShift)
         {
@@ -83,7 +81,6 @@ public class RebuiltShifts : ScoreOnlyOnce
 
         if (FMS.MatchState is not MatchState.auto)
         {
-            // Teleop elapsed == how far FMS.MatchTimer has moved since teleop started. This pauses automatically whenever FMS.MatchTimer is paused
             float teleopElapsed = teleopStartMatchTimer - FMS.MatchTimer;
             if (teleopElapsed < 0f) teleopElapsed = 0f;
             
