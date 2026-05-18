@@ -8,6 +8,7 @@ using Util;
 public class FMS : MonoBehaviour
 {
     //THIS SCRIPT SHOULD BE SEASON GENERIC AND FEATURE NO SEASON SPECIFIC CODE
+    public Transform defaultSpawn;
     public int matchTime = 150;
     public int autoTime = 15;
     public float autoDisableTime = 0.5f;
@@ -26,6 +27,7 @@ public class FMS : MonoBehaviour
     private TextMeshProUGUI timer;
 
     public RobotState robotState;
+    
 
 
     // Start is called before the first frame update

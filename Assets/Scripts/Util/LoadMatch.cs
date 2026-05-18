@@ -14,6 +14,7 @@ using Util;
 public class LoadMatch : MonoBehaviour
 {
     [SerializeField] private GameObject[] fieldPrefab;
+    [SerializeField] private bool useCustomSpawnPoint;
     [SerializeField] private Transform spawnPoint;
     [Header("Robot Selection")]
     [SerializeField] private InspectorDropdown robotSelected;
@@ -144,7 +145,10 @@ public class LoadMatch : MonoBehaviour
         if (availableRobots.Count > 0 && selectedRobotIndex >= 0 && selectedRobotIndex < availableRobots.Count)
         {
             GameObject robotToSpawn = availableRobots[selectedRobotIndex];
-            _activeRobot = Instantiate(robotToSpawn, spawnPoint.position, spawnPoint.rotation, _fieldHolder.transform);
+            Transform spawnLocation = useCustomSpawnPoint ? spawnPoint : 
+                                        fms != null ? fms.defaultSpawn : 
+                                                        spawnPoint;
+            _activeRobot = Instantiate(robotToSpawn, spawnLocation.position, spawnLocation.rotation, _fieldHolder.transform);
             var frame = _activeRobot.GetComponent<BuildFrame>();
             var controller = frame.GetSwerveController();
             if (controller)
