@@ -18,9 +18,6 @@ public class WheelBehaviour : MonoBehaviour
         Vector3 axle       = transform.right;
         float   radius     = wheelDiameter / 2f;
 
-        // Capsule oriented along the axle, small probe radius so the cast
-        // origin does not start inside geometry, swept downward by 1.1x wheel
-        // radius — matching the SphereCast pattern in the reference.
         Vector3 point1 = transform.position + axle * (wheelWidth / 2f);
         Vector3 point2 = transform.position - axle * (wheelWidth / 2f);
 

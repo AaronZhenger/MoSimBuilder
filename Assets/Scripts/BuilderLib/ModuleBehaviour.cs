@@ -50,26 +50,19 @@ public class ModuleBehaviour : MonoBehaviour
 
         float dt = Time.fixedDeltaTime;
         float r  = wheelDiameter * 0.5f;
-
-        // ── Azimuth ───────────────────────────────────────────────────────────
+        
         float targetRotation = Mathf.Repeat(targetModuleAngle - _startingRotation, 360f);
         float angleError     = targetRotation - _wheelBehaviour.transform.localEulerAngles.y;
 
         if (FMS.RobotState == RobotState.disabled)
             targetVelocity = 0f;
 
-        // ── Chassis velocity at contact patch ─────────────────────────────────
         Vector3 localVel          = _wheelBehaviour.transform
             .InverseTransformDirection(_rb.GetPointVelocity(_wheelBehaviour.transform.position));
         
         localVel.y = 0f;
         float chassisSurfaceSpeed = localVel.z;
         
-        
-
-        // ── Motor voltage ─────────────────────────────────────────────────────
-        // Feed the motor sim from chassis speed, same as the original — this is
-        // what DriveSimUpdate was designed to receive.
         float realSpeedRPM = (chassisSurfaceSpeed / (Mathf.PI * wheelDiameter)) * 60f;
 
         float feedForward = targetVelocity * 18f;
@@ -77,23 +70,10 @@ public class ModuleBehaviour : MonoBehaviour
         float alignFactor = (90f - Mathf.Clamp(Mathf.Abs(angleError), 0f, 90f)) / 90f;
         float voltage     = Mathf.Clamp(feedForward + pValue * alignFactor, -12f, 12f);
 
-        // ── Motor speed → wheel surface speed ────────────────────────────────
-        // DriveSimUpdate advances the motor sim and returns torque, but we need
-        // the motor's own speed state for slip. _driveMotor.motorSpeed is the
-        // motor shaft RPM maintained internally by DriveMotor.
         _driveMotor.DriveSimUpdate(voltage, realSpeedRPM * gearRatio);
         float wheelSurfaceSpeed = (_driveMotor.motorSpeed / gearRatio / 60f)
-                                  * (Mathf.PI * wheelDiameter); // m/s
-
-        // ── Slip force ────────────────────────────────────────────────────────
-        // slip = what the motor is spinning at − what the chassis is doing.
-        //
-        // Ramp holding: target = 0, so motor holds wheelSurfaceSpeed ≈ 0.
-        // Gravity pulls chassis downhill → chassisSurfaceSpeed > 0.
-        // → slip < 0 → forceZ < 0 → pushes uphill.  ✓
-        //
-        // This was impossible before because both sides came from chassis
-        // velocity, making slip always ≈ 0 when stationary.
+                                  * (Mathf.PI * wheelDiameter); 
+        
         float slipVelocity = wheelSurfaceSpeed - chassisSurfaceSpeed;
 
         float maxGrip  = _rb.mass * 9.81f * tractionCoefficient;
@@ -104,7 +84,6 @@ public class ModuleBehaviour : MonoBehaviour
         if (totalForce.sqrMagnitude > maxGrip * maxGrip)
             totalForce = totalForce.normalized * maxGrip;
 
-        // ── Apply forces ──────────────────────────────────────────────────────
         int contactCount = _wheelBehaviour.collisionPoints.Count;
         if (contactCount > 0)
         {
@@ -120,7 +99,6 @@ public class ModuleBehaviour : MonoBehaviour
             }
         }
 
-        // ── Visuals ───────────────────────────────────────────────────────────
         if (FMS.RobotState == RobotState.enabled)
         {
             _wheelBehaviour.transform.localEulerAngles = Quaternion
