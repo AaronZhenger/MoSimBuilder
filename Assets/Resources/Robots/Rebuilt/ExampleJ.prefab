@@ -5611,7 +5611,7 @@ MonoBehaviour:
   units: 0
   frameSize: {x: 33.5, y: 21.5}
   robotWeight: 90
-  gearRatio: 7
+  gearRatio: 6.85
   moduleType: 3
   generateBumpers: 0
   bumperStyle: 0
@@ -15595,6 +15595,7 @@ MonoBehaviour:
   targetVelocity: 0
   targetModuleAngle: 0
   lateralFrictionMultiplier: 1
+  tractionCoefficient: 1.1
   _rb: {fileID: 0}
 --- !u!1 &1876865551312810929
 GameObject:
@@ -40587,6 +40588,7 @@ MonoBehaviour:
   targetVelocity: 0
   targetModuleAngle: 0
   lateralFrictionMultiplier: 1
+  tractionCoefficient: 1.1
   _rb: {fileID: 0}
 --- !u!1 &5083648711757564807
 GameObject:
@@ -71027,7 +71029,7 @@ MonoBehaviour:
   units: 0
   length: 5
   width: 0
-  armWeight: 5
+  armWeight: 1
   useNoWrapPoint: 0
   noWrapAngle: 180
   useAdvancedSettings: 0
@@ -71087,6 +71089,7 @@ MonoBehaviour:
   targetVelocity: 0
   targetModuleAngle: 0
   lateralFrictionMultiplier: 1
+  tractionCoefficient: 1.1
   _rb: {fileID: 0}
 --- !u!1 &8847616611950061853
 GameObject:
@@ -71142,7 +71145,7 @@ MonoBehaviour:
     sequenceTo: 
     delay: 0
     persist: 0
-    point: 12
+    point: 12.5
     shouldScaleToUnits: 1
     units: 0
     controllerButton: 8
@@ -71156,7 +71159,7 @@ MonoBehaviour:
   carriage: 1
   carriageHeight: 3
   stageWeights:
-  - 5
+  - 1
   useAdvancedSettings: 0
   maxSpeed: 0
   kP: 0
@@ -71695,6 +71698,7 @@ MonoBehaviour:
   targetVelocity: 0
   targetModuleAngle: 0
   lateralFrictionMultiplier: 1
+  tractionCoefficient: 1.1
   _rb: {fileID: 0}
 --- !u!1 &8924644180664578171
 GameObject:
